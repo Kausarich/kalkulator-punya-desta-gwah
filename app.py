@@ -1,4 +1,4 @@
-"""Advanced Calculator GUI Application - Black & White Brutalism Theme (No Emojis).
+"""Advanced Calculator GUI Application - Neo-Brutalism Theme with Accent Yellow (No Emojis).
 
 Features:
 - Calculator (Basic & Scientific)
@@ -81,39 +81,40 @@ class AdvancedCalculatorApp(tk.Tk):
         self.title("DESTA CALCULATOR & QIBLA FINDER")
         self.geometry("850x650")
         self.minsize(750, 580)
-        self.configure(bg="#ffffff")
+        self.configure(bg="#f8f8f5")
 
-        # Custom Styling - Black & White Brutalism
+        # Custom Styling - Neo-Brutalism with Electric Yellow Accent
         self.style = ttk.Style(self)
         self.style.theme_use("clam")
 
-        bg_col = "#ffffff"
+        bg_col = "#f8f8f5"
         fg_col = "#000000"
         card_bg = "#ffffff"
+        accent_yellow = "#ffde59"
 
         self.style.configure(".", background=bg_col, foreground=fg_col, font=("Consolas", 10, "bold"))
         self.style.configure("TNotebook", background=bg_col, borderwidth=0)
-        self.style.configure("TNotebook.Tab", background=bg_col, foreground=fg_col, padding=[15, 8], font=("Consolas", 11, "bold"), borderwidth=2, relief="solid")
-        self.style.map("TNotebook.Tab", background=[("selected", "#000000")], foreground=[("selected", "#ffffff")])
+        self.style.configure("TNotebook.Tab", background=card_bg, foreground=fg_col, padding=[15, 8], font=("Consolas", 11, "bold"), borderwidth=2, relief="solid")
+        self.style.map("TNotebook.Tab", background=[("selected", accent_yellow)], foreground=[("selected", "#000000")])
 
         self.style.configure("TFrame", background=bg_col)
         self.style.configure("Card.TFrame", background=card_bg, relief="solid", borderwidth=2)
         self.style.configure("TLabel", background=bg_col, foreground=fg_col, font=("Consolas", 10, "bold"))
-        self.style.configure("Header.TLabel", background=bg_col, foreground=fg_col, font=("Consolas", 16, "bold"))
+        self.style.configure("Header.TLabel", background=accent_yellow, foreground=fg_col, font=("Consolas", 16, "bold"))
         self.style.configure("CardHeader.TLabel", background=card_bg, foreground=fg_col, font=("Consolas", 13, "bold"))
         self.style.configure("CardLabel.TLabel", background=card_bg, foreground=fg_col, font=("Consolas", 10, "bold"))
 
         self.style.configure("TButton", font=("Consolas", 10, "bold"), background="#ffffff", foreground="#000000", borderwidth=2, relief="solid")
         self.style.map("TButton", background=[("active", "#000000")], foreground=[("active", "#ffffff")])
 
-        self.style.configure("Primary.TButton", background="#000000", foreground="#ffffff", font=("Consolas", 11, "bold"), borderwidth=2, relief="solid")
-        self.style.map("Primary.TButton", background=[("active", "#333333")], foreground=[("active", "#ffffff")])
+        self.style.configure("Primary.TButton", background=accent_yellow, foreground="#000000", font=("Consolas", 11, "bold"), borderwidth=2, relief="solid")
+        self.style.map("Primary.TButton", background=[("active", "#000000")], foreground=[("active", "#ffffff")])
 
         # Header Title
-        header_frame = tk.Frame(self, bg="#ffffff", bd=2, relief="solid", padx=15, pady=10)
+        header_frame = tk.Frame(self, bg="#ffffff", bd=3, relief="solid", padx=15, pady=10)
         header_frame.pack(fill="x", padx=15, pady=(15, 10))
 
-        title_lbl = tk.Label(header_frame, text="DESTA CALCULATOR", bg="#ffffff", fg="#000000", font=("Consolas", 16, "bold"))
+        title_lbl = tk.Label(header_frame, text=" DESTA CALCULATOR ", bg=accent_yellow, fg="#000000", font=("Consolas", 16, "bold"), bd=2, relief="solid")
         title_lbl.pack(side="left")
 
         subtitle_lbl = tk.Label(header_frame, text="ARITHMETIC • JULIAN DAY • QIBLA FINDER", bg="#ffffff", fg="#000000", font=("Consolas", 10, "bold"))
@@ -148,10 +149,10 @@ class AdvancedCalculatorApp(tk.Tk):
         self.calc_expr_var = tk.StringVar(value="")
         self.calc_result_var = tk.StringVar(value="0")
 
-        expr_lbl = tk.Label(card, textvariable=self.calc_expr_var, bg="#ffffff", fg="#444444", font=("Consolas", 12, "bold"), anchor="e", padx=10)
+        expr_lbl = tk.Label(card, textvariable=self.calc_expr_var, bg="#ffffff", fg="#555555", font=("Consolas", 12, "bold"), anchor="e", padx=10)
         expr_lbl.pack(fill="x", pady=(0, 2))
 
-        display_frame = tk.Frame(card, bg="#ffffff", bd=2, relief="solid")
+        display_frame = tk.Frame(card, bg="#ffffff", bd=3, relief="solid")
         display_frame.pack(fill="x", pady=(0, 15))
 
         display_lbl = tk.Label(display_frame, textvariable=self.calc_result_var, bg="#ffffff", fg="#000000", font=("Consolas", 26, "bold"), anchor="e", padx=10, pady=8)
@@ -176,13 +177,13 @@ class AdvancedCalculatorApp(tk.Tk):
                 bg_c = "#ffffff"
                 fg_c = "#000000"
                 if text == "=":
-                    bg_c = "#000000"
-                    fg_c = "#ffffff"
+                    bg_c = "#ffde59"
+                    fg_c = "#000000"
                 elif text in ("C", "AC"):
                     bg_c = "#000000"
                     fg_c = "#ffffff"
                 elif text in ("÷", "×", "-", "+", "^", "√", "π", "e", "±"):
-                    bg_c = "#f0f0f0"
+                    bg_c = "#f4f4ee"
                     fg_c = "#000000"
 
                 b = tk.Button(btn_frame, text=text, command=cmd, bg=bg_c, fg=fg_c, activebackground="#000000", activeforeground="#ffffff",
@@ -288,7 +289,7 @@ class AdvancedCalculatorApp(tk.Tk):
         res_card = tk.Frame(card, bg="#ffffff", bd=2, relief="solid", padx=15, pady=15)
         res_card.grid(row=5, column=0, columnspan=4, sticky="nsew", pady=10)
 
-        self.jd_val_lbl = tk.Label(res_card, text="JULIAN DAY (JD): --", bg="#ffffff", fg="#000000", font=("Consolas", 13, "bold"), anchor="w")
+        self.jd_val_lbl = tk.Label(res_card, text="JULIAN DAY (JD): --", bg="#ffde59", fg="#000000", font=("Consolas", 13, "bold"), anchor="w", bd=2, relief="solid", padx=5)
         self.jd_val_lbl.pack(fill="x", pady=2)
 
         self.mjd_val_lbl = tk.Label(res_card, text="MODIFIED JULIAN DAY (MJD): --", bg="#ffffff", fg="#000000", font=("Consolas", 11, "bold"), anchor="w")
@@ -394,7 +395,7 @@ class AdvancedCalculatorApp(tk.Tk):
         self.qibla_res_box = tk.Frame(left_card, bg="#ffffff", bd=2, relief="solid", padx=12, pady=12)
         self.qibla_res_box.pack(fill="both", expand=True)
 
-        self.q_bearing_lbl = tk.Label(self.qibla_res_box, text="BEARING: --°", bg="#ffffff", fg="#000000", font=("Consolas", 13, "bold"), anchor="w")
+        self.q_bearing_lbl = tk.Label(self.qibla_res_box, text="BEARING: --°", bg="#ffde59", fg="#000000", font=("Consolas", 13, "bold"), anchor="w", bd=2, relief="solid", padx=5)
         self.q_bearing_lbl.pack(fill="x", pady=2)
 
         self.q_dir_lbl = tk.Label(self.qibla_res_box, text="DIRECTION: --", bg="#ffffff", fg="#000000", font=("Consolas", 11, "bold"), anchor="w")
@@ -480,18 +481,18 @@ class AdvancedCalculatorApp(tk.Tk):
         # Draw North Needle (Solid black pointer)
         cv.create_line(cx, cy, cx, cy - (radius - 35), fill="#000000", width=3, arrow=tk.LAST, arrowshape=(10, 12, 5))
 
-        # Draw Qibla Vector Needle (Thick black pointer)
+        # Draw Qibla Vector Needle (Electric Yellow with black outline)
         q_rad = math.radians(bearing_deg - 90)
         qx = cx + (radius - 30) * math.cos(q_rad)
         qy = cy + (radius - 30) * math.sin(q_rad)
 
-        cv.create_line(cx, cy, qx, qy, fill="#000000", width=4, arrow=tk.LAST, arrowshape=(12, 15, 6))
+        cv.create_line(cx, cy, qx, qy, fill="#ffde59", width=5, arrow=tk.LAST, arrowshape=(12, 15, 6))
 
-        # Kaaba marker (Text MECCA box - NO EMOJIS)
+        # Kaaba marker (Electric Yellow MECCA box)
         kx = cx + (radius - 12) * math.cos(q_rad)
         ky = cy + (radius - 12) * math.sin(q_rad)
-        cv.create_rectangle(kx - 18, ky - 8, kx + 18, ky + 8, fill="#000000", outline="#000000", width=1)
-        cv.create_text(kx, ky, text="MECCA", fill="#ffffff", font=("Consolas", 7, "bold"))
+        cv.create_rectangle(kx - 20, ky - 9, kx + 20, ky + 9, fill="#ffde59", outline="#000000", width=2)
+        cv.create_text(kx, ky, text="MECCA", fill="#000000", font=("Consolas", 8, "bold"))
 
         # Center Dot
         cv.create_oval(cx - 5, cy - 5, cx + 5, cy + 5, fill="#000000", outline="")

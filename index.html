@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desta Calculator - Black & White Brutalism</title>
+    <title>Desta Calculator</title>
     <!-- Google Fonts: Space Mono & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg: #ffffff;
@@ -337,10 +339,25 @@
             font-size: 1.1rem;
         }
 
-        .compass-label.n { top: 10px; color: #000000; }
-        .compass-label.e { right: 15px; color: #000000; }
-        .compass-label.s { bottom: 10px; color: #000000; }
-        .compass-label.w { left: 15px; color: #000000; }
+        .compass-label.n {
+            top: 10px;
+            color: #000000;
+        }
+
+        .compass-label.e {
+            right: 15px;
+            color: #000000;
+        }
+
+        .compass-label.s {
+            bottom: 10px;
+            color: #000000;
+        }
+
+        .compass-label.w {
+            left: 15px;
+            color: #000000;
+        }
 
         .needle-north {
             position: absolute;
@@ -536,7 +553,8 @@
 
             <div class="res-card">
                 <div id="jd-result-val" class="res-title">JULIAN DAY (JD): --</div>
-                <div id="mjd-result-val" style="font-weight: 700; margin-top: 0.25rem;">MODIFIED JULIAN DAY (MJD): --</div>
+                <div id="mjd-result-val" style="font-weight: 700; margin-top: 0.25rem;">MODIFIED JULIAN DAY (MJD): --
+                </div>
                 <div id="jd-result-info" class="res-detail" style="margin-top: 0.5rem;">INPUT DATE: --</div>
             </div>
         </div>
@@ -575,12 +593,14 @@
                         </div>
                     </div>
 
-                    <button class="primary-btn" style="width: 100%; margin-top: 1rem;" onclick="computeQibla()">CALCULATE QIBLA DIRECTION</button>
+                    <button class="primary-btn" style="width: 100%; margin-top: 1rem;"
+                        onclick="computeQibla()">CALCULATE QIBLA DIRECTION</button>
 
                     <div class="res-card">
                         <div id="qibla-bearing" class="res-title">BEARING: --°</div>
                         <div id="qibla-dir" style="font-weight: 700;">DIRECTION: --</div>
-                        <div id="qibla-dist" class="res-detail" style="margin-top: 0.25rem;">DISTANCE TO MECCA: -- km</div>
+                        <div id="qibla-dist" class="res-detail" style="margin-top: 0.25rem;">DISTANCE TO MECCA: -- km
+                        </div>
                     </div>
                 </div>
 
@@ -596,7 +616,8 @@
                         <div id="needle-qibla" class="needle-qibla"></div>
                         <div id="kaaba-marker" class="kaaba-icon">MECCA</div>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;" id="compass-caption">QIBLA VECTOR</p>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;"
+                        id="compass-caption">QIBLA VECTOR</p>
                 </div>
             </div>
         </div>
