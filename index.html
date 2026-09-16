@@ -4,113 +4,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Calculator & Qibla Finder</title>
-    <!-- Google Fonts -->
+    <title>Desta Calculator - Black & White Brutalism</title>
+    <!-- Google Fonts: Space Mono & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --card-bg: rgba(15, 23, 42, 0.6);
-            --accent-primary: #6366f1;
-            --accent-glow: rgba(99, 102, 241, 0.4);
-            --emerald: #10b981;
-            --emerald-glow: rgba(16, 185, 129, 0.4);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --danger: #f43f5e;
+            --bg: #ffffff;
+            --text: #000000;
+            --card-bg: #ffffff;
+            --border: #000000;
+            --border-width: 3px;
+            --shadow: 4px 4px 0px #000000;
+            --shadow-lg: 6px 6px 0px #000000;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Space Mono', 'JetBrains Mono', monospace;
         }
 
         body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
+            background-color: var(--bg);
+            background-image: radial-gradient(#000000 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
         }
 
+        /* Header */
         .header {
             text-align: center;
             margin-bottom: 2rem;
+            border: var(--border-width) solid var(--border);
+            background: #ffffff;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-lg);
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #818cf8, #c084fc, #38bdf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 0.25rem;
         }
 
         .header p {
-            color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #444444;
         }
 
         /* Nav Tabs */
         .tabs {
             display: flex;
-            gap: 0.5rem;
-            background: var(--glass-bg);
-            padding: 0.5rem;
-            border-radius: 1rem;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(16px);
+            gap: 0.75rem;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            color: var(--text);
             padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.15s ease;
         }
 
         .tab-btn.active {
-            background: var(--accent-primary);
-            color: white;
-            box-shadow: 0 0 20px var(--accent-glow);
+            background: #000000;
+            color: #ffffff;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
         }
 
         .tab-btn:hover:not(.active) {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
+            background: #000000;
+            color: #ffffff;
         }
 
-        /* Container Card */
+        /* Main Container Card */
         .app-container {
             width: 100%;
-            max-width: 900px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            border-radius: 1.5rem;
+            max-width: 850px;
+            background: var(--card-bg);
+            border: var(--border-width) solid var(--border);
             padding: 2rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--shadow-lg);
         }
 
         .tab-content {
@@ -119,43 +112,39 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.4s ease;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: var(--border-width) solid var(--border);
         }
 
         /* Tab 1: Calculator */
         .calc-display {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
             padding: 1.25rem;
             text-align: right;
             margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
         }
 
         .calc-expr {
             font-size: 1.1rem;
-            color: var(--text-muted);
+            color: #555555;
             min-height: 1.5rem;
             word-break: break-all;
+            font-weight: 700;
         }
 
         .calc-result {
-            font-family: 'JetBrains Mono', monospace;
             font-size: 2.5rem;
-            font-weight: 700;
-            color: #38bdf8;
+            font-weight: 800;
+            color: #000000;
             margin-top: 0.25rem;
         }
 
@@ -166,48 +155,58 @@
         }
 
         .calc-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            color: var(--text);
             font-size: 1.25rem;
-            font-weight: 600;
-            padding: 1.25rem 0;
-            border-radius: 0.75rem;
+            font-weight: 700;
+            padding: 1.1rem 0;
             cursor: pointer;
-            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+            transition: all 0.1s ease;
         }
 
         .calc-btn:hover {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: var(--accent-primary);
-            transform: translateY(-2px);
+            background: #000000;
+            color: #ffffff;
         }
 
         .calc-btn:active {
-            transform: translateY(0);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
         }
 
         .calc-btn.op {
-            color: var(--emerald);
-            background: rgba(16, 185, 129, 0.1);
+            background: #e0e0e0;
         }
 
         .calc-btn.action {
-            color: var(--danger);
-            background: rgba(244, 63, 94, 0.1);
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .calc-btn.action:hover {
+            background: #ffffff;
+            color: #000000;
         }
 
         .calc-btn.equals {
-            background: var(--accent-primary);
-            color: white;
-            grid-column: span 1;
-            box-shadow: 0 0 15px var(--accent-glow);
+            background: #000000;
+            color: #ffffff;
+            font-weight: 800;
         }
 
-        /* Tab 2 & 3 Form Controls */
+        /* Form Controls */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 1.25rem;
             margin-bottom: 1.5rem;
         }
@@ -219,65 +218,88 @@
         }
 
         .input-group label {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         .input-control {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid var(--glass-border);
-            color: white;
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            color: #000000;
             padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
             font-size: 1rem;
+            font-weight: 700;
             outline: none;
-            transition: border-color 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
         .input-control:focus {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 10px var(--accent-glow);
+            background: #f0f0f0;
         }
 
         .primary-btn {
-            background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
-            color: white;
-            border: none;
+            background: #000000;
+            color: #ffffff;
+            border: var(--border-width) solid var(--border);
             padding: 0.85rem 1.75rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px var(--accent-glow);
+            box-shadow: var(--shadow);
+            transition: all 0.15s ease;
         }
 
         .primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--accent-glow);
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .primary-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
+        }
+
+        .secondary-btn {
+            background: #ffffff;
+            color: #000000;
+            border: var(--border-width) solid var(--border);
+            padding: 0.85rem 1.75rem;
+            font-size: 0.95rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.15s ease;
+        }
+
+        .secondary-btn:hover {
+            background: #000000;
+            color: #ffffff;
         }
 
         /* Result Cards */
         .res-card {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--glass-border);
-            border-radius: 1rem;
-            padding: 1.5rem;
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            padding: 1.25rem;
             margin-top: 1.5rem;
+            box-shadow: var(--shadow);
         }
 
         .res-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--emerald);
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
         }
 
         .res-detail {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #333333;
+            line-height: 1.5;
         }
 
         /* Qibla Layout */
@@ -288,13 +310,7 @@
             align-items: center;
         }
 
-        @media (max-width: 768px) {
-            .qibla-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Compass Visual */
+        /* Compass Visual Brutalism */
         .compass-wrapper {
             display: flex;
             flex-direction: column;
@@ -303,13 +319,13 @@
         }
 
         .compass-dial {
-            width: 260px;
-            height: 260px;
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
-            border: 4px solid var(--accent-primary);
-            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            border: 4px solid #000000;
+            background: #ffffff;
             position: relative;
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+            box-shadow: var(--shadow-lg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -317,56 +333,114 @@
 
         .compass-label {
             position: absolute;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 1.1rem;
         }
 
-        .compass-label.n {
-            top: 12px;
-            color: var(--danger);
-        }
-
-        .compass-label.e {
-            right: 15px;
-            color: var(--text-muted);
-        }
-
-        .compass-label.s {
-            bottom: 12px;
-            color: var(--text-muted);
-        }
-
-        .compass-label.w {
-            left: 15px;
-            color: var(--text-muted);
-        }
+        .compass-label.n { top: 10px; color: #000000; }
+        .compass-label.e { right: 15px; color: #000000; }
+        .compass-label.s { bottom: 10px; color: #000000; }
+        .compass-label.w { left: 15px; color: #000000; }
 
         .needle-north {
             position: absolute;
             width: 4px;
-            height: 90px;
-            background: linear-gradient(to top, transparent 50%, var(--danger) 50%);
+            height: 85px;
+            background: #000000;
             transform-origin: center center;
             top: 40px;
-            border-radius: 2px;
         }
 
         .needle-qibla {
             position: absolute;
             width: 6px;
-            height: 110px;
-            background: linear-gradient(to top, transparent 50%, var(--emerald) 50%);
+            height: 105px;
+            background: #000000;
+            border: 1px solid #ffffff;
             transform-origin: center center;
-            border-radius: 3px;
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 0 8px var(--emerald-glow));
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .kaaba-icon {
             position: absolute;
-            font-size: 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            background: #000000;
+            color: #ffffff;
+            padding: 2px 4px;
+            border: 1px solid #000000;
             transform: translate(-50%, -50%);
-            transition: all 0.8s ease;
+            transition: all 0.6s ease;
+            white-space: nowrap;
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 768px) {
+            .qibla-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .header p {
+                font-size: 0.8rem;
+            }
+
+            .tabs {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                gap: 0.4rem;
+            }
+
+            .tab-btn {
+                padding: 0.5rem 0.85rem;
+                font-size: 0.8rem;
+            }
+
+            .app-container {
+                padding: 1rem;
+            }
+
+            .calc-result {
+                font-size: 1.8rem;
+            }
+
+            .calc-grid {
+                gap: 0.4rem;
+            }
+
+            .calc-btn {
+                padding: 0.85rem 0;
+                font-size: 1rem;
+            }
+
+            .form-grid-2col {
+                grid-template-columns: 1fr;
+            }
+
+            .compass-dial {
+                width: 210px;
+                height: 210px;
+            }
+
+            .needle-north {
+                height: 70px;
+                top: 35px;
+            }
+
+            .needle-qibla {
+                height: 85px;
+            }
         }
     </style>
 </head>
@@ -374,15 +448,15 @@
 <body>
 
     <div class="header">
-        <h1>Desta Calculator</h1>
-        <p>Simple Calculator that counts, Julian Day Converter & Qibla Direction Visualizer</p>
+        <h1>DESTA CALCULATOR</h1>
+        <p>ARITHMETIC • JULIAN DAY • QIBLA DIRECTION</p>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('calc')">🧮 Calculator</button>
-        <button class="tab-btn" onclick="switchTab('julian')">📅 Julian Day</button>
-        <button class="tab-btn" onclick="switchTab('qibla')">🧭 Qibla Finder</button>
+        <button class="tab-btn active" onclick="switchTab(event, 'calc')">CALCULATOR</button>
+        <button class="tab-btn" onclick="switchTab(event, 'julian')">JULIAN DAY</button>
+        <button class="tab-btn" onclick="switchTab(event, 'qibla')">QIBLA FINDER</button>
     </div>
 
     <!-- Main Container -->
@@ -430,8 +504,7 @@
 
         <!-- TAB 2: JULIAN DAY -->
         <div id="tab-julian" class="tab-content">
-            <h2 style="margin-bottom: 1.25rem; font-size: 1.4rem; color: #818cf8;">Calendar to Julian Day (JD) Converter
-            </h2>
+            <h2 class="section-title">CALENDAR TO JULIAN DAY (JD)</h2>
 
             <div class="form-grid">
                 <div class="input-group">
@@ -456,29 +529,26 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                <button class="primary-btn" onclick="computeJulianDay()">Calculate Julian Day</button>
-                <button class="primary-btn" style="background: rgba(255,255,255,0.1); box-shadow: none;"
-                    onclick="setCurrentDateTime()">Set Current Time</button>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                <button class="primary-btn" onclick="computeJulianDay()">CALCULATE JULIAN DAY</button>
+                <button class="secondary-btn" onclick="setCurrentDateTime()">SET CURRENT TIME</button>
             </div>
 
             <div class="res-card">
-                <div id="jd-result-val" class="res-title">Julian Day (JD): --</div>
-                <div id="mjd-result-val"
-                    style="color: #38bdf8; font-size: 1.1rem; font-weight: 600; margin-top: 0.25rem;">Modified Julian
-                    Day (MJD): --</div>
-                <div id="jd-result-info" class="res-detail" style="margin-top: 0.5rem;">Input Date: --</div>
+                <div id="jd-result-val" class="res-title">JULIAN DAY (JD): --</div>
+                <div id="mjd-result-val" style="font-weight: 700; margin-top: 0.25rem;">MODIFIED JULIAN DAY (MJD): --</div>
+                <div id="jd-result-info" class="res-detail" style="margin-top: 0.5rem;">INPUT DATE: --</div>
             </div>
         </div>
 
         <!-- TAB 3: QIBLA FINDER -->
         <div id="tab-qibla" class="tab-content">
-            <h2 style="margin-bottom: 1.25rem; font-size: 1.4rem; color: #818cf8;">Qibla (Kiblat) Direction Finder</h2>
+            <h2 class="section-title">QIBLA (KIBLAT) DIRECTION FINDER</h2>
 
             <div class="qibla-layout">
                 <div>
                     <div class="input-group" style="margin-bottom: 1.25rem;">
-                        <label>Quick Select City</label>
+                        <label>QUICK SELECT CITY</label>
                         <select id="city-preset" class="input-control" onchange="onCitySelected()">
                             <option value="-6.2088,106.8456">Jakarta, Indonesia</option>
                             <option value="-7.2575,112.7521">Surabaya, Indonesia</option>
@@ -494,25 +564,23 @@
                         </select>
                     </div>
 
-                    <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="form-grid-2col">
                         <div class="input-group">
-                            <label>Latitude (°N/°S)</label>
+                            <label>LATITUDE (°N/°S)</label>
                             <input type="number" step="any" id="qibla-lat" class="input-control" placeholder="-6.2088">
                         </div>
                         <div class="input-group">
-                            <label>Longitude (°E/°W)</label>
+                            <label>LONGITUDE (°E/°W)</label>
                             <input type="number" step="any" id="qibla-lon" class="input-control" placeholder="106.8456">
                         </div>
                     </div>
 
-                    <button class="primary-btn" style="width: 100%; margin-top: 1rem;"
-                        onclick="computeQibla()">Calculate Qibla Direction</button>
+                    <button class="primary-btn" style="width: 100%; margin-top: 1rem;" onclick="computeQibla()">CALCULATE QIBLA DIRECTION</button>
 
                     <div class="res-card">
-                        <div id="qibla-bearing" class="res-title">Bearing: --°</div>
-                        <div id="qibla-dir" style="color: #38bdf8; font-weight: 600;">Direction: --</div>
-                        <div id="qibla-dist" class="res-detail" style="margin-top: 0.25rem;">Distance to Mecca: -- km
-                        </div>
+                        <div id="qibla-bearing" class="res-title">BEARING: --°</div>
+                        <div id="qibla-dir" style="font-weight: 700;">DIRECTION: --</div>
+                        <div id="qibla-dist" class="res-detail" style="margin-top: 0.25rem;">DISTANCE TO MECCA: -- km</div>
                     </div>
                 </div>
 
@@ -526,10 +594,9 @@
 
                         <div class="needle-north"></div>
                         <div id="needle-qibla" class="needle-qibla"></div>
-                        <div id="kaaba-marker" class="kaaba-icon">🕋</div>
+                        <div id="kaaba-marker" class="kaaba-icon">MECCA</div>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.95rem; color: var(--emerald); font-weight: 600;"
-                        id="compass-caption">Qibla Direction Vector</p>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;" id="compass-caption">QIBLA VECTOR</p>
                 </div>
             </div>
         </div>
@@ -538,11 +605,13 @@
 
     <script>
         // Tab switching
-        function switchTab(tabId) {
+        function switchTab(evt, tabId) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            event.currentTarget.classList.add('active');
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
             document.getElementById('tab-' + tabId).classList.add('active');
         }
 
@@ -580,7 +649,7 @@
                 document.getElementById('calc-result').innerText = res;
                 document.getElementById('calc-expr').innerText = `√(${calcExpr})`;
             } catch (e) {
-                document.getElementById('calc-result').innerText = "Error";
+                document.getElementById('calc-result').innerText = "ERROR";
             }
         }
 
@@ -593,7 +662,7 @@
                 }
                 document.getElementById('calc-result').innerText = res;
             } catch (e) {
-                document.getElementById('calc-result').innerText = "Error";
+                document.getElementById('calc-result').innerText = "ERROR";
             }
         }
 
@@ -608,7 +677,7 @@
             const mins = String(now.getMinutes()).padStart(2, '0');
             const secs = String(now.getSeconds()).padStart(2, '0');
             document.getElementById('jd-time').value = `${hours}:${mins}:${secs}`;
-            document.getElementById('jd-utc').value = 7; // Default WIB
+            document.getElementById('jd-utc').value = 7;
         }
 
         function computeJulianDay() {
@@ -639,9 +708,9 @@
             const jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + fracDay + b - 1524.5;
             const mjd = jd - 2400000.5;
 
-            document.getElementById('jd-result-val').innerText = `Julian Day (JD): ${jd.toFixed(6)}`;
-            document.getElementById('mjd-result-val').innerText = `Modified Julian Day (MJD): ${mjd.toFixed(6)}`;
-            document.getElementById('jd-result-info').innerText = `Date: ${year}-${String(month).padStart(2, '0')}-${String(Math.floor(day)).padStart(2, '0')} ${String(hr).padStart(2, '0')}:${String(mn).padStart(2, '0')}:${String(sc).padStart(2, '0')} (UTC${utcOffset >= 0 ? '+' : ''}${utcOffset})`;
+            document.getElementById('jd-result-val').innerText = `JULIAN DAY (JD): ${jd.toFixed(6)}`;
+            document.getElementById('mjd-result-val').innerText = `MODIFIED JULIAN DAY (MJD): ${mjd.toFixed(6)}`;
+            document.getElementById('jd-result-info').innerText = `INPUT DATE: ${year}-${String(month).padStart(2, '0')}-${String(Math.floor(day)).padStart(2, '0')} ${String(hr).padStart(2, '0')}:${String(mn).padStart(2, '0')}:${String(sc).padStart(2, '0')} (UTC${utcOffset >= 0 ? '+' : ''}${utcOffset})`;
         }
 
         // --- QIBLA FINDER ---
@@ -677,7 +746,6 @@
 
             let bearingDeg = (toDeg(Math.atan2(y, x)) + 360) % 360;
 
-            // Distance
             const dphi = phiM - phiU;
             const haversineA = Math.sin(dphi / 2) ** 2 + Math.cos(phiU) * Math.cos(phiM) * Math.sin(deltaLambda / 2) ** 2;
             const distKm = 6371 * 2 * Math.atan2(Math.sqrt(haversineA), Math.sqrt(1 - haversineA));
@@ -685,25 +753,25 @@
             const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
             const dirIdx = Math.round((bearingDeg + 11.25) / 22.5) % 16;
 
-            document.getElementById('qibla-bearing').innerText = `Bearing: ${bearingDeg.toFixed(2)}°`;
-            document.getElementById('qibla-dir').innerText = `Direction: ${directions[dirIdx]} (from True North)`;
-            document.getElementById('qibla-dist').innerText = `Distance to Kaaba: ${distKm.toLocaleString(undefined, { maximumFractionDigits: 2 })} km`;
+            document.getElementById('qibla-bearing').innerText = `BEARING: ${bearingDeg.toFixed(2)}°`;
+            document.getElementById('qibla-dir').innerText = `DIRECTION: ${directions[dirIdx]} (FROM TRUE NORTH)`;
+            document.getElementById('qibla-dist').innerText = `DISTANCE TO MECCA: ${distKm.toLocaleString(undefined, { maximumFractionDigits: 2 })} KM`;
 
-            // Rotate Compass Needle
             const needle = document.getElementById('needle-qibla');
             needle.style.transform = `rotate(${bearingDeg}deg)`;
 
-            // Position Kaaba Icon
-            const radius = 100;
+            const dial = document.querySelector('.compass-dial');
+            const center = dial ? (dial.clientWidth / 2) : 125;
+            const radius = center - 25;
             const rad = toRad(bearingDeg - 90);
-            const kx = 130 + radius * Math.cos(rad);
-            const ky = 130 + radius * Math.sin(rad);
+            const kx = center + radius * Math.cos(rad);
+            const ky = center + radius * Math.sin(rad);
 
             const kaaba = document.getElementById('kaaba-marker');
             kaaba.style.left = `${kx}px`;
             kaaba.style.top = `${ky}px`;
 
-            document.getElementById('compass-caption').innerText = `Qibla Vector: ${bearingDeg.toFixed(1)}° (${directions[dirIdx]})`;
+            document.getElementById('compass-caption').innerText = `QIBLA VECTOR: ${bearingDeg.toFixed(1)}° (${directions[dirIdx]})`;
         }
 
         // Initialize defaults
