@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desta Calculator</title>
+    <title>Desta Calculator - Kalkulator, Qibla & Kalender Hijriah</title>
     <!-- Google Fonts: Space Mono & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +20,8 @@
             --border-width: 3px;
             --shadow: 4px 4px 0px #000000;
             --shadow-lg: 6px 6px 0px #000000;
+            --accent-yellow: #ffde59;
+            --accent-yellow-light: #fff8d6;
         }
 
         * {
@@ -49,6 +51,8 @@
             background: #ffffff;
             padding: 1.5rem 2rem;
             box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 850px;
         }
 
         .header h1 {
@@ -60,10 +64,11 @@
         }
 
         .header p {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
             color: #444444;
+            letter-spacing: 0.5px;
         }
 
         /* Nav Tabs */
@@ -71,15 +76,18 @@
             display: flex;
             gap: 0.75rem;
             margin-bottom: 2rem;
+            width: 100%;
+            max-width: 850px;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
             background: #ffffff;
             border: var(--border-width) solid var(--border);
             color: var(--text);
-            padding: 0.75rem 1.5rem;
-            font-size: 0.95rem;
-            font-weight: 700;
+            padding: 0.75rem 1.35rem;
+            font-size: 0.9rem;
+            font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
             box-shadow: var(--shadow);
@@ -87,8 +95,8 @@
         }
 
         .tab-btn.active {
-            background: #000000;
-            color: #ffffff;
+            background: var(--accent-yellow);
+            color: #000000;
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0px #000000;
         }
@@ -117,12 +125,17 @@
         }
 
         .section-title {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 800;
             text-transform: uppercase;
             margin-bottom: 1.25rem;
             padding-bottom: 0.5rem;
             border-bottom: var(--border-width) solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         /* Tab 1: Calculator */
@@ -179,7 +192,7 @@
         }
 
         .calc-btn.op {
-            background: #e0e0e0;
+            background: #f4f4ee;
         }
 
         .calc-btn.action {
@@ -193,15 +206,20 @@
         }
 
         .calc-btn.equals {
+            background: var(--accent-yellow);
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .calc-btn.equals:hover {
             background: #000000;
             color: #ffffff;
-            font-weight: 800;
         }
 
         /* Form Controls */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.25rem;
             margin-bottom: 1.5rem;
         }
@@ -209,18 +227,18 @@
         .form-grid-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.45rem;
         }
 
         .input-group label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
         }
@@ -229,23 +247,23 @@
             background: #ffffff;
             border: var(--border-width) solid var(--border);
             color: #000000;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.95rem;
             font-weight: 700;
             outline: none;
             box-shadow: var(--shadow);
         }
 
         .input-control:focus {
-            background: #f0f0f0;
+            background: #fdfae5;
         }
 
         .primary-btn {
-            background: #000000;
-            color: #ffffff;
+            background: var(--accent-yellow);
+            color: #000000;
             border: var(--border-width) solid var(--border);
-            padding: 0.85rem 1.75rem;
-            font-size: 0.95rem;
+            padding: 0.85rem 1.5rem;
+            font-size: 0.9rem;
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
@@ -254,8 +272,8 @@
         }
 
         .primary-btn:hover {
-            background: #ffffff;
-            color: #000000;
+            background: #000000;
+            color: #ffffff;
         }
 
         .primary-btn:active {
@@ -267,8 +285,8 @@
             background: #ffffff;
             color: #000000;
             border: var(--border-width) solid var(--border);
-            padding: 0.85rem 1.75rem;
-            font-size: 0.95rem;
+            padding: 0.85rem 1.5rem;
+            font-size: 0.9rem;
             font-weight: 800;
             text-transform: uppercase;
             cursor: pointer;
@@ -281,24 +299,49 @@
             color: #ffffff;
         }
 
+        .sec-mini-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #000000;
+            transition: all 0.1s ease;
+        }
+
+        .sec-mini-btn:hover {
+            background: var(--accent-yellow);
+        }
+
+        .sec-mini-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+
         /* Result Cards */
         .res-card {
             background: #ffffff;
             border: var(--border-width) solid var(--border);
             padding: 1.25rem;
-            margin-top: 1.5rem;
+            margin-top: 1.25rem;
             box-shadow: var(--shadow);
         }
 
         .res-title {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 800;
             text-transform: uppercase;
             margin-bottom: 0.25rem;
+            background: var(--accent-yellow);
+            display: inline-block;
+            padding: 2px 6px;
+            border: 2px solid #000000;
         }
 
         .res-detail {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: #333333;
             line-height: 1.5;
@@ -307,7 +350,7 @@
         /* Qibla Layout */
         .qibla-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             gap: 2rem;
             align-items: center;
         }
@@ -368,27 +411,348 @@
             top: 40px;
         }
 
+        .needle-north::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -4px;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 10px solid #000000;
+        }
+
         .needle-qibla {
             position: absolute;
-            width: 6px;
+            width: 5px;
             height: 105px;
-            background: #000000;
-            border: 1px solid #ffffff;
+            background: var(--accent-yellow);
+            border: 2px solid #000000;
             transform-origin: center center;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        .needle-qibla::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -5px;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 12px solid #000000;
+        }
+
+        /* Kaaba Icon replacing text MECCA */
         .kaaba-icon {
             position: absolute;
-            font-size: 0.7rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10;
+            cursor: pointer;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
+        }
+
+        .kaaba-icon:hover {
+            transform: translate(-50%, -50%) scale(1.15);
+        }
+
+        /* Prayer Times Section */
+        .prayer-section {
+            margin-top: 2rem;
+            border-top: var(--border-width) solid var(--border);
+            padding-top: 1.5rem;
+        }
+
+        .prayer-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            padding: 0.85rem 1.25rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.65rem;
+        }
+
+        .prayer-card {
+            background: #ffffff;
+            border: 2px solid var(--border);
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            box-shadow: 3px 3px 0px #000000;
+            transition: all 0.15s ease;
+        }
+
+        .prayer-card.active {
+            background: var(--accent-yellow);
+            border: 3px solid #000000;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0px #000000;
+        }
+
+        .prayer-card.next {
+            border: 2px dashed #000000;
+            background: #fafaf5;
+        }
+
+        .prayer-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .prayer-time {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .prayer-note {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #666666;
+            margin-top: 0.2rem;
+            text-transform: uppercase;
+        }
+
+        .prayer-card.active .prayer-note {
+            color: #000000;
+            font-weight: 800;
+        }
+
+        /* Calendar Styles */
+        .cal-wrapper {
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .cal-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #000000;
+            margin-bottom: 1rem;
+        }
+
+        .cal-nav-btn {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #000000;
+            transition: all 0.1s ease;
+        }
+
+        .cal-nav-btn:hover {
+            background: var(--accent-yellow);
+        }
+
+        .cal-nav-btn.today-btn {
+            background: var(--accent-yellow);
+        }
+
+        .cal-nav-btn.today-btn:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .cal-nav-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+
+        .cal-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .cal-weekday {
+            background: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 0.5rem 0.2rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            border: 1px solid #000000;
+        }
+
+        .cal-weekday.sun {
+            background: #e63946;
+            color: #ffffff;
+        }
+
+        .cal-weekday.fri {
+            background: #2a9d8f;
+            color: #ffffff;
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .cal-cell {
+            min-height: 76px;
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 2px 2px 0px #000000;
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+
+        .cal-cell:hover {
+            background: var(--accent-yellow-light);
+            transform: translateY(-1px);
+        }
+
+        .cal-cell.today {
+            background: var(--accent-yellow);
+            border: 3px solid #000000;
+            box-shadow: 3px 3px 0px #000000;
+        }
+
+        .cal-cell.other-month {
+            background: #f9f9f6;
+            opacity: 0.45;
+            border-color: #cccccc;
+            box-shadow: none;
+        }
+
+        .cal-cell.selected {
+            outline: 3px solid #000000;
+            outline-offset: -2px;
+        }
+
+        .cal-cell-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .cal-greg-num {
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .cal-hijri-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: #000000;
+            color: #ffffff;
+            padding: 1px 4px;
+            border-radius: 2px;
+            white-space: nowrap;
+        }
+
+        .cal-cell.today .cal-hijri-badge {
+            background: #000000;
+            color: var(--accent-yellow);
+        }
+
+        .cal-event-tag {
+            font-size: 0.6rem;
             font-weight: 800;
             background: #000000;
             color: #ffffff;
-            padding: 2px 4px;
-            border: 1px solid #000000;
-            transform: translate(-50%, -50%);
-            transition: all 0.6s ease;
+            padding: 1px 3px;
+            margin-top: 2px;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border: 1px solid #000000;
+        }
+
+        .cal-cell.today .cal-event-tag {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Converter Cards */
+        .conv-card {
+            background: #ffffff;
+            border: var(--border-width) solid var(--border);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .conv-header {
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #000000;
+            background: var(--accent-yellow);
+            padding: 0.35rem 0.5rem;
+            border: 2px solid #000000;
+        }
+
+        /* Month Start Tables */
+        .month-start-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000000;
+            margin-top: 0.5rem;
+        }
+
+        .month-start-table th {
+            background: #000000;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 0.5rem 0.4rem;
+            border: 1px solid #000000;
+            text-align: left;
+        }
+
+        .month-start-table td {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.45rem 0.4rem;
+            border: 1px solid #dddddd;
+            border-bottom: 1px solid #000000;
+        }
+
+        .month-start-table tr:nth-child(even) {
+            background: #fbfbf8;
+        }
+
+        .month-start-table tr:hover {
+            background: var(--accent-yellow-light);
         }
 
         /* Responsive Media Queries */
@@ -396,6 +760,28 @@
             .qibla-layout {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
+            }
+
+            .form-grid-2col {
+                grid-template-columns: 1fr;
+            }
+
+            .prayer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .cal-cell {
+                min-height: 60px;
+                padding: 3px;
+            }
+
+            .cal-greg-num {
+                font-size: 0.95rem;
+            }
+
+            .cal-hijri-badge {
+                font-size: 0.55rem;
+                padding: 1px 2px;
             }
         }
 
@@ -409,19 +795,16 @@
             }
 
             .header p {
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
 
             .tabs {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 0.5rem;
                 gap: 0.4rem;
             }
 
             .tab-btn {
                 padding: 0.5rem 0.85rem;
-                font-size: 0.8rem;
+                font-size: 0.75rem;
             }
 
             .app-container {
@@ -458,6 +841,10 @@
             .needle-qibla {
                 height: 85px;
             }
+
+            .prayer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
@@ -466,14 +853,15 @@
 
     <div class="header">
         <h1>DESTA CALCULATOR</h1>
-        <p>ARITHMETIC • JULIAN DAY • QIBLA DIRECTION</p>
+        <p>ARITHMETIC • JULIAN DAY • QIBLA & SHALAT • KALENDER HIJRIAH</p>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab(event, 'calc')">CALCULATOR</button>
-        <button class="tab-btn" onclick="switchTab(event, 'julian')">JULIAN DAY</button>
-        <button class="tab-btn" onclick="switchTab(event, 'qibla')">QIBLA FINDER</button>
+        <button class="tab-btn active" id="btn-tab-calc" onclick="switchTab(event, 'calc')">CALCULATOR</button>
+        <button class="tab-btn" id="btn-tab-julian" onclick="switchTab(event, 'julian')">JULIAN DAY</button>
+        <button class="tab-btn" id="btn-tab-qibla" onclick="switchTab(event, 'qibla')">QIBLA & SHALAT</button>
+        <button class="tab-btn" id="btn-tab-calendar" onclick="switchTab(event, 'calendar')">KALENDER & HIJRIAH</button>
     </div>
 
     <!-- Main Container -->
@@ -553,36 +941,47 @@
 
             <div class="res-card">
                 <div id="jd-result-val" class="res-title">JULIAN DAY (JD): --</div>
-                <div id="mjd-result-val" style="font-weight: 700; margin-top: 0.25rem;">MODIFIED JULIAN DAY (MJD): --
-                </div>
+                <div id="mjd-result-val" style="font-weight: 700; margin-top: 0.25rem;">MODIFIED JULIAN DAY (MJD): --</div>
                 <div id="jd-result-info" class="res-detail" style="margin-top: 0.5rem;">INPUT DATE: --</div>
             </div>
         </div>
 
-        <!-- TAB 3: QIBLA FINDER -->
+        <!-- TAB 3: QIBLA & PRAYER TIMES -->
         <div id="tab-qibla" class="tab-content">
-            <h2 class="section-title">QIBLA (KIBLAT) DIRECTION FINDER</h2>
+            <h2 class="section-title">
+                <span>QIBLA & WAKTU SHALAT</span>
+                <span style="font-size: 0.85rem; font-weight: 700; background: #000000; color: #ffffff; padding: 3px 8px;">BERDASARKAN LOKASI</span>
+            </h2>
 
             <div class="qibla-layout">
                 <div>
-                    <div class="input-group" style="margin-bottom: 1.25rem;">
-                        <label>QUICK SELECT CITY</label>
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label>PILIH KOTA PRESET</label>
                         <select id="city-preset" class="input-control" onchange="onCitySelected()">
-                            <option value="-6.2088,106.8456">Jakarta, Indonesia</option>
-                            <option value="-7.2575,112.7521">Surabaya, Indonesia</option>
-                            <option value="-6.9175,107.6191">Bandung, Indonesia</option>
-                            <option value="3.5952,98.6722">Medan, Indonesia</option>
-                            <option value="-5.1477,119.4327">Makassar, Indonesia</option>
-                            <option value="3.1390,101.6869">Kuala Lumpur, Malaysia</option>
-                            <option value="24.7136,46.6753">Riyadh, Saudi Arabia</option>
-                            <option value="51.5074,-0.1278">London, United Kingdom</option>
-                            <option value="40.7128,-74.0060">New York, USA</option>
-                            <option value="35.6762,139.6503">Tokyo, Japan</option>
-                            <option value="-33.8688,151.2093">Sydney, Australia</option>
+                            <option value="-6.2088,106.8456,7,Jakarta (WIB)">Jakarta, Indonesia (WIB)</option>
+                            <option value="-7.2575,112.7521,7,Surabaya (WIB)">Surabaya, Indonesia (WIB)</option>
+                            <option value="-6.9175,107.6191,7,Bandung (WIB)">Bandung, Indonesia (WIB)</option>
+                            <option value="3.5952,98.6722,7,Medan (WIB)">Medan, Indonesia (WIB)</option>
+                            <option value="-7.7956,110.3695,7,Yogyakarta (WIB)">Yogyakarta, Indonesia (WIB)</option>
+                            <option value="-6.9667,110.4167,7,Semarang (WIB)">Semarang, Indonesia (WIB)</option>
+                            <option value="5.5483,95.3238,7,Banda Aceh (WIB)">Banda Aceh, Indonesia (WIB)</option>
+                            <option value="-0.0263,109.3425,7,Pontianak (WIB)">Pontianak, Indonesia (WIB)</option>
+                            <option value="-5.1477,119.4327,8,Makassar (WITA)">Makassar, Indonesia (WITA)</option>
+                            <option value="-8.6705,115.2126,8,Denpasar (WITA)">Denpasar, Indonesia (WITA)</option>
+                            <option value="-3.3194,114.5908,8,Banjarmasin (WITA)">Banjarmasin, Indonesia (WITA)</option>
+                            <option value="-2.5489,140.7181,9,Jayapura (WIT)">Jayapura, Indonesia (WIT)</option>
+                            <option value="3.1390,101.6869,8,Kuala Lumpur (MYT)">Kuala Lumpur, Malaysia</option>
+                            <option value="21.4225,39.8262,3,Makkah (AST)">Makkah Al-Mukarramah, Saudi Arabia</option>
+                            <option value="24.4672,39.6111,3,Madinah (AST)">Madinah Al-Munawwarah, Saudi Arabia</option>
+                            <option value="24.7136,46.6753,3,Riyadh (AST)">Riyadh, Saudi Arabia</option>
+                            <option value="51.5074,-0.1278,0,London (GMT)">London, United Kingdom</option>
+                            <option value="40.7128,-74.0060,-5,New York (EST)">New York, USA</option>
+                            <option value="35.6762,139.6503,9,Tokyo (JST)">Tokyo, Japan</option>
+                            <option value="-33.8688,151.2093,10,Sydney (AEST)">Sydney, Australia</option>
                         </select>
                     </div>
 
-                    <div class="form-grid-2col">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 90px; gap: 0.75rem; margin-bottom: 1rem;">
                         <div class="input-group">
                             <label>LATITUDE (°N/°S)</label>
                             <input type="number" step="any" id="qibla-lat" class="input-control" placeholder="-6.2088">
@@ -591,20 +990,29 @@
                             <label>LONGITUDE (°E/°W)</label>
                             <input type="number" step="any" id="qibla-lon" class="input-control" placeholder="106.8456">
                         </div>
+                        <div class="input-group">
+                            <label>UTC (JAM)</label>
+                            <input type="number" step="0.5" id="qibla-tz" class="input-control" placeholder="7" value="7">
+                        </div>
                     </div>
 
-                    <button class="primary-btn" style="width: 100%; margin-top: 1rem;"
-                        onclick="computeQibla()">CALCULATE QIBLA DIRECTION</button>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="primary-btn" style="flex: 1;" onclick="computeQiblaAndPrayer()">
+                            HITUNG QIBLA & JADWAL SHALAT
+                        </button>
+                        <button class="secondary-btn" style="padding: 0.85rem 1rem;" onclick="detectMyLocation()" title="Gunakan GPS Browser">
+                            DETEKSI LOKASI (GPS)
+                        </button>
+                    </div>
 
                     <div class="res-card">
                         <div id="qibla-bearing" class="res-title">BEARING: --°</div>
-                        <div id="qibla-dir" style="font-weight: 700;">DIRECTION: --</div>
-                        <div id="qibla-dist" class="res-detail" style="margin-top: 0.25rem;">DISTANCE TO MECCA: -- km
-                        </div>
+                        <div id="qibla-dir" style="font-weight: 700;">ARAH: --</div>
+                        <div id="qibla-dist" class="res-detail" style="margin-top: 0.25rem;">JARAK KE KA'BAH: -- KM</div>
                     </div>
                 </div>
 
-                <!-- Compass Visual -->
+                <!-- Compass Visual with Kaaba Marker -->
                 <div class="compass-wrapper">
                     <div class="compass-dial">
                         <div class="compass-label n">N</div>
@@ -614,10 +1022,318 @@
 
                         <div class="needle-north"></div>
                         <div id="needle-qibla" class="needle-qibla"></div>
-                        <div id="kaaba-marker" class="kaaba-icon">MECCA</div>
+
+                        <!-- Gambar Kakbah menggantikan tulisan MECCA -->
+                        <div id="kaaba-marker" class="kaaba-icon" title="Ka'bah Al-Musyarrafah (Mekkah)">
+                            <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Bayangan Dasar -->
+                                <polygon points="18,34 32,26 18,18 4,26" fill="#000000" opacity="0.35"/>
+                                <!-- Dinding Sisi Kiri -->
+                                <polygon points="4,13 18,20 18,31 4,24" fill="#141416" stroke="#000000" stroke-width="1.2"/>
+                                <!-- Dinding Sisi Kanan -->
+                                <polygon points="18,20 32,13 32,24 18,31" fill="#1f1f22" stroke="#000000" stroke-width="1.2"/>
+                                <!-- Atap Ka'bah -->
+                                <polygon points="18,5 32,13 18,20 4,13" fill="#2d2d30" stroke="#000000" stroke-width="1.2"/>
+                                <polygon points="18,7 30,13 18,18 6,13" fill="#141416"/>
+                                <!-- Pita Kiswah Emas Sisi Kiri -->
+                                <polygon points="4,15.5 18,22.5 18,24.5 4,17.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
+                                <!-- Pita Kiswah Emas Sisi Kanan -->
+                                <polygon points="18,22.5 32,15.5 32,17.5 18,24.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
+                                <!-- Pintu Ka'bah (Bab al-Kaaba) -->
+                                <polygon points="22,19.5 27,17 27,24 22,26.5" fill="#ffde59" stroke="#000000" stroke-width="1"/>
+                                <line x1="24.5" y1="18.2" x2="24.5" y2="25.2" stroke="#000000" stroke-width="0.7"/>
+                                <!-- Pondasi Marmer (Syadzarwan) -->
+                                <polygon points="4,24 18,31 18,32 4,25" fill="#e5e5ea" stroke="#000000" stroke-width="0.8"/>
+                                <polygon points="18,31 32,24 32,25 18,32" fill="#d1d1d6" stroke="#000000" stroke-width="0.8"/>
+                            </svg>
+                        </div>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;"
-                        id="compass-caption">QIBLA VECTOR</p>
+                        id="compass-caption">VEKTOR KIBLAT: MENUNJUK KE KA'BAH</p>
+                </div>
+            </div>
+
+            <!-- JADWAL WAKTU SHALAT BERDASARKAN LOKASI -->
+            <div class="prayer-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 800; text-transform: uppercase;">
+                        JADWAL WAKTU SHALAT HARI INI
+                    </h3>
+                    <div id="prayer-loc-tag" style="font-size: 0.8rem; font-weight: 800; background: var(--accent-yellow); border: 2px solid #000000; padding: 4px 10px;">
+                        LOKASI: JAKARTA (WIB)
+                    </div>
+                </div>
+
+                <!-- Status Bar Shalat & Countdown -->
+                <div class="prayer-status-bar">
+                    <div>
+                        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #555555;">STATUS SAAT INI:</div>
+                        <div id="prayer-status-name" style="font-size: 1.15rem; font-weight: 800;">MEMUAT...</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #555555;">HITUNG MUNDUR WAKTU BERIKUTNYA:</div>
+                        <div id="prayer-countdown-val" style="font-size: 1.25rem; font-weight: 800; font-family: monospace;">--:--:--</div>
+                    </div>
+                </div>
+
+                <!-- 7 Kartu Waktu Shalat -->
+                <div class="prayer-grid">
+                    <div class="prayer-card" id="pcard-imsak">
+                        <div class="prayer-name">IMSAK</div>
+                        <div class="prayer-time" id="ptime-imsak">--:--</div>
+                        <div class="prayer-note">Imsakiah</div>
+                    </div>
+                    <div class="prayer-card" id="pcard-fajr">
+                        <div class="prayer-name">SUBUH</div>
+                        <div class="prayer-time" id="ptime-fajr">--:--</div>
+                        <div class="prayer-note">Fajr</div>
+                    </div>
+                    <div class="prayer-card" id="pcard-sunrise">
+                        <div class="prayer-name">TERBIT</div>
+                        <div class="prayer-time" id="ptime-sunrise">--:--</div>
+                        <div class="prayer-note">Syuruq</div>
+                    </div>
+                    <div class="prayer-card" id="pcard-dhuhr">
+                        <div class="prayer-name">DZUHUR</div>
+                        <div class="prayer-time" id="ptime-dhuhr">--:--</div>
+                        <div class="prayer-note">Zuhur</div>
+                    </div>
+                    <div class="prayer-card" id="pcard-asr">
+                        <div class="prayer-name">ASHAR</div>
+                        <div class="prayer-time" id="ptime-asr">--:--</div>
+                        <div class="prayer-note">Ashr</div>
+                    </div>
+                    <div class="prayer-card" id="pcard-maghrib">
+                        <div class="prayer-name">MAGHRIB</div>
+                        <div class="prayer-time" id="ptime-maghrib">--:--</div>
+                        <div class="prayer-note">Maghrib</div>
+                    </div>
+                    <div class="prayer-card" id="pcard-isha">
+                        <div class="prayer-name">ISYA</div>
+                        <div class="prayer-time" id="ptime-isha">--:--</div>
+                        <div class="prayer-note">Isya'</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+                    <div>STANDAR PERHITUNGAN: KEMENAG RI (SUBUH 20°, ISYA 18°, IHTIYATH +2m)</div>
+                    <div id="prayer-current-date-info">TANGGAL: --</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: KALENDER & HIJRIAH -->
+        <div id="tab-calendar" class="tab-content">
+            <h2 class="section-title">
+                <span>KALENDER MASEHI & HIJRIAH</span>
+                <span style="font-size: 0.85rem; font-weight: 700; background: var(--accent-yellow); color: #000000; padding: 3px 8px; border: 2px solid #000000;">DUAL DISPLAY</span>
+            </h2>
+
+            <!-- 1. KALENDER BULANAN INTERAKTIF -->
+            <div class="cal-wrapper">
+                <div class="cal-header-bar">
+                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                        <button class="cal-nav-btn" onclick="calPrevMonth()">◀ BULAN LALU</button>
+                        <button class="cal-nav-btn today-btn" onclick="calGoToday()">HARI INI</button>
+                        <button class="cal-nav-btn" onclick="calNextMonth()">BULAN DEPAN ▶</button>
+                    </div>
+
+                    <div style="text-align: center;">
+                        <div id="cal-month-title-greg" style="font-size: 1.35rem; font-weight: 800; text-transform: uppercase;">
+                            SEPTEMBER 2026
+                        </div>
+                        <div id="cal-month-title-hijri" style="font-size: 0.9rem; font-weight: 700; color: #444444; margin-top: 2px;">
+                            RABI'UL-AWWAL - RABI'UL-AKHIR 1448 H
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                        <select id="cal-select-month" class="input-control" style="padding: 0.45rem 0.6rem; font-size: 0.85rem;" onchange="calJumpToDate()">
+                            <option value="0">Januari</option>
+                            <option value="1">Februari</option>
+                            <option value="2">Maret</option>
+                            <option value="3">April</option>
+                            <option value="4">Mei</option>
+                            <option value="5">Juni</option>
+                            <option value="6">Juli</option>
+                            <option value="7">Agustus</option>
+                            <option value="8">September</option>
+                            <option value="9">Oktober</option>
+                            <option value="10">November</option>
+                            <option value="11">Desember</option>
+                        </select>
+                        <input type="number" id="cal-select-year" class="input-control" style="width: 90px; padding: 0.45rem 0.6rem; font-size: 0.85rem;" value="2026" onchange="calJumpToDate()">
+                    </div>
+                </div>
+
+                <!-- Bar Nama Hari -->
+                <div class="cal-weekdays">
+                    <div class="cal-weekday sun">AHAD</div>
+                    <div class="cal-weekday">SENIN</div>
+                    <div class="cal-weekday">SELASA</div>
+                    <div class="cal-weekday">RABU</div>
+                    <div class="cal-weekday">KAMIS</div>
+                    <div class="cal-weekday fri">JUMAT</div>
+                    <div class="cal-weekday">SABTU</div>
+                </div>
+
+                <!-- Grid Tanggal Kalender -->
+                <div id="cal-days-grid" class="cal-grid"></div>
+
+                <!-- Info Tanggal yang Dipilih -->
+                <div id="cal-selected-info" class="res-card" style="margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <div id="cal-sel-greg" style="font-size: 1.15rem; font-weight: 800;">--</div>
+                            <div id="cal-sel-hijri" style="font-size: 1rem; font-weight: 700; color: #222222; margin-top: 2px;">--</div>
+                        </div>
+                        <div id="cal-sel-event" style="background: var(--accent-yellow); border: 2px solid #000000; padding: 4px 10px; font-weight: 800; font-size: 0.85rem;">
+                            HARI INI
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. KONVERSI TANGGAL MASEHI KE HIJRIAH DAN SEBALIKNYA -->
+            <div style="margin-top: 2rem;">
+                <h3 class="section-title">KONVERSI TANGGAL MASEHI ⇄ HIJRIAH</h3>
+
+                <div class="form-grid-2col">
+                    <!-- Konversi Masehi ke Hijriah -->
+                    <div class="conv-card">
+                        <div class="conv-header">KONVERSI MASEHI ➔ HIJRIAH</div>
+
+                        <div class="input-group" style="margin-bottom: 1rem;">
+                            <label>PILIH TANGGAL MASEHI</label>
+                            <input type="date" id="conv-greg-input" class="input-control" onchange="convertGregToHijri()">
+                        </div>
+
+                        <button class="primary-btn" style="width: 100%;" onclick="convertGregToHijri()">
+                            KONVERSI KE HIJRIAH
+                        </button>
+
+                        <div class="res-card" style="margin-top: 1rem; flex: 1;">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #555555; text-transform: uppercase;">HASIL TANGGAL HIJRIAH:</div>
+                            <div id="conv-hijri-res" class="res-title" style="margin-top: 0.35rem;">--</div>
+                            <div id="conv-hijri-detail" style="font-size: 0.95rem; font-weight: 700; margin-top: 0.35rem;">--</div>
+                            <div id="conv-hijri-event" class="res-detail" style="margin-top: 0.35rem; font-weight: 800; color: #000000;"></div>
+                            <div id="conv-hijri-jd" class="res-detail" style="margin-top: 0.35rem; font-size: 0.78rem;">JULIAN DAY: --</div>
+                        </div>
+                    </div>
+
+                    <!-- Konversi Hijriah ke Masehi -->
+                    <div class="conv-card">
+                        <div class="conv-header">KONVERSI HIJRIAH ➔ MASEHI</div>
+
+                        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 0.5rem; margin-bottom: 1rem;">
+                            <div class="input-group">
+                                <label>TGL (1-30)</label>
+                                <input type="number" id="conv-hijri-day" class="input-control" min="1" max="30" value="1" onchange="convertHijriToGreg()">
+                            </div>
+                            <div class="input-group">
+                                <label>BULAN HIJRIAH</label>
+                                <select id="conv-hijri-month" class="input-control" onchange="convertHijriToGreg()">
+                                    <option value="1">1. Muharram</option>
+                                    <option value="2">2. Safar</option>
+                                    <option value="3">3. Rabi'ul-Awwal</option>
+                                    <option value="4">4. Rabi'ul-Akhir</option>
+                                    <option value="5">5. Jumadal-Ula</option>
+                                    <option value="6">6. Jumadal-Akhirah</option>
+                                    <option value="7">7. Rajab</option>
+                                    <option value="8">8. Sya'ban</option>
+                                    <option value="9">9. Ramadhan</option>
+                                    <option value="10">10. Syawwal</option>
+                                    <option value="11">11. Dzulqa'dah</option>
+                                    <option value="12">12. Dzulhijjah</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>TAHUN (H)</label>
+                                <input type="number" id="conv-hijri-year" class="input-control" value="1448" onchange="convertHijriToGreg()">
+                            </div>
+                        </div>
+
+                        <button class="primary-btn" style="width: 100%;" onclick="convertHijriToGreg()">
+                            KONVERSI KE MASEHI
+                        </button>
+
+                        <div class="res-card" style="margin-top: 1rem; flex: 1;">
+                            <div style="font-size: 0.75rem; font-weight: 800; color: #555555; text-transform: uppercase;">HASIL TANGGAL MASEHI:</div>
+                            <div id="conv-greg-res" class="res-title" style="margin-top: 0.35rem;">--</div>
+                            <div id="conv-greg-detail" style="font-size: 0.95rem; font-weight: 700; margin-top: 0.35rem;">--</div>
+                            <div id="conv-greg-event" class="res-detail" style="margin-top: 0.35rem; font-weight: 800; color: #000000;"></div>
+                            <div id="conv-greg-jd" class="res-detail" style="margin-top: 0.35rem; font-size: 0.78rem;">JULIAN DAY: --</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. INFORMASI AWAL BULAN HIJRIAH & MASEHI -->
+            <div style="margin-top: 2rem;">
+                <h3 class="section-title">INFORMASI AWAL BULAN HIJRIAH & MASEHI</h3>
+
+                <div class="form-grid-2col">
+                    <!-- Awal Bulan Hijriah di Kalender Masehi -->
+                    <div class="conv-card">
+                        <div class="conv-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>AWAL BULAN HIJRIAH DI MASEHI</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.85rem 0; gap: 0.5rem;">
+                            <button class="sec-mini-btn" onclick="stepHijriYear(-1)">◀ TAHUN LALU</button>
+                            <div style="display: flex; align-items: center; gap: 0.3rem;">
+                                <input type="number" id="table-hijri-year" class="input-control" style="width: 90px; text-align: center; padding: 0.35rem;" value="1448" onchange="renderHijriMonthStarts()">
+                                <span style="font-weight: 800;">H</span>
+                            </div>
+                            <button class="sec-mini-btn" onclick="stepHijriYear(1)">TAHUN DEPAN ▶</button>
+                        </div>
+                        <p style="font-size: 0.75rem; font-weight: 700; color: #555555; margin-bottom: 0.5rem;">
+                            Daftar tanggal 1 setiap bulan Hijriah pada tahun yang dipilih:
+                        </p>
+                        <div style="overflow-x: auto;">
+                            <table class="month-start-table" id="table-hijri-starts">
+                                <thead>
+                                    <tr>
+                                        <th>BULAN HIJRIAH</th>
+                                        <th>HARI</th>
+                                        <th>TANGGAL MASEHI</th>
+                                        <th>DURASI</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Awal Bulan Masehi di Kalender Hijriah -->
+                    <div class="conv-card">
+                        <div class="conv-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>AWAL BULAN MASEHI DI HIJRIAH</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.85rem 0; gap: 0.5rem;">
+                            <button class="sec-mini-btn" onclick="stepGregYear(-1)">◀ TAHUN LALU</button>
+                            <div style="display: flex; align-items: center; gap: 0.3rem;">
+                                <input type="number" id="table-greg-year" class="input-control" style="width: 90px; text-align: center; padding: 0.35rem;" value="2026" onchange="renderGregMonthStarts()">
+                                <span style="font-weight: 800;">M</span>
+                            </div>
+                            <button class="sec-mini-btn" onclick="stepGregYear(1)">TAHUN DEPAN ▶</button>
+                        </div>
+                        <p style="font-size: 0.75rem; font-weight: 700; color: #555555; margin-bottom: 0.5rem;">
+                            Daftar tanggal 1 setiap bulan Masehi pada tahun yang dipilih:
+                        </p>
+                        <div style="overflow-x: auto;">
+                            <table class="month-start-table" id="table-greg-starts">
+                                <thead>
+                                    <tr>
+                                        <th>BULAN MASEHI</th>
+                                        <th>HARI</th>
+                                        <th>TANGGAL HIJRIAH</th>
+                                        <th>DURASI</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -625,6 +1341,29 @@
     </div>
 
     <script>
+        // --- CONSTANTS & NAMES ---
+        const MECCA_LAT = 21.422487;
+        const MECCA_LON = 39.826206;
+
+        const HIJRI_MONTHS = [
+            "Muharram", "Safar", "Rabi'ul-Awwal", "Rabi'ul-Akhir",
+            "Jumadal-Ula", "Jumadal-Akhirah", "Rajab", "Sya'ban",
+            "Ramadhan", "Syawwal", "Dzulqa'dah", "Dzulhijjah"
+        ];
+
+        const HIJRI_MONTHS_SHORT = [
+            "Muh", "Saf", "Rab I", "Rab II",
+            "Jum I", "Jum II", "Raj", "Sya",
+            "Ram", "Syaw", "Dzulq", "Dzulh"
+        ];
+
+        const GREG_MONTHS = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        const DAYS_ID = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+
         // Tab switching
         function switchTab(evt, tabId) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -632,8 +1371,16 @@
 
             if (evt && evt.currentTarget) {
                 evt.currentTarget.classList.add('active');
+            } else {
+                const btn = document.getElementById('btn-tab-' + tabId);
+                if (btn) btn.classList.add('active');
             }
-            document.getElementById('tab-' + tabId).classList.add('active');
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.classList.add('active');
+
+            if (tabId === 'calendar') {
+                renderCalendar();
+            }
         }
 
         // --- CALCULATOR ---
@@ -698,7 +1445,7 @@
             const mins = String(now.getMinutes()).padStart(2, '0');
             const secs = String(now.getSeconds()).padStart(2, '0');
             document.getElementById('jd-time').value = `${hours}:${mins}:${secs}`;
-            document.getElementById('jd-utc').value = 7;
+            document.getElementById('jd-utc').value = -(now.getTimezoneOffset() / 60);
         }
 
         function computeJulianDay() {
@@ -734,32 +1481,247 @@
             document.getElementById('jd-result-info').innerText = `INPUT DATE: ${year}-${String(month).padStart(2, '0')}-${String(Math.floor(day)).padStart(2, '0')} ${String(hr).padStart(2, '0')}:${String(mn).padStart(2, '0')}:${String(sc).padStart(2, '0')} (UTC${utcOffset >= 0 ? '+' : ''}${utcOffset})`;
         }
 
-        // --- QIBLA FINDER ---
-        const MECCA_LAT = 21.422487;
-        const MECCA_LON = 39.826206;
+        // --- CORE ASTRONOMICAL & CALENDAR MATHEMATICS ---
+        function toRad(deg) { return deg * Math.PI / 180; }
+        function toDeg(rad) { return rad * 180 / Math.PI; }
+
+        function gregorianToJD(year, month, day) {
+            let y = year, m = month;
+            if (m <= 2) {
+                y -= 1;
+                m += 12;
+            }
+            const a = Math.floor(y / 100);
+            const b = 2 - a + Math.floor(a / 4);
+            return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + b - 1524.5;
+        }
+
+        function jdToGregorian(jd) {
+            const jd0 = jd + 0.5;
+            const z = Math.floor(jd0);
+            const f = jd0 - z;
+            let a = z;
+            if (z >= 2299161) {
+                const alpha = Math.floor((z - 1867216.25) / 36524.25);
+                a = z + 1 + alpha - Math.floor(alpha / 4);
+            }
+            const b = a + 1524;
+            const c = Math.floor((b - 122.1) / 365.25);
+            const d = Math.floor(365.25 * c);
+            const e = Math.floor((b - d) / 30.6001);
+            const day = b - d - Math.floor(30.6001 * e) + f;
+            const month = (e < 14) ? (e - 1) : (e - 13);
+            const year = (month > 2) ? (c - 4716) : (c - 4715);
+            return { year, month, day: Math.round(day) };
+        }
+
+        function isHijriLeap(year) {
+            return (11 * year + 14) % 30 < 11;
+        }
+
+        function hijriMonthDays(year, month) {
+            if (month % 2 === 1) return 30;
+            if (month === 12 && isHijriLeap(year)) return 30;
+            return 29;
+        }
+
+        function hijriToJD(year, month, day) {
+            const y = year - 1;
+            let days = y * 354 + Math.floor((11 * y + 3) / 30);
+            days += Math.ceil(29.5 * (month - 1));
+            days += day;
+            return days + 1948439.5 - 1;
+        }
+
+        function jdToHijri(jd) {
+            const jd0 = Math.floor(jd) + 0.5;
+            const d = jd0 - 1948439.5 + 1;
+            const cycle = Math.floor(d / 10631);
+            const dCycle = d - 10631 * cycle;
+            const yCycle = Math.floor((30 * dCycle + 15) / 10631);
+            let year = 30 * cycle + yCycle;
+
+            let y = year - 1;
+            let daysY = y * 354 + Math.floor((11 * y + 3) / 30);
+            let dRem = d - daysY;
+
+            if (dRem <= 0) {
+                year -= 1;
+                y = year - 1;
+                daysY = y * 354 + Math.floor((11 * y + 3) / 30);
+                dRem = d - daysY;
+            } else {
+                const maxYearDays = isHijriLeap(year) ? 355 : 354;
+                if (dRem > maxYearDays) {
+                    year += 1;
+                    y = year - 1;
+                    daysY = y * 354 + Math.floor((11 * y + 3) / 30);
+                    dRem = d - daysY;
+                }
+            }
+
+            let month = 1;
+            while (month <= 12) {
+                const mLen = hijriMonthDays(year, month);
+                if (dRem <= mLen) break;
+                dRem -= mLen;
+                month += 1;
+            }
+            return { year, month, day: Math.round(dRem) };
+        }
+
+        function gregorianToHijri(year, month, day) {
+            const jd = gregorianToJD(year, month, day);
+            return jdToHijri(jd);
+        }
+
+        function getIslamicHoliday(hMonth, hDay, hYear) {
+            if (hMonth === 1 && hDay === 1) return `Tahun Baru Hijriah ${hYear} H`;
+            if (hMonth === 1 && hDay === 9) return "Puasa Tasu'a";
+            if (hMonth === 1 && hDay === 10) return "Puasa Asyura";
+            if (hMonth === 3 && hDay === 12) return "Maulid Nabi Muhammad SAW";
+            if (hMonth === 7 && hDay === 27) return "Isra Mi'raj 1448 H";
+            if (hMonth === 8 && hDay === 15) return "Malam Nisfu Sya'ban";
+            if (hMonth === 9 && hDay === 1) return "Awal Puasa Ramadhan";
+            if (hMonth === 9 && hDay === 17) return "Nuzulul Qur'an";
+            if (hMonth === 9 && hDay >= 21 && hDay % 2 === 1) return "Malam Lailatul Qadar (Ganjil)";
+            if (hMonth === 10 && hDay === 1) return "Hari Raya Idul Fitri 1448 H";
+            if (hMonth === 10 && hDay === 2) return "Idul Fitri Hari Ke-2";
+            if (hMonth === 12 && hDay === 8) return "Hari Tarwiyah";
+            if (hMonth === 12 && hDay === 9) return "Hari Arafah (Puasa Arafah)";
+            if (hMonth === 12 && hDay === 10) return "Hari Raya Idul Adha";
+            if (hMonth === 12 && (hDay === 11 || hDay === 12 || hDay === 13)) return "Hari Tasyrik";
+            if (hDay === 13 || hDay === 14 || hDay === 15) return "Puasa Ayyamul Bidh";
+            return "";
+        }
+
+        // --- PRAYER TIMES CALCULATION ENGINE ---
+        function calculatePrayerTimes(lat, lon, tz, year, month, day, fajrAngle = 20.0, ishaAngle = 18.0) {
+            const jd = gregorianToJD(year, month, day);
+            const d = jd - 2451545.0;
+
+            const g = (357.529 + 0.98560028 * d) % 360;
+            const q = (280.459 + 0.98564736 * d) % 360;
+            const l = (q + 1.915 * Math.sin(toRad(g)) + 0.020 * Math.sin(toRad(2 * g))) % 360;
+            const e = 23.439 - 0.00000036 * d;
+
+            const sinDec = Math.sin(toRad(e)) * Math.sin(toRad(l));
+            const dec = Math.asin(sinDec); // radians
+
+            const tanE2 = Math.tan(toRad(e) / 2) ** 2;
+            const sin2L = Math.sin(2 * toRad(l));
+            const sinG = Math.sin(toRad(g));
+            const eqt = 4 * toDeg(tanE2 * sin2L - 2 * 0.0167086 * sinG + 4 * 0.0167086 * tanE2 * sinG * Math.cos(2 * toRad(l)) - 0.5 * (tanE2 ** 2) * Math.sin(4 * toRad(l)) - 1.25 * (0.0167086 ** 2) * Math.sin(2 * toRad(g)));
+
+            // Solar Noon (Dhuhr)
+            const noon = 12.0 + tz - (lon / 15.0) - (eqt / 60.0);
+            const phi = toRad(lat);
+
+            function hourAngle(altDeg) {
+                const sinAlt = Math.sin(toRad(altDeg));
+                const cosHA = (sinAlt - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec));
+                if (cosHA > 1) return 0.0;
+                if (cosHA < -1) return 180.0;
+                return toDeg(Math.acos(cosHA));
+            }
+
+            const haSun = hourAngle(-0.8333);
+            const sunrise = noon - haSun / 15.0;
+            const sunset = noon + haSun / 15.0;
+
+            const haFajr = hourAngle(-fajrAngle);
+            const fajr = noon - haFajr / 15.0;
+            const imsak = fajr - (10.0 / 60.0);
+
+            const altAsr = toDeg(Math.atan(1.0 / (1.0 + Math.tan(Math.abs(phi - dec)))));
+            const haAsr = hourAngle(altAsr);
+            const asr = noon + haAsr / 15.0;
+
+            const maghrib = sunset + (2.0 / 60.0); // +2 min ihtiyat
+            const haIsha = hourAngle(-ishaAngle);
+            const isha = noon + haIsha / 15.0;
+            const dhuhr = noon + (2.0 / 60.0); // +2 min ihtiyat
+
+            function formatTime(h) {
+                h = (h % 24 + 24) % 24;
+                const hours = Math.floor(h);
+                const mins = Math.round((h - hours) * 60);
+                const realH = (mins === 60) ? (hours + 1) : hours;
+                const realM = (mins === 60) ? 0 : mins;
+                return `${String(realH).padStart(2, '0')}:${String(realM).padStart(2, '0')}`;
+            }
+
+            return {
+                raw: { imsak, fajr, sunrise, dhuhr, asr, maghrib, isha },
+                times: {
+                    imsak: formatTime(imsak),
+                    fajr: formatTime(fajr),
+                    sunrise: formatTime(sunrise),
+                    dhuhr: formatTime(dhuhr),
+                    asr: formatTime(asr),
+                    maghrib: formatTime(maghrib),
+                    isha: formatTime(isha)
+                }
+            };
+        }
+
+        // --- QIBLA FINDER & PRAYER UI ---
+        let latestPrayerSchedule = null;
+        let countdownTimerInterval = null;
 
         function onCitySelected() {
             const val = document.getElementById('city-preset').value;
-            const [lat, lon] = val.split(',').map(Number);
+            const parts = val.split(',');
+            const lat = parseFloat(parts[0]);
+            const lon = parseFloat(parts[1]);
+            const tz = parseFloat(parts[2]) || 7;
+            const name = parts[3] || "Jakarta";
+
             document.getElementById('qibla-lat').value = lat;
             document.getElementById('qibla-lon').value = lon;
-            computeQibla();
+            document.getElementById('qibla-tz').value = tz;
+            document.getElementById('prayer-loc-tag').innerText = `LOKASI: ${name.toUpperCase()}`;
+
+            computeQiblaAndPrayer();
         }
 
-        function computeQibla() {
+        function detectMyLocation() {
+            if (!navigator.geolocation) {
+                alert("Geolocation tidak didukung oleh browser Anda.");
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = parseFloat(pos.coords.latitude.toFixed(6));
+                    const lon = parseFloat(pos.coords.longitude.toFixed(6));
+                    const tz = -(new Date().getTimezoneOffset() / 60);
+
+                    document.getElementById('qibla-lat').value = lat;
+                    document.getElementById('qibla-lon').value = lon;
+                    document.getElementById('qibla-tz').value = tz;
+                    document.getElementById('prayer-loc-tag').innerText = `LOKASI: GPS (${lat}, ${lon})`;
+
+                    computeQiblaAndPrayer();
+                },
+                (err) => {
+                    alert(`Gagal mengambil lokasi GPS: ${err.message}. Gunakan preset atau masukkan koordinat secara manual.`);
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        function computeQiblaAndPrayer() {
             const lat = parseFloat(document.getElementById('qibla-lat').value);
             const lon = parseFloat(document.getElementById('qibla-lon').value);
+            const tz = parseFloat(document.getElementById('qibla-tz').value) || 7;
 
             if (isNaN(lat) || isNaN(lon)) return;
 
-            const toRad = deg => deg * Math.PI / 180;
-            const toDeg = rad => rad * 180 / Math.PI;
-
+            // 1. Qibla Direction
             const phiU = toRad(lat);
             const lambdaU = toRad(lon);
             const phiM = toRad(MECCA_LAT);
             const lambdaM = toRad(MECCA_LON);
-
             const deltaLambda = lambdaM - lambdaU;
 
             const y = Math.sin(deltaLambda);
@@ -771,12 +1733,12 @@
             const haversineA = Math.sin(dphi / 2) ** 2 + Math.cos(phiU) * Math.cos(phiM) * Math.sin(deltaLambda / 2) ** 2;
             const distKm = 6371 * 2 * Math.atan2(Math.sqrt(haversineA), Math.sqrt(1 - haversineA));
 
-            const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+            const directions = ["U", "UTL", "TL", "TTL", "T", "TGr", "TG", "STG", "S", "SBD", "BD", "BBD", "B", "BBL", "BL", "UBL"];
             const dirIdx = Math.round((bearingDeg + 11.25) / 22.5) % 16;
 
             document.getElementById('qibla-bearing').innerText = `BEARING: ${bearingDeg.toFixed(2)}°`;
-            document.getElementById('qibla-dir').innerText = `DIRECTION: ${directions[dirIdx]} (FROM TRUE NORTH)`;
-            document.getElementById('qibla-dist').innerText = `DISTANCE TO MECCA: ${distKm.toLocaleString(undefined, { maximumFractionDigits: 2 })} KM`;
+            document.getElementById('qibla-dir').innerText = `ARAH: ${directions[dirIdx]} (${bearingDeg.toFixed(1)}° DARI UTARA SEJATI)`;
+            document.getElementById('qibla-dist').innerText = `JARAK KE KA'BAH: ${distKm.toLocaleString(undefined, { maximumFractionDigits: 2 })} KM`;
 
             const needle = document.getElementById('needle-qibla');
             needle.style.transform = `rotate(${bearingDeg}deg)`;
@@ -792,13 +1754,386 @@
             kaaba.style.left = `${kx}px`;
             kaaba.style.top = `${ky}px`;
 
-            document.getElementById('compass-caption').innerText = `QIBLA VECTOR: ${bearingDeg.toFixed(1)}° (${directions[dirIdx]})`;
+            document.getElementById('compass-caption').innerText = `VEKTOR KIBLAT: ${bearingDeg.toFixed(1)}° (${directions[dirIdx]}) MENUJU KA'BAH`;
+
+            // 2. Prayer Times for Today
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            const pRes = calculatePrayerTimes(lat, lon, tz, year, month, day);
+            latestPrayerSchedule = pRes;
+
+            document.getElementById('ptime-imsak').innerText = pRes.times.imsak;
+            document.getElementById('ptime-fajr').innerText = pRes.times.fajr;
+            document.getElementById('ptime-sunrise').innerText = pRes.times.sunrise;
+            document.getElementById('ptime-dhuhr').innerText = pRes.times.dhuhr;
+            document.getElementById('ptime-asr').innerText = pRes.times.asr;
+            document.getElementById('ptime-maghrib').innerText = pRes.times.maghrib;
+            document.getElementById('ptime-isha').innerText = pRes.times.isha;
+
+            const hijriToday = gregorianToHijri(year, month, day);
+            document.getElementById('prayer-current-date-info').innerText =
+                `TANGGAL: ${day} ${GREG_MONTHS[month - 1]} ${year} M / ${hijriToday.day} ${HIJRI_MONTHS[hijriToday.month - 1]} ${hijriToday.year} H`;
+
+            updatePrayerCountdown();
+            if (!countdownTimerInterval) {
+                countdownTimerInterval = setInterval(updatePrayerCountdown, 1000);
+            }
         }
 
-        // Initialize defaults
-        setCurrentDateTime();
-        computeJulianDay();
-        onCitySelected();
+        function updatePrayerCountdown() {
+            if (!latestPrayerSchedule) return;
+
+            const now = new Date();
+            const curHours = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+
+            const prayers = [
+                { id: "imsak", name: "IMSAK", raw: latestPrayerSchedule.raw.imsak },
+                { id: "fajr", name: "SUBUH", raw: latestPrayerSchedule.raw.fajr },
+                { id: "sunrise", name: "TERBIT", raw: latestPrayerSchedule.raw.sunrise },
+                { id: "dhuhr", name: "DZUHUR", raw: latestPrayerSchedule.raw.dhuhr },
+                { id: "asr", name: "ASHAR", raw: latestPrayerSchedule.raw.asr },
+                { id: "maghrib", name: "MAGHRIB", raw: latestPrayerSchedule.raw.maghrib },
+                { id: "isha", name: "ISYA", raw: latestPrayerSchedule.raw.isha }
+            ];
+
+            document.querySelectorAll('.prayer-card').forEach(c => {
+                c.classList.remove('active');
+                c.classList.remove('next');
+            });
+
+            // Find current and next prayer
+            let activeIdx = -1;
+            let nextIdx = 0;
+
+            for (let i = 0; i < prayers.length; i++) {
+                if (curHours >= prayers[i].raw) {
+                    activeIdx = i;
+                }
+            }
+
+            if (activeIdx === -1) {
+                // Before imsak
+                nextIdx = 0;
+                document.getElementById('prayer-status-name').innerText = "MENJELANG IMSAK / SUBUH";
+            } else {
+                nextIdx = (activeIdx + 1) % prayers.length;
+                document.getElementById('pcard-' + prayers[activeIdx].id).classList.add('active');
+                document.getElementById('prayer-status-name').innerText = `WAKTU ${prayers[activeIdx].name} SEDANG BERJALAN`;
+            }
+
+            document.getElementById('pcard-' + prayers[nextIdx].id).classList.add('next');
+
+            // Compute countdown to next prayer
+            let nextRaw = prayers[nextIdx].raw;
+            if (nextRaw <= curHours) {
+                nextRaw += 24; // next day
+            }
+            const diffHours = nextRaw - curHours;
+            const diffSec = Math.max(0, Math.floor(diffHours * 3600));
+
+            const hh = String(Math.floor(diffSec / 3600)).padStart(2, '0');
+            const mm = String(Math.floor((diffSec % 3600) / 60)).padStart(2, '0');
+            const ss = String(diffSec % 60).padStart(2, '0');
+
+            document.getElementById('prayer-countdown-val').innerText = `${prayers[nextIdx].name}: -${hh}:${mm}:${ss}`;
+        }
+
+        // --- CALENDAR STATE & FUNCTIONS ---
+        let calState = {
+            year: 2026,
+            month: 8 // 0-indexed: September
+        };
+
+        function renderCalendar() {
+            const y = calState.year;
+            const m = calState.month;
+
+            document.getElementById('cal-month-title-greg').innerText = `${GREG_MONTHS[m]} ${y}`;
+            document.getElementById('cal-select-month').value = m;
+            document.getElementById('cal-select-year').value = y;
+
+            const firstDayJD = gregorianToJD(y, m + 1, 1);
+            const firstHijri = jdToHijri(firstDayJD);
+
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            const lastDayJD = gregorianToJD(y, m + 1, daysInMonth);
+            const lastHijri = jdToHijri(lastDayJD);
+
+            let hijriTitle = "";
+            if (firstHijri.month === lastHijri.month) {
+                hijriTitle = `${HIJRI_MONTHS[firstHijri.month - 1]} ${firstHijri.year} H`;
+            } else {
+                hijriTitle = `${HIJRI_MONTHS[firstHijri.month - 1]} - ${HIJRI_MONTHS[lastHijri.month - 1]} ${firstHijri.year} H`;
+            }
+            document.getElementById('cal-month-title-hijri').innerText = hijriTitle;
+
+            // Day of week of 1st day (0 = Sunday, 1 = Monday ...)
+            const firstDOW = new Date(y, m, 1).getDay();
+
+            const grid = document.getElementById('cal-days-grid');
+            grid.innerHTML = "";
+
+            // Days from previous month
+            const prevMonthDays = new Date(y, m, 0).getDate();
+            for (let i = firstDOW - 1; i >= 0; i--) {
+                const prevDay = prevMonthDays - i;
+                const prevDate = new Date(y, m - 1, prevDay);
+                const hPrev = gregorianToHijri(prevDate.getFullYear(), prevDate.getMonth() + 1, prevDay);
+
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell other-month';
+                cell.innerHTML = `
+                    <div class="cal-cell-top">
+                        <span class="cal-greg-num">${prevDay}</span>
+                        <span class="cal-hijri-badge">${hPrev.day} ${HIJRI_MONTHS_SHORT[hPrev.month - 1]}</span>
+                    </div>
+                `;
+                grid.appendChild(cell);
+            }
+
+            // Current month days
+            const today = new Date();
+            const isCurrentYear = (today.getFullYear() === y);
+            const isCurrentMonth = (today.getMonth() === m);
+            const todayDate = today.getDate();
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const hDate = gregorianToHijri(y, m + 1, d);
+                const holiday = getIslamicHoliday(hDate.month, hDate.day, hDate.year);
+
+                const isToday = isCurrentYear && isCurrentMonth && (d === todayDate);
+
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell' + (isToday ? ' today' : '');
+                cell.id = `cal-day-${d}`;
+
+                let eventHtml = holiday ? `<div class="cal-event-tag" title="${holiday}">${holiday}</div>` : '';
+
+                cell.innerHTML = `
+                    <div class="cal-cell-top">
+                        <span class="cal-greg-num">${d}</span>
+                        <span class="cal-hijri-badge">${hDate.day} ${HIJRI_MONTHS_SHORT[hDate.month - 1]}</span>
+                    </div>
+                    ${eventHtml}
+                `;
+
+                cell.onclick = () => selectCalDay(y, m, d, hDate, holiday);
+                grid.appendChild(cell);
+
+                if (isToday) {
+                    selectCalDay(y, m, d, hDate, holiday, false);
+                }
+            }
+
+            // Trailing days for neat 7-column grid
+            const totalCellsSoFar = firstDOW + daysInMonth;
+            const remaining = (7 - (totalCellsSoFar % 7)) % 7;
+            for (let n = 1; n <= remaining; n++) {
+                const nextDate = new Date(y, m + 1, n);
+                const hNext = gregorianToHijri(nextDate.getFullYear(), nextDate.getMonth() + 1, n);
+
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell other-month';
+                cell.innerHTML = `
+                    <div class="cal-cell-top">
+                        <span class="cal-greg-num">${n}</span>
+                        <span class="cal-hijri-badge">${hNext.day} ${HIJRI_MONTHS_SHORT[hNext.month - 1]}</span>
+                    </div>
+                `;
+                grid.appendChild(cell);
+            }
+        }
+
+        function selectCalDay(y, m, d, hDate, holiday, shouldHighlight = true) {
+            document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+            const cell = document.getElementById(`cal-day-${d}`);
+            if (cell && shouldHighlight) {
+                cell.classList.add('selected');
+            }
+
+            const infoBox = document.getElementById('cal-selected-info');
+            infoBox.style.display = 'block';
+
+            const dowIdx = new Date(y, m, d).getDay();
+            document.getElementById('cal-sel-greg').innerText =
+                `${DAYS_ID[dowIdx]}, ${d} ${GREG_MONTHS[m]} ${y} M`;
+            document.getElementById('cal-sel-hijri').innerText =
+                `${hDate.day} ${HIJRI_MONTHS[hDate.month - 1]} ${hDate.year} H`;
+
+            const evtBadge = document.getElementById('cal-sel-event');
+            if (holiday) {
+                evtBadge.innerText = holiday;
+                evtBadge.style.display = 'block';
+            } else {
+                evtBadge.innerText = `HARI ${DAYS_ID[dowIdx].toUpperCase()}`;
+                evtBadge.style.display = 'block';
+            }
+        }
+
+        function calPrevMonth() {
+            calState.month -= 1;
+            if (calState.month < 0) {
+                calState.month = 11;
+                calState.year -= 1;
+            }
+            renderCalendar();
+        }
+
+        function calNextMonth() {
+            calState.month += 1;
+            if (calState.month > 11) {
+                calState.month = 0;
+                calState.year += 1;
+            }
+            renderCalendar();
+        }
+
+        function calGoToday() {
+            const now = new Date();
+            calState.year = now.getFullYear();
+            calState.month = now.getMonth();
+            renderCalendar();
+        }
+
+        function calJumpToDate() {
+            calState.month = parseInt(document.getElementById('cal-select-month').value);
+            calState.year = parseInt(document.getElementById('cal-select-year').value) || 2026;
+            renderCalendar();
+        }
+
+        // --- CONVERTERS ---
+        function convertGregToHijri() {
+            const inputVal = document.getElementById('conv-greg-input').value;
+            let dateObj;
+            if (inputVal) {
+                const parts = inputVal.split('-').map(Number);
+                dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+            } else {
+                dateObj = new Date();
+                document.getElementById('conv-greg-input').value = dateObj.toISOString().split('T')[0];
+            }
+
+            const y = dateObj.getFullYear();
+            const m = dateObj.getMonth() + 1;
+            const d = dateObj.getDate();
+            const dow = DAYS_ID[dateObj.getDay()];
+
+            const h = gregorianToHijri(y, m, d);
+            const holiday = getIslamicHoliday(h.month, h.day, h.year);
+            const jd = gregorianToJD(y, m, d);
+
+            document.getElementById('conv-hijri-res').innerText = `${h.day} ${HIJRI_MONTHS[h.month - 1]} ${h.year} H`;
+            document.getElementById('conv-hijri-detail').innerText = `${dow}, ${d} ${GREG_MONTHS[m - 1]} ${y} Masehi`;
+            document.getElementById('conv-hijri-event').innerText = holiday ? `PERINGATAN: ${holiday}` : "";
+            document.getElementById('conv-hijri-jd').innerText = `JULIAN DAY: ${jd.toFixed(1)}`;
+        }
+
+        function convertHijriToGreg() {
+            const hDay = parseInt(document.getElementById('conv-hijri-day').value) || 1;
+            const hMonth = parseInt(document.getElementById('conv-hijri-month').value) || 1;
+            const hYear = parseInt(document.getElementById('conv-hijri-year').value) || 1448;
+
+            const jd = hijriToJD(hYear, hMonth, hDay);
+            const g = jdToGregorian(jd);
+            const gDate = new Date(g.year, g.month - 1, g.day);
+            const dow = DAYS_ID[gDate.getDay()];
+            const holiday = getIslamicHoliday(hMonth, hDay, hYear);
+
+            document.getElementById('conv-greg-res').innerText = `${g.day} ${GREG_MONTHS[g.month - 1]} ${g.year} M`;
+            document.getElementById('conv-greg-detail').innerText = `${dow}, ${hDay} ${HIJRI_MONTHS[hMonth - 1]} ${hYear} Hijriah`;
+            document.getElementById('conv-greg-event').innerText = holiday ? `PERINGATAN: ${holiday}` : "";
+            document.getElementById('conv-greg-jd').innerText = `JULIAN DAY: ${jd.toFixed(1)}`;
+        }
+
+        // --- MONTH START TABLES ---
+        function renderHijriMonthStarts() {
+            const hy = parseInt(document.getElementById('table-hijri-year').value) || 1448;
+            const tbody = document.querySelector('#table-hijri-starts tbody');
+            tbody.innerHTML = "";
+
+            for (let m = 1; m <= 12; m++) {
+                const jd = hijriToJD(hy, m, 1);
+                const g = jdToGregorian(jd);
+                const gDate = new Date(g.year, g.month - 1, g.day);
+                const dow = DAYS_ID[gDate.getDay()];
+                const duration = hijriMonthDays(hy, m);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>1 ${HIJRI_MONTHS[m - 1]}</strong></td>
+                    <td>${dow}</td>
+                    <td>${g.day} ${GREG_MONTHS[g.month - 1]} ${g.year} M</td>
+                    <td>${duration} Hari</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        function stepHijriYear(delta) {
+            const input = document.getElementById('table-hijri-year');
+            input.value = (parseInt(input.value) || 1448) + delta;
+            renderHijriMonthStarts();
+        }
+
+        function renderGregMonthStarts() {
+            const gy = parseInt(document.getElementById('table-greg-year').value) || 2026;
+            const tbody = document.querySelector('#table-greg-starts tbody');
+            tbody.innerHTML = "";
+
+            for (let m = 1; m <= 12; m++) {
+                const jd = gregorianToJD(gy, m, 1);
+                const h = jdToHijri(jd);
+                const gDate = new Date(gy, m - 1, 1);
+                const dow = DAYS_ID[gDate.getDay()];
+                const duration = new Date(gy, m, 0).getDate();
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>1 ${GREG_MONTHS[m - 1]}</strong></td>
+                    <td>${dow}</td>
+                    <td>${h.day} ${HIJRI_MONTHS[h.month - 1]} ${h.year} H</td>
+                    <td>${duration} Hari</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        }
+
+        function stepGregYear(delta) {
+            const input = document.getElementById('table-greg-year');
+            input.value = (parseInt(input.value) || 2026) + delta;
+            renderGregMonthStarts();
+        }
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            setCurrentDateTime();
+            computeJulianDay();
+            onCitySelected();
+
+            const today = new Date();
+            calState.year = today.getFullYear();
+            calState.month = today.getMonth();
+            renderCalendar();
+
+            // Init converter inputs
+            document.getElementById('conv-greg-input').value = today.toISOString().split('T')[0];
+            convertGregToHijri();
+
+            const hToday = gregorianToHijri(today.getFullYear(), today.getMonth() + 1, today.getDate());
+            document.getElementById('conv-hijri-day').value = hToday.day;
+            document.getElementById('conv-hijri-month').value = hToday.month;
+            document.getElementById('conv-hijri-year').value = hToday.year;
+            convertHijriToGreg();
+
+            // Init month start tables
+            document.getElementById('table-hijri-year').value = hToday.year;
+            document.getElementById('table-greg-year').value = today.getFullYear();
+            renderHijriMonthStarts();
+            renderGregMonthStarts();
+        });
     </script>
 </body>
 
