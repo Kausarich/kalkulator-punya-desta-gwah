@@ -35,6 +35,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             background-color: var(--bg);
             background-image: radial-gradient(#000000 1px, transparent 1px);
@@ -121,6 +126,8 @@
             border: var(--border-width) solid var(--border);
             padding: 1.75rem;
             box-shadow: var(--shadow-lg);
+            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         .tab-content {
@@ -236,9 +243,16 @@
 
         .form-grid-2col {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 1.25rem;
             margin-bottom: 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-grid-2col > * {
+            min-width: 0;
+            max-width: 100%;
         }
 
         .input-group {
@@ -316,13 +330,14 @@
             background: #ffffff;
             color: #000000;
             border: 2px solid #000000;
-            padding: 0.4rem 0.7rem;
+            padding: 0.4rem 0.65rem;
             font-size: 0.78rem;
             font-weight: 800;
             cursor: pointer;
             box-shadow: var(--shadow-sm);
             transition: all 0.1s ease;
             user-select: none;
+            white-space: nowrap;
         }
 
         .sec-mini-btn:hover {
@@ -560,24 +575,75 @@
             font-weight: 800;
         }
 
-        /* Calendar Styles */
+        /* Calendar Styles - Precision Layout */
         .cal-wrapper {
             background: #ffffff;
             border: var(--border-width) solid var(--border);
             padding: 1.25rem;
             box-shadow: var(--shadow);
             margin-bottom: 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .cal-header-bar {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 0.85rem;
             padding-bottom: 0.85rem;
             border-bottom: 2px solid #000000;
             margin-bottom: 0.85rem;
+            width: 100%;
+        }
+
+        .cal-title-card {
+            text-align: center;
+            background: #fafaf7;
+            border: 2px solid #000000;
+            padding: 0.65rem 1rem;
+            box-shadow: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cal-title-greg {
+            font-size: 1.35rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            word-break: break-word;
+        }
+
+        .cal-title-hijri {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #444444;
+            margin-top: 2px;
+            word-break: break-word;
+        }
+
+        .cal-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .cal-nav-group {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cal-jump-group {
+            display: flex;
+            gap: 0.4rem;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .cal-nav-btn {
@@ -590,6 +656,7 @@
             box-shadow: var(--shadow-sm);
             transition: all 0.1s ease;
             user-select: none;
+            white-space: nowrap;
         }
 
         .cal-nav-btn:hover {
@@ -610,11 +677,31 @@
             box-shadow: 1px 1px 0px #000000;
         }
 
+        .cal-select-m {
+            padding: 0.45rem 0.55rem;
+            font-size: 0.82rem;
+            border: 2px solid #000000;
+            box-shadow: var(--shadow-sm);
+            width: auto;
+            min-width: 110px;
+        }
+
+        .cal-input-y {
+            width: 72px;
+            padding: 0.45rem 0.4rem;
+            font-size: 0.82rem;
+            text-align: center;
+            border: 2px solid #000000;
+            box-shadow: var(--shadow-sm);
+        }
+
         .cal-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 4px;
             margin-bottom: 4px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .cal-weekday {
@@ -626,6 +713,9 @@
             font-weight: 800;
             text-transform: uppercase;
             border: 1px solid #000000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .cal-weekday.sun {
@@ -642,39 +732,40 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 4px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .cal-cell {
-            min-height: 74px;
+            min-height: 72px;
             background: #ffffff;
             border: 2px solid #000000;
             padding: 4px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.1s ease;
+            transition: background 0.1s ease;
             cursor: pointer;
             user-select: none;
             overflow: hidden;
+            box-sizing: border-box;
+            width: 100%;
         }
 
-        .cal-cell:hover {
+        .cal-cell:hover:not(.other-month) {
             background: var(--accent-yellow-light);
-            transform: translateY(-1px);
         }
 
         .cal-cell.today {
             background: var(--accent-yellow);
             border: 3px solid #000000;
-            box-shadow: 3px 3px 0px #000000;
         }
 
         .cal-cell.other-month {
             background: #fafaf7;
-            opacity: 0.45;
+            opacity: 0.4;
             border-color: #cccccc;
-            box-shadow: none;
+            cursor: default;
         }
 
         .cal-cell.selected {
@@ -685,24 +776,31 @@
         .cal-cell-top {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             gap: 2px;
+            width: 100%;
+            overflow: hidden;
         }
 
         .cal-greg-num {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             line-height: 1;
+            flex-shrink: 0;
         }
 
         .cal-hijri-badge {
             font-size: 0.62rem;
-            font-weight: 700;
+            font-weight: 800;
             background: #000000;
             color: #ffffff;
             padding: 1px 3px;
             border-radius: 2px;
             white-space: nowrap;
+            line-height: 1.1;
+            display: inline-flex;
+            align-items: center;
+            overflow: hidden;
         }
 
         .cal-cell.today .cal-hijri-badge {
@@ -722,11 +820,57 @@
             text-overflow: ellipsis;
             border: 1px solid #000000;
             display: block;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .cal-cell.today .cal-event-tag {
             background: #ffffff;
             color: #000000;
+        }
+
+        /* Selected Info Card */
+        .cal-selected-info-card {
+            margin-top: 1rem;
+            background: #fafaf7;
+            border: 2px solid #000000;
+            box-shadow: none;
+            padding: 0.85rem 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cal-sel-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .cal-sel-greg {
+            font-size: 1.15rem;
+            font-weight: 800;
+            word-break: break-word;
+        }
+
+        .cal-sel-hijri {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333333;
+            margin-top: 2px;
+            word-break: break-word;
+        }
+
+        .cal-sel-event-badge {
+            background: var(--accent-yellow);
+            border: 2px solid #000000;
+            padding: 4px 10px;
+            font-weight: 800;
+            font-size: 0.82rem;
+            box-shadow: var(--shadow-sm);
+            word-break: break-word;
+            max-width: 100%;
         }
 
         /* Converter Cards */
@@ -738,6 +882,17 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            width: 100%;
+            box-sizing: border-box;
+            min-width: 0;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .conv-card .res-card {
+            box-shadow: none;
+            border: 2px solid #000000;
+            background: #fafaf7;
         }
 
         .conv-header {
@@ -748,41 +903,129 @@
             background: var(--accent-yellow);
             padding: 0.35rem 0.5rem;
             border: 2px solid #000000;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .hijri-inputs-row {
+            display: grid;
+            grid-template-columns: minmax(60px, 75px) minmax(0, 1fr) minmax(65px, 80px);
+            gap: 0.45rem;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .hijri-inputs-row label {
+            white-space: nowrap;
+            font-size: 0.72rem;
+        }
+
+        /* Unified Month Tab Switcher */
+        .month-toggle-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.85rem;
+            width: 100%;
+        }
+
+        .month-toggle-btn {
+            flex: 1;
+            background: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            padding: 0.55rem 0.6rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.12s ease;
+            text-align: center;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        .month-toggle-btn:hover:not(.active) {
+            background: var(--accent-yellow-light);
+        }
+
+        .month-toggle-btn.active {
+            background: var(--accent-yellow);
+            box-shadow: 1px 1px 0px #000000;
+            transform: translate(1px, 1px);
+        }
+
+        /* Start of Month Tables */
+        .table-year-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.75rem 0;
+            gap: 0.35rem;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .table-year-bar .sec-mini-btn {
+            padding: 0.35rem 0.5rem;
+            font-size: 0.72rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .table-year-input-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 800;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .table-year-input {
+            width: 68px;
+            text-align: center;
+            padding: 0.3rem 0.25rem;
+            font-size: 0.85rem;
+            border: 2px solid #000000;
+            box-shadow: var(--shadow-sm);
         }
 
         .table-responsive {
             width: 100%;
+            max-width: 100%;
+            min-width: 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            border: 2px solid #000000;
+            background: #ffffff;
+            box-shadow: none;
+            box-sizing: border-box;
         }
 
-        /* Month Start Tables */
         .month-start-table {
             width: 100%;
-            min-width: 320px;
             border-collapse: collapse;
-            border: 2px solid #000000;
-            margin-top: 0.5rem;
+            margin: 0;
         }
 
         .month-start-table th {
             background: #000000;
             color: #ffffff;
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 800;
             text-transform: uppercase;
-            padding: 0.45rem 0.4rem;
-            border: 1px solid #000000;
+            padding: 0.45rem 0.35rem;
+            border-right: 1px solid #333333;
             text-align: left;
             white-space: nowrap;
         }
 
         .month-start-table td {
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             font-weight: 700;
-            padding: 0.42rem 0.4rem;
-            border: 1px solid #dddddd;
+            padding: 0.4rem 0.35rem;
             border-bottom: 1px solid #000000;
+            border-right: 1px solid #eeeeee;
             white-space: nowrap;
         }
 
@@ -812,6 +1055,44 @@
 
             #pcard-isha {
                 grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .cal-hijri-badge .h-month {
+                display: none;
+            }
+            .cal-greg-num {
+                font-size: 0.95rem;
+            }
+            .cal-controls-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.45rem;
+            }
+            .cal-nav-group {
+                display: flex;
+                width: 100%;
+                gap: 0.35rem;
+            }
+            .cal-nav-btn {
+                flex: 1;
+                padding: 0.45rem 0.2rem;
+                font-size: 0.72rem;
+                text-align: center;
+            }
+            .cal-jump-group {
+                display: flex;
+                width: 100%;
+                gap: 0.35rem;
+            }
+            .cal-select-m {
+                flex: 1;
+                min-width: 0;
+            }
+            .cal-input-y {
+                width: 75px;
+                flex-shrink: 0;
             }
         }
 
@@ -847,7 +1128,15 @@
             }
 
             .app-container {
-                padding: 1rem 0.75rem;
+                padding: 1rem 0.65rem;
+            }
+
+            .cal-wrapper {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .conv-card {
+                padding: 0.85rem 0.65rem;
             }
 
             .calc-result {
@@ -894,32 +1183,61 @@
                 grid-column: span 2;
             }
 
-            .cal-header-bar {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-
-            .cal-header-bar > div {
-                justify-content: center;
-            }
-
             .cal-cell {
-                min-height: 56px;
-                padding: 2px;
+                min-height: 52px;
+                padding: 2px 1px;
+            }
+
+            .cal-cell-top {
+                flex-direction: column;
+                align-items: center;
+                gap: 1px;
             }
 
             .cal-greg-num {
-                font-size: 0.92rem;
+                font-size: 0.85rem;
+                line-height: 1;
             }
 
             .cal-hijri-badge {
-                font-size: 0.55rem;
+                font-size: 0.52rem;
                 padding: 1px 2px;
+                line-height: 1;
             }
 
             .cal-event-tag {
-                font-size: 0.52rem;
+                font-size: 0.48rem;
+                padding: 0 1px;
+            }
+
+            .hijri-inputs-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hijri-inputs-row .month-select-wrap {
+                grid-column: span 2;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .month-toggle-wrapper {
+                flex-direction: column;
+                gap: 0.35rem;
+            }
+            .month-toggle-btn {
+                font-size: 0.74rem;
+                padding: 0.45rem 0.35rem;
+            }
+            .table-year-bar {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.35rem;
+            }
+            .cal-sel-flex {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.45rem;
             }
         }
 
@@ -929,15 +1247,27 @@
             }
 
             .cal-cell {
-                min-height: 48px;
+                min-height: 46px;
+                padding: 1px;
             }
 
             .cal-greg-num {
-                font-size: 0.82rem;
+                font-size: 0.78rem;
             }
 
             .cal-hijri-badge {
-                font-size: 0.5rem;
+                font-size: 0.48rem;
+                padding: 1px;
+            }
+
+            .table-year-bar .sec-mini-btn {
+                font-size: 0.68rem;
+                padding: 0.3rem 0.4rem;
+            }
+
+            .table-year-input {
+                width: 60px;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -1226,37 +1556,41 @@
             <!-- 1. KALENDER BULANAN INTERAKTIF -->
             <div class="cal-wrapper">
                 <div class="cal-header-bar">
-                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
-                        <button class="cal-nav-btn" onclick="calPrevMonth()">◀ BULAN LALU</button>
-                        <button class="cal-nav-btn today-btn" onclick="calGoToday()">HARI INI</button>
-                        <button class="cal-nav-btn" onclick="calNextMonth()">BULAN DEPAN ▶</button>
-                    </div>
-
-                    <div style="text-align: center;">
-                        <div id="cal-month-title-greg" style="font-size: 1.35rem; font-weight: 800; text-transform: uppercase;">
+                    <!-- Title Section -->
+                    <div class="cal-title-card">
+                        <div id="cal-month-title-greg" class="cal-title-greg">
                             SEPTEMBER 2026
                         </div>
-                        <div id="cal-month-title-hijri" style="font-size: 0.88rem; font-weight: 700; color: #444444; margin-top: 2px;">
+                        <div id="cal-month-title-hijri" class="cal-title-hijri">
                             RABI'UL-AWWAL - RABI'UL-AKHIR 1448 H
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
-                        <select id="cal-select-month" class="input-control" style="padding: 0.45rem 0.6rem; font-size: 0.85rem;" onchange="calJumpToDate()">
-                            <option value="0">Januari</option>
-                            <option value="1">Februari</option>
-                            <option value="2">Maret</option>
-                            <option value="3">April</option>
-                            <option value="4">Mei</option>
-                            <option value="5">Juni</option>
-                            <option value="6">Juli</option>
-                            <option value="7">Agustus</option>
-                            <option value="8">September</option>
-                            <option value="9">Oktober</option>
-                            <option value="10">November</option>
-                            <option value="11">Desember</option>
-                        </select>
-                        <input type="number" id="cal-select-year" class="input-control" style="width: 85px; padding: 0.45rem 0.6rem; font-size: 0.85rem;" value="2026" onchange="calJumpToDate()">
+                    <!-- Controls Section -->
+                    <div class="cal-controls-row">
+                        <div class="cal-nav-group">
+                            <button class="cal-nav-btn" onclick="calPrevMonth()">◀ BULAN LALU</button>
+                            <button class="cal-nav-btn today-btn" onclick="calGoToday()">HARI INI</button>
+                            <button class="cal-nav-btn" onclick="calNextMonth()">BULAN DEPAN ▶</button>
+                        </div>
+
+                        <div class="cal-jump-group">
+                            <select id="cal-select-month" class="input-control cal-select-m" onchange="calJumpToDate()">
+                                <option value="0">Januari</option>
+                                <option value="1">Februari</option>
+                                <option value="2">Maret</option>
+                                <option value="3">April</option>
+                                <option value="4">Mei</option>
+                                <option value="5">Juni</option>
+                                <option value="6">Juli</option>
+                                <option value="7">Agustus</option>
+                                <option value="8">September</option>
+                                <option value="9">Oktober</option>
+                                <option value="10">November</option>
+                                <option value="11">Desember</option>
+                            </select>
+                            <input type="number" id="cal-select-year" class="input-control cal-input-y" value="2026" onchange="calJumpToDate()">
+                        </div>
                     </div>
                 </div>
 
@@ -1275,13 +1609,13 @@
                 <div id="cal-days-grid" class="cal-grid"></div>
 
                 <!-- Info Tanggal yang Dipilih -->
-                <div id="cal-selected-info" class="res-card" style="margin-top: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div id="cal-selected-info" class="cal-selected-info-card">
+                    <div class="cal-sel-flex">
                         <div>
-                            <div id="cal-sel-greg" style="font-size: 1.15rem; font-weight: 800;">--</div>
-                            <div id="cal-sel-hijri" style="font-size: 0.95rem; font-weight: 700; color: #222222; margin-top: 2px;">--</div>
+                            <div id="cal-sel-greg" class="cal-sel-greg">--</div>
+                            <div id="cal-sel-hijri" class="cal-sel-hijri">--</div>
                         </div>
-                        <div id="cal-sel-event" style="background: var(--accent-yellow); border: 2px solid #000000; padding: 4px 10px; font-weight: 800; font-size: 0.85rem;">
+                        <div id="cal-sel-event" class="cal-sel-event-badge">
                             HARI INI
                         </div>
                     </div>
@@ -1319,12 +1653,12 @@
                     <div class="conv-card">
                         <div class="conv-header">KONVERSI HIJRIAH ➔ MASEHI</div>
 
-                        <div style="display: grid; grid-template-columns: 80px 1fr 90px; gap: 0.5rem; margin-bottom: 1rem;">
+                        <div class="hijri-inputs-row">
                             <div class="input-group">
                                 <label>TGL (1-30)</label>
                                 <input type="number" id="conv-hijri-day" class="input-control" min="1" max="30" value="1" onchange="convertHijriToGreg()">
                             </div>
-                            <div class="input-group">
+                            <div class="input-group month-select-wrap">
                                 <label>BULAN HIJRIAH</label>
                                 <select id="conv-hijri-month" class="input-control" onchange="convertHijriToGreg()">
                                     <option value="1">1. Muharram</option>
@@ -1366,17 +1700,24 @@
             <div style="margin-top: 2rem;">
                 <h3 class="section-title">INFORMASI AWAL BULAN HIJRIAH & MASEHI</h3>
 
-                <div class="form-grid-2col">
-                    <!-- Awal Bulan Hijriah di Kalender Masehi -->
-                    <div class="conv-card">
-                        <div class="conv-header" style="display: flex; justify-content: space-between; align-items: center;">
-                            <span>AWAL BULAN HIJRIAH DI MASEHI</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0; gap: 0.5rem; flex-wrap: wrap;">
+                <div class="conv-card">
+                    <!-- Segmented Toggle Switcher -->
+                    <div class="month-toggle-wrapper">
+                        <button id="btn-mtab-hijri" class="month-toggle-btn active" onclick="switchMonthTable('hijri')">
+                            AWAL BULAN HIJRIAH DI MASEHI
+                        </button>
+                        <button id="btn-mtab-greg" class="month-toggle-btn" onclick="switchMonthTable('greg')">
+                            AWAL BULAN MASEHI DI HIJRIAH
+                        </button>
+                    </div>
+
+                    <!-- Panel 1: Awal Bulan Hijriah di Kalender Masehi -->
+                    <div id="panel-month-hijri">
+                        <div class="table-year-bar">
                             <button class="sec-mini-btn" onclick="stepHijriYear(-1)">◀ TAHUN LALU</button>
-                            <div style="display: flex; align-items: center; gap: 0.3rem;">
-                                <input type="number" id="table-hijri-year" class="input-control" style="width: 85px; text-align: center; padding: 0.35rem;" value="1448" onchange="renderHijriMonthStarts()">
-                                <span style="font-weight: 800;">H</span>
+                            <div class="table-year-input-wrap">
+                                <input type="number" id="table-hijri-year" class="input-control table-year-input" value="1448" onchange="renderHijriMonthStarts()">
+                                <span>H</span>
                             </div>
                             <button class="sec-mini-btn" onclick="stepHijriYear(1)">TAHUN DEPAN ▶</button>
                         </div>
@@ -1398,16 +1739,13 @@
                         </div>
                     </div>
 
-                    <!-- Awal Bulan Masehi di Kalender Hijriah -->
-                    <div class="conv-card">
-                        <div class="conv-header" style="display: flex; justify-content: space-between; align-items: center;">
-                            <span>AWAL BULAN MASEHI DI HIJRIAH</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.75rem 0; gap: 0.5rem; flex-wrap: wrap;">
+                    <!-- Panel 2: Awal Bulan Masehi di Kalender Hijriah -->
+                    <div id="panel-month-greg" style="display: none;">
+                        <div class="table-year-bar">
                             <button class="sec-mini-btn" onclick="stepGregYear(-1)">◀ TAHUN LALU</button>
-                            <div style="display: flex; align-items: center; gap: 0.3rem;">
-                                <input type="number" id="table-greg-year" class="input-control" style="width: 85px; text-align: center; padding: 0.35rem;" value="2026" onchange="renderGregMonthStarts()">
-                                <span style="font-weight: 800;">M</span>
+                            <div class="table-year-input-wrap">
+                                <input type="number" id="table-greg-year" class="input-control table-year-input" value="2026" onchange="renderGregMonthStarts()">
+                                <span>M</span>
                             </div>
                             <button class="sec-mini-btn" onclick="stepGregYear(1)">TAHUN DEPAN ▶</button>
                         </div>
@@ -2027,7 +2365,7 @@
                 cell.innerHTML = `
                     <div class="cal-cell-top">
                         <span class="cal-greg-num">${prevDay}</span>
-                        <span class="cal-hijri-badge">${hPrev.day} ${HIJRI_MONTHS_SHORT[hPrev.month - 1]}</span>
+                        <span class="cal-hijri-badge"><span class="h-day">${hPrev.day}</span><span class="h-month"> ${HIJRI_MONTHS_SHORT[hPrev.month - 1]}</span></span>
                     </div>
                 `;
                 grid.appendChild(cell);
@@ -2053,7 +2391,7 @@
                 cell.innerHTML = `
                     <div class="cal-cell-top">
                         <span class="cal-greg-num">${d}</span>
-                        <span class="cal-hijri-badge">${hDate.day} ${HIJRI_MONTHS_SHORT[hDate.month - 1]}</span>
+                        <span class="cal-hijri-badge"><span class="h-day">${hDate.day}</span><span class="h-month"> ${HIJRI_MONTHS_SHORT[hDate.month - 1]}</span></span>
                     </div>
                     ${eventHtml}
                 `;
@@ -2077,7 +2415,7 @@
                 cell.innerHTML = `
                     <div class="cal-cell-top">
                         <span class="cal-greg-num">${n}</span>
-                        <span class="cal-hijri-badge">${hNext.day} ${HIJRI_MONTHS_SHORT[hNext.month - 1]}</span>
+                        <span class="cal-hijri-badge"><span class="h-day">${hNext.day}</span><span class="h-month"> ${HIJRI_MONTHS_SHORT[hNext.month - 1]}</span></span>
                     </div>
                 `;
                 grid.appendChild(cell);
@@ -2244,6 +2582,27 @@
             renderGregMonthStarts();
         }
 
+        function switchMonthTable(type) {
+            const btnH = document.getElementById('btn-mtab-hijri');
+            const btnG = document.getElementById('btn-mtab-greg');
+            const pnlH = document.getElementById('panel-month-hijri');
+            const pnlG = document.getElementById('panel-month-greg');
+
+            if (type === 'hijri') {
+                btnH.classList.add('active');
+                btnG.classList.remove('active');
+                pnlH.style.display = 'block';
+                pnlG.style.display = 'none';
+                renderHijriMonthStarts();
+            } else {
+                btnG.classList.add('active');
+                btnH.classList.remove('active');
+                pnlG.style.display = 'block';
+                pnlH.style.display = 'none';
+                renderGregMonthStarts();
+            }
+        }
+
         // --- WINDOW RESIZE & ORIENTATION LISTENER ---
         window.addEventListener('resize', () => {
             const qiblaTab = document.getElementById('tab-qibla');
@@ -2278,6 +2637,13 @@
             document.getElementById('table-greg-year').value = today.getFullYear();
             renderHijriMonthStarts();
             renderGregMonthStarts();
+
+            // Check URL hash or query parameter for direct tab link
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab') || window.location.hash.replace('#', '');
+            if (['calc', 'julian', 'qibla', 'calendar'].includes(tabParam)) {
+                switchTab(null, tabParam);
+            }
         });
     </script>
 </body>

@@ -956,60 +956,75 @@ class AdvancedCalculatorApp(tk.Tk):
         self.ch_holiday_lbl = tk.Label(self.ch_res_box, text="", bg="#ffffff", fg="#e63946", font=("Consolas", 8, "bold"), anchor="w")
         self.ch_holiday_lbl.pack(fill="x")
 
-        # 3. Tables for Start of Months (Awal Bulan Hijriah & Masehi)
-        tables_wrapper = tk.Frame(scroll_content, bg="#f8f8f5")
-        tables_wrapper.pack(fill="x", pady=(0, 10))
+        # 3. Tables for Start of Months (Unified Switcher)
+        tbl_card = tk.Frame(scroll_content, bg="#ffffff", bd=2, relief="solid", padx=12, pady=10)
+        tbl_card.pack(fill="x", pady=(0, 10))
 
-        tbl_left = tk.Frame(tables_wrapper, bg="#ffffff", bd=2, relief="solid", padx=10, pady=10)
-        tbl_left.pack(side="left", fill="both", expand=True, padx=(0, 6))
+        # Switcher Bar
+        switch_bar = tk.Frame(tbl_card, bg="#ffffff")
+        switch_bar.pack(fill="x", pady=(0, 8))
 
-        tbl_right = tk.Frame(tables_wrapper, bg="#ffffff", bd=2, relief="solid", padx=10, pady=10)
-        tbl_right.pack(side="right", fill="both", expand=True, padx=(6, 0))
+        self.btn_mtab_hijri = tk.Button(
+            switch_bar, text="AWAL BULAN HIJRIAH DI MASEHI",
+            font=("Consolas", 9, "bold"), bg="#ffde59", fg="#000000",
+            relief="solid", bd=2, cursor="hand2", padx=8, pady=4,
+            command=lambda: self._switch_month_table("hijri")
+        )
+        self.btn_mtab_hijri.pack(side="left", fill="x", expand=True, padx=(0, 4))
 
-        # Awal Bulan Hijriah di Masehi
-        tk.Label(tbl_left, text="AWAL BULAN HIJRIAH DI MASEHI", bg="#ffde59", fg="#000000", font=("Consolas", 9, "bold"), bd=1, relief="solid", padx=4, pady=2).pack(fill="x", pady=(0, 4))
+        self.btn_mtab_greg = tk.Button(
+            switch_bar, text="AWAL BULAN MASEHI DI HIJRIAH",
+            font=("Consolas", 9, "bold"), bg="#ffffff", fg="#000000",
+            relief="solid", bd=2, cursor="hand2", padx=8, pady=4,
+            command=lambda: self._switch_month_table("greg")
+        )
+        self.btn_mtab_greg.pack(side="right", fill="x", expand=True, padx=(4, 0))
 
-        hy_bar = tk.Frame(tbl_left, bg="#ffffff")
-        hy_bar.pack(fill="x", pady=2)
-        tk.Button(hy_bar, text="◀", font=("Consolas", 8, "bold"), command=lambda: self._step_hy(-1)).pack(side="left")
+        # Frame 1: Hijri starts in Gregorian
+        self.pnl_month_hijri = tk.Frame(tbl_card, bg="#ffffff")
+        self.pnl_month_hijri.pack(fill="x")
+
+        hy_bar = tk.Frame(self.pnl_month_hijri, bg="#ffffff")
+        hy_bar.pack(fill="x", pady=(0, 4))
+        tk.Button(hy_bar, text="◀ TAHUN LALU", font=("Consolas", 8, "bold"), bg="#ffffff", bd=2, relief="solid", command=lambda: self._step_hy(-1)).pack(side="left")
         self.tbl_hy_var = tk.StringVar(value="1448")
-        ttk.Entry(hy_bar, textvariable=self.tbl_hy_var, width=8, font=("Consolas", 9, "bold")).pack(side="left", padx=4)
+        ttk.Entry(hy_bar, textvariable=self.tbl_hy_var, width=8, font=("Consolas", 9, "bold")).pack(side="left", padx=6)
         tk.Label(hy_bar, text="H", bg="#ffffff", font=("Consolas", 9, "bold")).pack(side="left")
-        tk.Button(hy_bar, text="▶", font=("Consolas", 8, "bold"), command=lambda: self._step_hy(1)).pack(side="left", padx=2)
+        tk.Button(hy_bar, text="TAHUN DEPAN ▶", font=("Consolas", 8, "bold"), bg="#ffffff", bd=2, relief="solid", command=lambda: self._step_hy(1)).pack(side="left", padx=6)
         ttk.Button(hy_bar, text="RENDER", command=self._render_hijri_starts).pack(side="right")
 
-        self.tree_hijri = ttk.Treeview(tbl_left, columns=("Bulan", "Hari", "Masehi", "Durasi"), show="headings", height=12)
-        self.tree_hijri.heading("Bulan", text="BULAN H")
+        self.tree_hijri = ttk.Treeview(self.pnl_month_hijri, columns=("Bulan", "Hari", "Masehi", "Durasi"), show="headings", height=12)
+        self.tree_hijri.heading("Bulan", text="BULAN HIJRIAH")
         self.tree_hijri.heading("Hari", text="HARI")
-        self.tree_hijri.heading("Masehi", text="TGL MASEHI")
+        self.tree_hijri.heading("Masehi", text="TANGGAL MASEHI")
         self.tree_hijri.heading("Durasi", text="DURASI")
-        self.tree_hijri.column("Bulan", width=80, anchor="w")
-        self.tree_hijri.column("Hari", width=50, anchor="center")
-        self.tree_hijri.column("Masehi", width=95, anchor="w")
-        self.tree_hijri.column("Durasi", width=50, anchor="center")
+        self.tree_hijri.column("Bulan", width=140, anchor="w")
+        self.tree_hijri.column("Hari", width=70, anchor="center")
+        self.tree_hijri.column("Masehi", width=180, anchor="w")
+        self.tree_hijri.column("Durasi", width=70, anchor="center")
         self.tree_hijri.pack(fill="both", expand=True, pady=4)
 
-        # Awal Bulan Masehi di Hijriah
-        tk.Label(tbl_right, text="AWAL BULAN MASEHI DI HIJRIAH", bg="#ffde59", fg="#000000", font=("Consolas", 9, "bold"), bd=1, relief="solid", padx=4, pady=2).pack(fill="x", pady=(0, 4))
+        # Frame 2: Greg starts in Hijri
+        self.pnl_month_greg = tk.Frame(tbl_card, bg="#ffffff")
 
-        gy_bar = tk.Frame(tbl_right, bg="#ffffff")
-        gy_bar.pack(fill="x", pady=2)
-        tk.Button(gy_bar, text="◀", font=("Consolas", 8, "bold"), command=lambda: self._step_gy(-1)).pack(side="left")
+        gy_bar = tk.Frame(self.pnl_month_greg, bg="#ffffff")
+        gy_bar.pack(fill="x", pady=(0, 4))
+        tk.Button(gy_bar, text="◀ TAHUN LALU", font=("Consolas", 8, "bold"), bg="#ffffff", bd=2, relief="solid", command=lambda: self._step_gy(-1)).pack(side="left")
         self.tbl_gy_var = tk.StringVar(value="2026")
-        ttk.Entry(gy_bar, textvariable=self.tbl_gy_var, width=8, font=("Consolas", 9, "bold")).pack(side="left", padx=4)
+        ttk.Entry(gy_bar, textvariable=self.tbl_gy_var, width=8, font=("Consolas", 9, "bold")).pack(side="left", padx=6)
         tk.Label(gy_bar, text="M", bg="#ffffff", font=("Consolas", 9, "bold")).pack(side="left")
-        tk.Button(gy_bar, text="▶", font=("Consolas", 8, "bold"), command=lambda: self._step_gy(1)).pack(side="left", padx=2)
+        tk.Button(gy_bar, text="TAHUN DEPAN ▶", font=("Consolas", 8, "bold"), bg="#ffffff", bd=2, relief="solid", command=lambda: self._step_gy(1)).pack(side="left", padx=6)
         ttk.Button(gy_bar, text="RENDER", command=self._render_greg_starts).pack(side="right")
 
-        self.tree_greg = ttk.Treeview(tbl_right, columns=("Bulan", "Hari", "Hijriah", "Durasi"), show="headings", height=12)
-        self.tree_greg.heading("Bulan", text="BULAN M")
+        self.tree_greg = ttk.Treeview(self.pnl_month_greg, columns=("Bulan", "Hari", "Hijriah", "Durasi"), show="headings", height=12)
+        self.tree_greg.heading("Bulan", text="BULAN MASEHI")
         self.tree_greg.heading("Hari", text="HARI")
-        self.tree_greg.heading("Hijriah", text="TGL HIJRIAH")
+        self.tree_greg.heading("Hijriah", text="TANGGAL HIJRIAH")
         self.tree_greg.heading("Durasi", text="DURASI")
-        self.tree_greg.column("Bulan", width=80, anchor="w")
-        self.tree_greg.column("Hari", width=50, anchor="center")
-        self.tree_greg.column("Hijriah", width=95, anchor="w")
-        self.tree_greg.column("Durasi", width=50, anchor="center")
+        self.tree_greg.column("Bulan", width=140, anchor="w")
+        self.tree_greg.column("Hari", width=70, anchor="center")
+        self.tree_greg.column("Hijriah", width=180, anchor="w")
+        self.tree_greg.column("Durasi", width=70, anchor="center")
         self.tree_greg.pack(fill="both", expand=True, pady=4)
 
         # Initialize Calendar State
@@ -1204,6 +1219,20 @@ class AdvancedCalculatorApp(tk.Tk):
             self._render_greg_starts()
         except Exception:
             pass
+
+    def _switch_month_table(self, tab_type):
+        if tab_type == "hijri":
+            self.btn_mtab_hijri.config(bg="#ffde59")
+            self.btn_mtab_greg.config(bg="#ffffff")
+            self.pnl_month_greg.pack_forget()
+            self.pnl_month_hijri.pack(fill="x")
+            self._render_hijri_starts()
+        else:
+            self.btn_mtab_hijri.config(bg="#ffffff")
+            self.btn_mtab_greg.config(bg="#ffde59")
+            self.pnl_month_hijri.pack_forget()
+            self.pnl_month_greg.pack(fill="x")
+            self._render_greg_starts()
 
     def _render_hijri_starts(self):
         for item in self.tree_hijri.get_children():
