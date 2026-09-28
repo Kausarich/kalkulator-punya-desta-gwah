@@ -732,13 +732,15 @@ class AdvancedCalculatorApp(tk.Tk):
         cv = self.compass_canvas
         cv.delete("all")
 
-        w = cv.winfo_width() or 260
-        h = cv.winfo_height() or 260
+        w = cv.winfo_width()
+        h = cv.winfo_height()
+        if w <= 1 or h <= 1:
+            w, h = 260, 260
         cx, cy = w / 2, h / 2
         radius = min(w, h) / 2 - 25
 
-        if radius < 40:
-            radius = 90
+        if radius < 35:
+            radius = max(25, min(w, h) / 2 - 8)
 
         # Draw Outer Ring (Solid Black)
         cv.create_oval(cx - radius, cy - radius, cx + radius, cy + radius, outline="#000000", width=3, fill="#ffffff")
@@ -771,10 +773,10 @@ class AdvancedCalculatorApp(tk.Tk):
 
         cv.create_line(cx, cy, qx, qy, fill="#ffde59", width=5, arrow=tk.LAST, arrowshape=(12, 15, 6))
 
-        # Kaaba marker (Isometric 3D Kaaba Graphic - NO MECCA TEXT)
+        # Kaaba marker (Isometric 3D Kaaba Graphic - Scaled proportionately)
         kx = cx + (radius - 14) * math.cos(q_rad)
         ky = cy + (radius - 14) * math.sin(q_rad)
-        s = 0.85
+        s = max(0.55, min(1.15, radius / 95.0))
 
         # Marble Foundation (Syadzarwan)
         cv.create_polygon(kx - 12 * s, ky + 1 * s, kx, ky + 7 * s, kx, ky + 9 * s, kx - 12 * s, ky + 3 * s, fill="#e5e5ea", outline="#000000", width=1)
@@ -814,6 +816,14 @@ class AdvancedCalculatorApp(tk.Tk):
         def _on_canvas_configure(event):
             canvas.itemconfig(canvas_window, width=event.width)
         canvas.bind("<Configure>", _on_canvas_configure)
+
+        def _on_mousewheel(event):
+            try:
+                if self.notebook.select() == str(self.tab_calendar):
+                    canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            except Exception:
+                pass
+        self.bind_all("<MouseWheel>", _on_mousewheel)
 
         canvas.configure(yscrollcommand=v_scrollbar.set)
         canvas.pack(side="left", fill="both", expand=True)
