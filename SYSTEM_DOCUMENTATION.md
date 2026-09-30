@@ -166,14 +166,15 @@ Pengguna memiliki kebebasan penuh memilih antara **Mode Template (Kompas Statis)
      - **Perilaku Kompas**: Kompas berada dalam mode referensi **Utara Sejati statis** (Utara di posisi jam 12, rotasi $0^\circ$). Jarum emas dan ikon Ka'bah menunjukkan sudut arah kiblat statis dari Utara sejati (contoh: `295.14°`). Sensor orientasi tidak aktif sehingga tampilan stabil tanpa terpengaruh pergerakan ponsel.
    - **Mode 2: 🛰️ DETEKSI GPS & SENSOR (LIVE DINAMIS)**:
      - Klik opsi **"2. DETEKSI GPS & SENSOR (LIVE)"** atau tekan tombol **"🛰️ DETEKSI LOKASI SAYA SEKARANG"**.
-     - Peramban secara otomatis meminta izin GPS & kalibrasi sensor gerak (*DeviceOrientation API*).
-     - **Perilaku Kompas**: Piringan kompas (*compass rose*) **berputar secara dinamis dan real-time mengikuti putaran fisik ponsel pengguna**.
+     - **Kalibrasi Otomatis Instan**: Sistem langsung meminta izin sensor gerak (*DeviceOrientation / Magnetometer API*) dan GPS presisi tinggi secara otomatis tanpa memerlukan penyesuaian derajat manual.
+     - **Perilaku Kompas Otomatis**: Piringan kompas (*compass rose*) **berputar secara dinamis dan real-time mengikuti arah hadap fisik perangkat** (dilengkapi kompensasi kemiringan/tilt compensation 3D & orientasi layar).
      - **Retikel Bidik Depan**: Menunjukkan arah hadap perangkat saat ini.
-     - **Jarum & Ka'bah 3D**: Terus menunjuk ke arah Ka'bah di dunia nyata secara presisi.
+     - **Jarum & Ka'bah 3D**: Terus menunjuk ke arah Ka'bah di dunia nyata secara presisi dengan pergerakan halus (60 FPS damping interpolation).
      - **Umpan Balik Presisi (Alignment Feedback)**:
        - Ketika perangkat berjarak $\le 3^\circ$ dari arah Ka'bah, kompas berpendar hijau zamrud (*Emerald Glow*), menampilkan banner *"✓ ANDA TEPAT MENGHADAP KIBLAT!"*, dan memicu getaran haptik (*Haptic Vibration*).
        - Jika belum tepat, HUD memandu belokan: *"⟳ PUTAR KE KANAN X°"* atau *"⟲ PUTAR KE KIRI X°"*.
-       - Pada pengujian di PC/laptop tanpa sensor magnetik, tersedia slider simulasi untuk menguji pergerakan kompas secara instan.
+       - Jika terdeteksi gangguan magnetik atau diperlukan kalibrasi, sistem memandu kalibrasi pola angka 8 (*figure-8 calibration*).
+       - Pada pengujian di PC/laptop tanpa sensor magnetik fisik, sistem otomatis mendeteksi perangkat desktop dan menampilkan arah kiblat statis yang akurat berdasarkan posisi GPS Anda.
 3. **Langkah 3 (Melihat Jadwal Shalat)**:
    - 7 kartu waktu shalat ditampilkan lengkap: **Imsak, Subuh, Terbit, Dzuhur, Ashar, Maghrib, dan Isya**.
    - Shalat yang sedang berlangsung otomatis disorot dengan warna kuning terang (*Active Prayer Card*).

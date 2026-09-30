@@ -832,36 +832,31 @@
             margin-top: 0.2rem;
         }
 
-        /* Simulation Box for Desktop / Manual Testing */
-        .compass-sim-box {
-            margin-top: 0.5rem;
-            background: #fffbeb;
-            border: 2px dashed #000000;
-            padding: 0.65rem 0.75rem;
-            font-size: 0.74rem;
-            width: 100%;
-            max-width: 340px;
-            box-sizing: border-box;
-        }
-
-        .compass-sim-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 800;
-            margin-bottom: 0.4rem;
-        }
-
-        .compass-sim-slider-row {
+        /* Compass Auto-Calibration Alert & Indicator */
+        .compass-calib-banner {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            background: var(--accent-yellow);
+            border: 2px solid #000000;
+            padding: 0.45rem 0.75rem;
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-top: 0.4rem;
+            box-shadow: 2px 2px 0px #000000;
+            animation: calibPulse 1.5s infinite alternate;
         }
 
-        .compass-sim-slider-row input[type="range"] {
-            flex: 1;
-            accent-color: #000000;
-            cursor: pointer;
+        @keyframes calibPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.015); }
+        }
+
+        .compass-calib-banner.calibrated {
+            background: #d1fae5;
+            border-color: #059669;
+            color: #065f46;
+            animation: none;
         }
 
         /* Prayer Times Section */
@@ -1823,11 +1818,11 @@
                             </div>
 
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.35rem;">
-                                <button class="primary-btn" id="btn-gps" style="width: 100%; padding: 0.9rem;" onclick="detectMyLocation()" title="Deteksi koordinat GPS dan kalibrasi sensor">
+                                <button class="primary-btn" id="btn-gps" style="width: 100%; padding: 0.9rem;" onclick="autoCalibrateAndStartGPS()" title="Deteksi koordinat GPS dan kalibrasi otomatis sensor">
                                     🛰️ DETEKSI LOKASI SAYA SEKARANG
                                 </button>
-                                <button class="secondary-btn" style="width: 100%; font-size: 0.78rem; padding: 0.55rem;" onclick="requestCompassSensorPermission()">
-                                    🔄 KALIBRASI / MINTA ULANG IZIN SENSOR
+                                <button class="secondary-btn" style="width: 100%; font-size: 0.78rem; padding: 0.55rem;" onclick="recalibrateCompass()" title="Kalibrasi ulang sensor kompas perangkat">
+                                    🔄 KALIBRASI ULANG SENSOR KOMPAS
                                 </button>
                             </div>
                         </div>
@@ -1950,32 +1945,20 @@
                             </div>
                         </div>
 
-                        <!-- Live Controls Row -->
+                        <!-- Live Controls Row (Auto-tracking status & recalibration) -->
                         <div class="compass-actions-row">
                             <button id="btn-toggle-sensor" class="secondary-btn" style="flex: 1; padding: 0.45rem 0.5rem; font-size: 0.72rem;" onclick="toggleLiveCompass()">
-                                🟢 AKTIFKAN LIVE KOMPAS
+                                🟢 SENSOR LIVE: AKTIF
                             </button>
-                            <button id="btn-recalibrate" class="secondary-btn" style="padding: 0.45rem 0.6rem; font-size: 0.72rem;" onclick="requestCompassSensorPermission()" title="Minta izin sensor / kalibrasi">
-                                🔄 KALIBRASI
+                            <button id="btn-recalibrate" class="secondary-btn" style="padding: 0.45rem 0.6rem; font-size: 0.72rem;" onclick="recalibrateCompass()" title="Kalibrasi ulang otomatis sensor perangkat">
+                                🔄 KALIBRASI ULANG
                             </button>
                         </div>
 
-                        <!-- Desktop / Manual Simulation Controls -->
-                        <div class="compass-sim-box" id="compass-sim-container">
-                            <div class="compass-sim-header" onclick="toggleSimVisibility()">
-                                <span>📱 UJI SIMULASI PUTAR DEVICE</span>
-                                <span id="sim-heading-val" style="font-family: monospace; font-size: 0.85rem; background: #000; color: #fff; padding: 1px 5px;">0°</span>
-                            </div>
-                            <div class="compass-sim-slider-row">
-                                <span style="font-size: 0.7rem; font-weight: 800;">0°</span>
-                                <input type="range" id="sim-heading-slider" min="0" max="359" value="0" step="1" oninput="simulateHeading(this.value)">
-                                <span style="font-size: 0.7rem; font-weight: 800;">360°</span>
-                            </div>
-                            <div style="display: flex; gap: 0.35rem; margin-top: 0.4rem;">
-                                <button class="secondary-btn" style="flex: 1; padding: 0.25rem; font-size: 0.68rem;" onclick="adjustSimHeading(-15)">⟲ -15°</button>
-                                <button class="secondary-btn" style="flex: 1.2; padding: 0.25rem; font-size: 0.68rem; background: var(--accent-yellow);" onclick="alignSimToQibla()">🎯 KE KIBLAT</button>
-                                <button class="secondary-btn" style="flex: 1; padding: 0.25rem; font-size: 0.68rem;" onclick="adjustSimHeading(15)">+15° ⟳</button>
-                            </div>
+                        <!-- Calibration Alert (Shown if compass needs figure-8 gesture) -->
+                        <div id="compass-calib-alert" class="compass-calib-banner" style="display: none;">
+                            <span>♾️</span>
+                            <span id="compass-calib-msg">Kalibrasi: Gerakkan ponsel membentuk pola angka 8 di udara.</span>
                         </div>
 
                         <p style="margin-top: 0.35rem; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; text-align: center;"
@@ -2652,10 +2635,13 @@
         let liveCompassActive = false;
         let currentQiblaBearing = 295.14; // Default Jakarta
         let currentDeviceHeading = 0;
+        let targetDeviceHeading = 0;
+        let currentDisplayHeading = 0;
         let continuousDialRotation = 0;
         let hasSensorSupport = false;
         let lastHapticTime = 0;
         let sensorWatchTimeout = null;
+        let compassAnimFrameId = null;
 
         function setQiblaMode(mode) {
             currentQiblaMode = mode;
@@ -2664,7 +2650,6 @@
             const panelTemplate = document.getElementById('panel-mode-template');
             const panelGps = document.getElementById('panel-mode-gps');
             const reticleText = document.getElementById('reticle-label');
-            const simBox = document.getElementById('compass-sim-container');
             const actionsRow = document.querySelector('.compass-actions-row');
 
             if (mode === 'template') {
@@ -2700,8 +2685,8 @@
                     banner.innerHTML = `📍 MODE TEMPLATE: ARAH KIBLAT <b>${currentQiblaBearing.toFixed(1)}°</b> DARI UTARA SEJATI`;
                 }
 
-                if (simBox) simBox.style.display = 'none';
                 if (actionsRow) actionsRow.style.display = 'none';
+                showCompassCalibPrompt(false);
 
                 computeQiblaAndPrayer();
             } else {
@@ -2714,11 +2699,47 @@
                     reticleText.innerText = "DEPAN (ARAH DEVICE)";
                 }
 
-                if (simBox) simBox.style.display = 'block';
                 if (actionsRow) actionsRow.style.display = 'flex';
 
-                // Trigger GPS detection and sensor tracking
-                detectMyLocation();
+                // Automatically calibrate sensor, start tracking, and request GPS
+                autoCalibrateAndStartGPS();
+            }
+        }
+
+        function autoCalibrateAndStartGPS() {
+            // 1. Immediately request sensor permission on user click gesture (critical for iOS)
+            requestCompassSensorPermission();
+
+            // 2. Start orientation sensor listeners & animation loop
+            startLiveCompassTracking();
+
+            // 3. Detect GPS position with high accuracy
+            detectMyLocation();
+        }
+
+        function recalibrateCompass() {
+            targetDeviceHeading = 0;
+            currentDisplayHeading = 0;
+            continuousDialRotation = 0;
+            showCompassCalibPrompt(true, "Mengkalibrasi ulang sensor... Gerakkan perangkat membentuk angka 8 ♾️");
+            setTimeout(() => {
+                if (hasSensorSupport) {
+                    showCompassCalibPrompt(false);
+                }
+            }, 2500);
+            requestCompassSensorPermission();
+            detectMyLocation();
+        }
+
+        function showCompassCalibPrompt(show, text = "Gerakkan perangkat membentuk angka 8 untuk kalibrasi otomatis ♾️") {
+            const alertBox = document.getElementById('compass-calib-alert');
+            const msg = document.getElementById('compass-calib-msg');
+            if (!alertBox) return;
+            if (show && currentQiblaMode === 'gps') {
+                if (msg) msg.innerText = text;
+                alertBox.style.display = 'flex';
+            } else {
+                alertBox.style.display = 'none';
             }
         }
 
@@ -2732,14 +2753,14 @@
                 if (dot) {
                     dot.className = 'status-dot-indicator active';
                 }
-                if (statusText) statusText.innerText = "SENSOR LIVE: AKTIF";
+                if (statusText) statusText.innerText = "SENSOR LIVE: AKTIF (OTOMATIS)";
                 if (badge) {
                     badge.innerText = modeLabel;
                     badge.style.background = "#10b981";
                     badge.style.color = "#ffffff";
                 }
                 if (btnToggle) {
-                    btnToggle.innerHTML = "⏸ JEDA / MODE STATIS";
+                    btnToggle.innerHTML = "⏸ JEDA SENSOR LIVE";
                     btnToggle.style.background = "#fff";
                 }
             } else {
@@ -2785,28 +2806,39 @@
 
         function startLiveCompassTracking() {
             liveCompassActive = true;
-            updateLiveCompassUIState(true, hasSensorSupport ? "SENSOR DEVICE" : "GPS REALTIME");
+            updateLiveCompassUIState(true, hasSensorSupport ? "SENSOR OTOMATIS" : "GPS REALTIME");
 
             window.removeEventListener('deviceorientationabsolute', onDeviceOrientation, true);
             window.removeEventListener('deviceorientation', onDeviceOrientation, true);
+            window.removeEventListener('compassneedscalibration', onCompassCalibrationNeeded);
 
             if ('ondeviceorientationabsolute' in window) {
                 window.addEventListener('deviceorientationabsolute', onDeviceOrientation, true);
             }
             window.addEventListener('deviceorientation', onDeviceOrientation, true);
+            window.addEventListener('compassneedscalibration', onCompassCalibrationNeeded);
 
-            // Timeout to notify if running on PC/Laptop without magnetometer
+            if (!compassAnimFrameId) {
+                compassAnimFrameId = requestAnimationFrame(renderCompassLoop);
+            }
+
+            // Desktop / Laptop detection fallback
             clearTimeout(sensorWatchTimeout);
             sensorWatchTimeout = setTimeout(() => {
                 if (!hasSensorSupport && liveCompassActive) {
                     const badge = document.getElementById('sensor-type-badge');
-                    if (badge) badge.innerText = "SIMULASI / PC";
+                    if (badge) {
+                        badge.innerText = "MODE DESKTOP / PC";
+                        badge.style.background = "#3b82f6";
+                        badge.style.color = "#ffffff";
+                    }
                     const banner = document.getElementById('compass-guide-banner');
-                    if (banner && banner.classList.contains('static')) {
-                        banner.innerText = "SENSOR TIDAK TERDETEKSI (PC/LAPTOP). GUNAKAN SLIDER SIMULASI DI BAWAH.";
+                    if (banner && currentQiblaMode === 'gps') {
+                        banner.className = 'compass-guide-banner static';
+                        banner.innerHTML = `💻 PERANGKAT DESKTOP (Tanpa Magnetometer Fisik). Jarum otomatis menunjuk arah Kiblat <b>${currentQiblaBearing.toFixed(1)}°</b> dari koordinat GPS Anda.`;
                     }
                 }
-            }, 1800);
+            }, 2000);
         }
 
         function stopLiveCompassTracking() {
@@ -2815,10 +2847,20 @@
 
             window.removeEventListener('deviceorientationabsolute', onDeviceOrientation, true);
             window.removeEventListener('deviceorientation', onDeviceOrientation, true);
+            window.removeEventListener('compassneedscalibration', onCompassCalibrationNeeded);
+
+            if (compassAnimFrameId) {
+                cancelAnimationFrame(compassAnimFrameId);
+                compassAnimFrameId = null;
+            }
+
+            showCompassCalibPrompt(false);
 
             // Smoothly reset rose to 0deg (North-up)
             continuousDialRotation = 0;
             currentDeviceHeading = 0;
+            targetDeviceHeading = 0;
+            currentDisplayHeading = 0;
 
             const rose = document.getElementById('compass-rose');
             if (rose) {
@@ -2854,20 +2896,19 @@
                 hudDiff.innerText = `--°`;
                 hudDiff.style.color = '#000000';
             }
-
-            const slider = document.getElementById('sim-heading-slider');
-            if (slider) slider.value = 0;
-
-            const simVal = document.getElementById('sim-heading-val');
-            if (simVal) simVal.innerText = `0°`;
         }
 
         function toggleLiveCompass() {
             if (liveCompassActive) {
                 stopLiveCompassTracking();
             } else {
-                requestCompassSensorPermission();
+                autoCalibrateAndStartGPS();
             }
+        }
+
+        function onCompassCalibrationNeeded(e) {
+            if (e) e.preventDefault();
+            showCompassCalibPrompt(true, "Sensor perlu kalibrasi: Gerakkan ponsel membentuk pola angka 8 di udara ♾️");
         }
 
         function onDeviceOrientation(e) {
@@ -2875,7 +2916,16 @@
 
             let heading = null;
 
-            // 1. iOS Safari webkitCompassHeading
+            // Accuracy check (iOS webkitCompassAccuracy)
+            if (typeof e.webkitCompassAccuracy !== 'undefined' && e.webkitCompassAccuracy !== null) {
+                if (e.webkitCompassAccuracy < 0 || e.webkitCompassAccuracy > 35) {
+                    showCompassCalibPrompt(true, "Akurasi sensor rendah: Gerakkan ponsel membentuk angka 8 ♾️");
+                } else {
+                    showCompassCalibPrompt(false);
+                }
+            }
+
+            // 1. iOS Safari native webkitCompassHeading (system calibrated)
             if (typeof e.webkitCompassHeading !== 'undefined' && e.webkitCompassHeading !== null) {
                 heading = e.webkitCompassHeading;
                 hasSensorSupport = true;
@@ -2883,16 +2933,46 @@
             // 2. Android deviceorientationabsolute or alpha
             else if (e.alpha !== null && !isNaN(e.alpha)) {
                 hasSensorSupport = true;
-                if (e.beta !== null && e.gamma !== null && Math.abs(e.beta) > 15 && Math.abs(e.gamma) > 15) {
-                    let comp = -(e.alpha + (e.beta * e.gamma) / 90);
-                    heading = ((comp % 360) + 360) % 360;
+                const alpha = e.alpha;
+                const beta = e.beta || 0;
+                const gamma = e.gamma || 0;
+
+                // Flat on table (tilt < 5 deg)
+                if (Math.abs(beta) < 5 && Math.abs(gamma) < 5) {
+                    heading = (360 - alpha + 360) % 360;
                 } else {
-                    heading = ((360 - e.alpha) % 360 + 360) % 360;
+                    // Standard W3C tilt compensation
+                    const degtorad = Math.PI / 180;
+                    const aRad = alpha * degtorad;
+                    const bRad = beta * degtorad;
+                    const gRad = gamma * degtorad;
+
+                    const cA = Math.cos(aRad);
+                    const sA = Math.sin(aRad);
+                    const cB = Math.cos(bRad);
+                    const sB = Math.sin(bRad);
+                    const cG = Math.cos(gRad);
+                    const sG = Math.sin(gRad);
+
+                    const rA = -cA * sG - sA * sB * cG;
+                    const rB = -sA * sG + cA * sB * cG;
+
+                    if (Math.abs(rA) < 1e-6 && Math.abs(rB) < 1e-6) {
+                        heading = (360 - alpha + 360) % 360;
+                    } else {
+                        let compH = Math.atan(rA / rB);
+                        if (rB < 0) {
+                            compH += Math.PI;
+                        } else if (rA < 0) {
+                            compH += 2 * Math.PI;
+                        }
+                        heading = compH * (180 / Math.PI);
+                    }
                 }
             }
 
             if (heading !== null && !isNaN(heading)) {
-                // Screen orientation adjustment
+                // Screen orientation compensation (portrait / landscape)
                 let screenAngle = 0;
                 if (window.screen && window.screen.orientation && window.screen.orientation.angle !== undefined) {
                     screenAngle = window.screen.orientation.angle;
@@ -2901,26 +2981,37 @@
                 }
                 heading = (heading + screenAngle + 360) % 360;
 
-                applyCompassHeading(heading, true);
+                targetDeviceHeading = heading;
+                currentDeviceHeading = heading;
+                hasSensorSupport = true;
+
+                const badge = document.getElementById('sensor-type-badge');
+                if (badge && badge.innerText !== "SENSOR LIVE: OTOMATIS") {
+                    badge.innerText = "SENSOR LIVE: OTOMATIS";
+                    badge.style.background = "#10b981";
+                    badge.style.color = "#ffffff";
+                }
             }
         }
 
-        function applyCompassHeading(heading, fromSensor = true) {
-            currentDeviceHeading = heading;
-            if (fromSensor) {
-                hasSensorSupport = true;
-                const badge = document.getElementById('sensor-type-badge');
-                if (badge && badge.innerText !== "SENSOR DEVICE") {
-                    badge.innerText = "SENSOR DEVICE";
-                    badge.style.background = "#10b981";
-                }
+        function renderCompassLoop() {
+            if (!liveCompassActive) return;
+
+            // Exponential damping towards targetDeviceHeading for fluid motion
+            let diff = targetDeviceHeading - currentDisplayHeading;
+            diff = ((diff + 180) % 360 + 360) % 360 - 180;
+
+            if (Math.abs(diff) > 0.04) {
+                currentDisplayHeading = (currentDisplayHeading + diff * 0.22 + 360) % 360;
+            } else {
+                currentDisplayHeading = targetDeviceHeading;
             }
 
             // Continuous rotation to avoid 360° backspin glitches
-            const targetAngle = -heading;
-            let diff = targetAngle - continuousDialRotation;
-            diff = ((diff + 180) % 360 + 360) % 360 - 180;
-            continuousDialRotation += diff;
+            const targetAngle = -currentDisplayHeading;
+            let dialDiff = targetAngle - continuousDialRotation;
+            dialDiff = ((dialDiff + 180) % 360 + 360) % 360 - 180;
+            continuousDialRotation += dialDiff;
 
             // Rotate compass rose
             const rose = document.getElementById('compass-rose');
@@ -2931,24 +3022,24 @@
             // Keep Ka'bah icon upright isometrically
             const kaaba = document.getElementById('kaaba-marker');
             if (kaaba) {
-                kaaba.style.transform = `translate(-50%, -50%) rotate(${heading}deg)`;
+                kaaba.style.transform = `translate(-50%, -50%) rotate(${currentDisplayHeading}deg)`;
             }
 
             // Calculate angular difference towards Qibla
-            let qiblaDiff = (currentQiblaBearing - heading + 360) % 360;
+            let qiblaDiff = (currentQiblaBearing - currentDisplayHeading + 360) % 360;
             if (qiblaDiff > 180) qiblaDiff -= 360;
 
             const absDiff = Math.abs(qiblaDiff);
             const isAligned = absDiff <= 3.0; // Within 3° precision
 
             const directions = ["U", "UTL", "TL", "TTL", "T", "TGr", "TG", "STG", "S", "SBD", "BD", "BBD", "B", "BBL", "BL", "UBL"];
-            const headingDirIdx = Math.floor(((heading % 360 + 360) % 360 + 11.25) / 22.5) % 16;
+            const headingDirIdx = Math.floor(((currentDisplayHeading % 360 + 360) % 360 + 11.25) / 22.5) % 16;
             const qiblaDirIdx = Math.floor(((currentQiblaBearing % 360 + 360) % 360 + 11.25) / 22.5) % 16;
 
             // Update Live HUD elements
             const hudHeading = document.getElementById('hud-device-heading');
             if (hudHeading) {
-                hudHeading.innerText = `${Math.round(heading)}° (${directions[headingDirIdx]})`;
+                hudHeading.innerText = `${Math.round(currentDisplayHeading)}° (${directions[headingDirIdx]})`;
             }
 
             const hudDiff = document.getElementById('hud-angle-diff');
@@ -3003,49 +3094,11 @@
                 if (isAligned) {
                     caption.innerText = `✓ ARAH TEPAT MENUJU KA'BAH (${currentQiblaBearing.toFixed(1)}°)`;
                 } else {
-                    caption.innerText = `VEKTOR KIBLAT: ${currentQiblaBearing.toFixed(1)}° (${directions[qiblaDirIdx]}) | ARAH ANDA: ${Math.round(heading)}°`;
+                    caption.innerText = `VEKTOR KIBLAT: ${currentQiblaBearing.toFixed(1)}° (${directions[qiblaDirIdx]}) | ARAH ANDA: ${Math.round(currentDisplayHeading)}°`;
                 }
             }
 
-            // Sync simulation slider if not currently dragging
-            const slider = document.getElementById('sim-heading-slider');
-            const simVal = document.getElementById('sim-heading-val');
-            if (slider && !slider.matches(':active')) {
-                slider.value = Math.round(heading);
-            }
-            if (simVal) {
-                simVal.innerText = `${Math.round(heading)}°`;
-            }
-        }
-
-        // --- SIMULATION FUNCTIONS FOR TESTING & DESKTOP ---
-        function simulateHeading(val) {
-            const h = parseFloat(val);
-            if (!liveCompassActive) {
-                liveCompassActive = true;
-                updateLiveCompassUIState(true, "SIMULASI MANUAL");
-            }
-            applyCompassHeading(h, false);
-        }
-
-        function adjustSimHeading(delta) {
-            let newH = ((currentDeviceHeading + delta) % 360 + 360) % 360;
-            simulateHeading(newH);
-        }
-
-        function alignSimToQibla() {
-            simulateHeading(currentQiblaBearing);
-        }
-
-        function toggleSimVisibility() {
-            const container = document.getElementById('compass-sim-container');
-            if (container) {
-                const row = container.querySelector('.compass-sim-slider-row');
-                const btns = container.querySelector('div:last-child');
-                const isHidden = row.style.display === 'none';
-                row.style.display = isHidden ? 'flex' : 'none';
-                btns.style.display = isHidden ? 'flex' : 'none';
-            }
+            compassAnimFrameId = requestAnimationFrame(renderCompassLoop);
         }
 
         // --- QIBLA FINDER & PRAYER UI ---
@@ -3214,10 +3267,12 @@
                 if (dialEl) dialEl.classList.remove('aligned');
             } else {
                 if (kaaba) {
-                    kaaba.style.transform = `translate(-50%, -50%) rotate(${currentDeviceHeading}deg)`;
+                    kaaba.style.transform = `translate(-50%, -50%) rotate(${currentDisplayHeading}deg)`;
                 }
-                // Refresh live compass heading calculation with updated Qibla bearing
-                applyCompassHeading(currentDeviceHeading, false);
+                // Ensure live compass tracking loop is running
+                if (liveCompassActive && !compassAnimFrameId) {
+                    compassAnimFrameId = requestAnimationFrame(renderCompassLoop);
+                }
             }
 
             // 2. Prayer Times for Today
