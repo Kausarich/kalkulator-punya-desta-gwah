@@ -155,20 +155,24 @@ Digunakan oleh praktisi astronomi, hisab falak, dan sains untuk menentukan posis
 
 ---
 
-### Alur 3: Menentukan Arah Kiblat & Jadwal Shalat (`QIBLA & SHALAT`)
-Panduan ibadah harian berbasis hisab resmi Kementerian Agama RI.
+### Alur 3: Menentukan Arah Kiblat Real-Time & Jadwal Shalat (`QIBLA & SHALAT`)
+Panduan ibadah harian berbasis hisab resmi Kementerian Agama RI dilengkapi **Kompas Dinamis Real-Time (Live Device Orientation)**.
 
 1. **Langkah 1**: Klik tab **"QIBLA & SHALAT"**.
 2. **Langkah 2 (Menentukan Lokasi)**:
-   - **Opsi A (Otomatis GPS)**: Klik tombol **"DETEKSI LOKASI SAYA"**. Peramban akan meminta izin lokasi dan langsung mengisi lintang/bujur pengguna secara akurat.
+   - **Opsi A (Otomatis GPS & Sensor Gerak)**: Klik tombol **"DETEKSI LOKASI (GPS)"**. Peramban akan meminta izin lokasi dan orientasi sensor, langsung mengisi lintang/bujur pengguna secara akurat, dan **langsung mengaktifkan kompas real-time**.
    - **Opsi B (Daftar Kota)**: Pilih nama kota pada menu dropdown (contoh: Jakarta, Surabaya, Bandung, Medan, Makassar, Banda Aceh, Jayapura, dll).
    - **Opsi C (Koordinat Manual)**: Ketik koordinat lintang (*Latitude*) dan bujur (*Longitude*) yang Anda miliki.
-3. **Langkah 3**: Klik tombol **"HITUNG KIBLAT & WAKTU SHALAT"**.
-4. **Langkah 4 (Melihat Hasil Kompas)**:
-   - Jarum emas kompas otomatis berputar menunjuk ke arah Ka'bah.
-   - Jarum merah menunjukkan arah Utara magnetik/sejati.
-   - Ikon Ka'bah 3D isometrik berada tepat di arah kiblat dengan sudut derajat presisi dari Utara (contoh: `295.14°`).
-   - Menampilkan jarak garis lurus dari lokasi Anda ke Ka'bah di Mekkah (dalam kilometer).
+3. **Langkah 3**: Klik tombol **"HITUNG QIBLA & SHALAT"**.
+4. **Langkah 4 (Kompas Real-Time Bergerak Mengikuti Perangkat)**:
+   - **Pelacakan Arah Perangkat Nyata**: Saat menggunakan fitur GPS atau mengaktifkan mode live, piringan kompas (*compass rose*) berputar secara dinamis dan mulus (*continuous unwrapped rotation*) mengikuti perputaran fisik ponsel / perangkat pengguna (*DeviceOrientation API / Magnetometer & Gyroscope*).
+   - **Retikel Bidik Depan (Sighting Arrow)**: Menunjukkan arah hadap perangkat saat ini (12 o'clock).
+   - **Jarum & Ikon Ka'bah 3D**: Terus menunjuk ke arah fisik Ka'bah di Mekkah di dunia nyata.
+   - **Umpan Balik Presisi (Alignment Feedback)**:
+     - Jika perangkat berjarak $\le 3^\circ$ dari arah Ka'bah, kompas otomatis memancarkan kilau hijau zamrud (*Emerald Glow*), menampilkan banner *"✓ ANDA TEPAT MENGHADAP KIBLAT!"*, dan memicu getaran haptik ponsel (*Haptic Vibration*).
+     - Jika belum tepat, HUD dinamis menampilkan panduan belok seketika: *"⟳ PUTAR KE KANAN X°"* atau *"⟲ PUTAR KE KIRI X°"*.
+   - **Simulator Interaktif (Desktop / PC Fallback)**: Untuk pengujian di laptop/PC tanpa sensor kompas, tersedia slider simulasi derajat ($0^\circ - 360^\circ$) dan tombol *"🎯 KE KIBLAT"* untuk menguji rotasi kompas dan deteksi arah secara instan.
+   - Menampilkan jarak garis lurus dari lokasi Anda ke Ka'bah di Mekkah (dalam kilometer) serta sudut bearing presisi.
 5. **Langkah 5 (Melihat Jadwal Shalat)**:
    - 7 kartu waktu shalat ditampilkan lengkap: **Imsak, Subuh, Terbit, Dzuhur, Ashar, Maghrib, dan Isya**.
    - Shalat yang sedang berlangsung otomatis disorot dengan warna kuning terang (*Active Prayer Card*).

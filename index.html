@@ -393,18 +393,51 @@
             margin-bottom: 1rem;
         }
 
-        /* Compass Visual Brutalism */
+        /* Compass Visual Brutalism & Real-Time Dynamic Orientation */
         .compass-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
+            position: relative;
+        }
+
+        /* Top Sighting Reticle (Fixed to Device Front) */
+        .compass-reticle-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 6px;
+            z-index: 20;
+            transition: all 0.25s ease;
+        }
+
+        .reticle-arrow {
+            font-size: 1.3rem;
+            font-weight: 900;
+            line-height: 1;
+            color: #000000;
+            transition: color 0.25s ease, transform 0.25s ease;
+        }
+
+        .reticle-text {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #000000;
+            color: #ffffff;
+            padding: 3px 8px;
+            border-radius: 2px;
+            margin-top: 2px;
+            transition: all 0.25s ease;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
         .compass-dial {
-            width: 250px;
-            height: 250px;
+            width: 260px;
+            height: 260px;
             border-radius: 50%;
             border: 4px solid #000000;
             background: #ffffff;
@@ -414,17 +447,84 @@
             align-items: center;
             justify-content: center;
             user-select: none;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
         }
 
+        /* Aligned state when device faces Ka'bah directly */
+        .compass-dial.aligned {
+            border-color: #059669;
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.55), var(--shadow-lg);
+            background-color: #f0fdf4;
+        }
+
+        .compass-reticle-top.aligned .reticle-arrow {
+            color: #059669;
+            transform: scale(1.25);
+            animation: pulse-reticle 0.8s infinite alternate ease-in-out;
+        }
+
+        .compass-reticle-top.aligned .reticle-text {
+            background: #059669;
+            color: #ffffff;
+        }
+
+        @keyframes pulse-reticle {
+            0% { transform: scale(1.15) translateY(0); }
+            100% { transform: scale(1.35) translateY(2px); }
+        }
+
+        /* Rotating Compass Rose Container */
+        .compass-rose {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: center center;
+            transition: transform 0.08s linear;
+            pointer-events: none;
+        }
+
+        .compass-rose.anim-smooth {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Background grid crosshairs inside rose */
+        .compass-crosshair-v {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.08);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .compass-crosshair-h {
+            position: absolute;
+            height: 1px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.08);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Cardinal direction labels inside rose */
         .compass-label {
             position: absolute;
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            font-family: monospace, sans-serif;
         }
 
         .compass-label.n {
-            top: 8px;
-            color: #000000;
+            top: 10px;
+            color: #dc2626; /* Bright Red for True North */
+            font-size: 1.25rem;
         }
 
         .compass-label.e {
@@ -433,7 +533,7 @@
         }
 
         .compass-label.s {
-            bottom: 8px;
+            bottom: 10px;
             color: #000000;
         }
 
@@ -442,64 +542,239 @@
             color: #000000;
         }
 
+        /* Secondary intercardinal labels */
+        .compass-sublabel {
+            position: absolute;
+            font-weight: 800;
+            font-size: 0.65rem;
+            color: #71717a;
+            font-family: monospace;
+        }
+        .compass-sublabel.tl { top: 40px; right: 40px; }
+        .compass-sublabel.tg { bottom: 40px; right: 40px; }
+        .compass-sublabel.bd { bottom: 40px; left: 40px; }
+        .compass-sublabel.bl { top: 40px; left: 40px; }
+
+        /* True North Needle */
         .needle-north {
             position: absolute;
             width: 4px;
             height: 85px;
-            background: #000000;
+            background: #dc2626;
             transform-origin: center center;
-            top: 40px;
+            top: 45px;
             pointer-events: none;
+            z-index: 5;
         }
 
         .needle-north::after {
             content: '';
             position: absolute;
-            top: -8px;
-            left: -4px;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 10px solid #000000;
+            top: -9px;
+            left: -5px;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 11px solid #dc2626;
         }
 
+        /* Qibla Direction Needle */
         .needle-qibla {
             position: absolute;
             width: 5px;
-            height: 105px;
+            height: 110px;
             background: var(--accent-yellow);
             border: 2px solid #000000;
             transform-origin: center center;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
+            z-index: 7;
         }
 
         .needle-qibla::after {
             content: '';
             position: absolute;
-            top: -12px;
-            left: -5px;
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-bottom: 12px solid #000000;
+            top: -14px;
+            left: -6px;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 14px solid #000000;
         }
 
-        /* Kaaba Icon replacing text MECCA */
+        /* Central Pivot Hub */
+        .compass-center-hub {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-yellow);
+            border: 3px solid #000000;
+            z-index: 15;
+            pointer-events: none;
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Kaaba Marker */
         .kaaba-icon {
             position: absolute;
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             transform: translate(-50%, -50%);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 10;
+            transition: left 0.4s ease, top 0.4s ease;
+            z-index: 12;
             cursor: pointer;
-            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.6));
+            pointer-events: auto;
         }
 
         .kaaba-icon:hover {
             transform: translate(-50%, -50%) scale(1.15);
+        }
+
+        /* Live Compass HUD & Information Box */
+        .compass-hud-box {
+            margin-top: 0.85rem;
+            width: 100%;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .compass-status-bar-pill {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-dot-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .status-dot-indicator.active {
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 1.2s infinite ease-in-out;
+        }
+
+        .status-dot-indicator.inactive {
+            background: #9ca3af;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .compass-guide-banner {
+            padding: 0.65rem 0.85rem;
+            border: 2px solid #000000;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+
+        .compass-guide-banner.aligned {
+            background: #10b981;
+            color: #ffffff;
+            border-color: #047857;
+            animation: pulse-guide-box 1.2s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse-guide-box {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+            100% { transform: scale(1.02); box-shadow: 0 0 20px rgba(16, 185, 129, 0.7); }
+        }
+
+        .compass-guide-banner.turn-right {
+            background: var(--accent-yellow);
+            color: #000000;
+        }
+
+        .compass-guide-banner.turn-left {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .compass-guide-banner.static {
+            background: #f4f4f5;
+            color: #3f3f46;
+        }
+
+        .compass-metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.45rem;
+            text-align: center;
+        }
+
+        .compass-metric-pill {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 4px 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .compass-metric-pill small {
+            display: block;
+            font-size: 0.62rem;
+            color: #555555;
+            font-weight: 700;
+        }
+
+        .compass-actions-row {
+            display: flex;
+            gap: 0.45rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Simulation Box for Desktop / Manual Testing */
+        .compass-sim-box {
+            margin-top: 0.5rem;
+            background: #fffbeb;
+            border: 2px dashed #000000;
+            padding: 0.65rem 0.75rem;
+            font-size: 0.74rem;
+            width: 100%;
+            max-width: 340px;
+            box-sizing: border-box;
+        }
+
+        .compass-sim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+
+        .compass-sim-slider-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compass-sim-slider-row input[type="range"] {
+            flex: 1;
+            accent-color: #000000;
+            cursor: pointer;
         }
 
         /* Prayer Times Section */
@@ -1436,44 +1711,146 @@
                     </div>
                 </div>
 
-                <!-- Compass Visual with Kaaba Marker -->
+                <!-- Compass Visual with Real-Time Dynamic Orientation -->
                 <div class="compass-wrapper">
-                    <div class="compass-dial">
-                        <div class="compass-label n">U</div>
-                        <div class="compass-label e">T</div>
-                        <div class="compass-label s">S</div>
-                        <div class="compass-label w">B</div>
+                    <!-- Sighting reticle pointing forward (Device heading) -->
+                    <div class="compass-reticle-top" id="compass-reticle">
+                        <span class="reticle-arrow">▼</span>
+                        <span class="reticle-text" id="reticle-label">DEPAN (ARAH DEVICE)</span>
+                    </div>
 
-                        <div class="needle-north"></div>
-                        <div id="needle-qibla" class="needle-qibla"></div>
-
-                        <!-- Gambar Kakbah menggantikan tulisan MECCA -->
-                        <div id="kaaba-marker" class="kaaba-icon" title="Ka'bah Al-Musyarrafah (Mekkah)">
-                            <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <!-- Bayangan Dasar -->
-                                <polygon points="18,34 32,26 18,18 4,26" fill="#000000" opacity="0.35"/>
-                                <!-- Dinding Sisi Kiri -->
-                                <polygon points="4,13 18,20 18,31 4,24" fill="#141416" stroke="#000000" stroke-width="1.2"/>
-                                <!-- Dinding Sisi Kanan -->
-                                <polygon points="18,20 32,13 32,24 18,31" fill="#1f1f22" stroke="#000000" stroke-width="1.2"/>
-                                <!-- Atap Ka'bah -->
-                                <polygon points="18,5 32,13 18,20 4,13" fill="#2d2d30" stroke="#000000" stroke-width="1.2"/>
-                                <polygon points="18,7 30,13 18,18 6,13" fill="#141416"/>
-                                <!-- Pita Kiswah Emas Sisi Kiri -->
-                                <polygon points="4,15.5 18,22.5 18,24.5 4,17.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
-                                <!-- Pita Kiswah Emas Sisi Kanan -->
-                                <polygon points="18,22.5 32,15.5 32,17.5 18,24.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
-                                <!-- Pintu Ka'bah (Bab al-Kaaba) -->
-                                <polygon points="22,19.5 27,17 27,24 22,26.5" fill="#ffde59" stroke="#000000" stroke-width="1"/>
-                                <line x1="24.5" y1="18.2" x2="24.5" y2="25.2" stroke="#000000" stroke-width="0.7"/>
-                                <!-- Pondasi Marmer (Syadzarwan) -->
-                                <polygon points="4,24 18,31 18,32 4,25" fill="#e5e5ea" stroke="#000000" stroke-width="0.8"/>
-                                <polygon points="18,31 32,24 32,25 18,32" fill="#d1d1d6" stroke="#000000" stroke-width="0.8"/>
+                    <div class="compass-dial" id="compass-dial-box">
+                        <!-- Rotating Compass Rose (tracks device heading) -->
+                        <div id="compass-rose" class="compass-rose">
+                            <!-- Compass Bezel Ticks SVG -->
+                            <svg class="compass-ticks-ring" viewBox="0 0 260 260" width="260" height="260">
+                                <circle cx="130" cy="130" r="122" fill="none" stroke="#e4e4e7" stroke-width="1.5" stroke-dasharray="2 6"/>
+                                <circle cx="130" cy="130" r="102" fill="none" stroke="#f4f4f5" stroke-width="1"/>
+                                <!-- 30-degree tick marks -->
+                                <line x1="130" y1="8" x2="130" y2="18" stroke="#dc2626" stroke-width="3"/>
+                                <line x1="130" y1="242" x2="130" y2="252" stroke="#000000" stroke-width="2.5"/>
+                                <line x1="8" y1="130" x2="18" y2="130" stroke="#000000" stroke-width="2.5"/>
+                                <line x1="242" y1="130" x2="252" y2="130" stroke="#000000" stroke-width="2.5"/>
+                                
+                                <line x1="191" y1="24" x2="186" y2="33" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="236" y1="69" x2="227" y2="74" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="236" y1="191" x2="227" y2="186" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="191" y1="236" x2="186" y2="227" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="69" y1="236" x2="74" y2="227" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="24" y1="191" x2="33" y2="186" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="24" y1="69" x2="33" y2="74" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="69" y1="24" x2="74" y2="33" stroke="#a1a1aa" stroke-width="1.5"/>
                             </svg>
+
+                            <div class="compass-crosshair-v"></div>
+                            <div class="compass-crosshair-h"></div>
+
+                            <!-- Cardinal Labels -->
+                            <div class="compass-label n">U</div>
+                            <div class="compass-label e">T</div>
+                            <div class="compass-label s">S</div>
+                            <div class="compass-label w">B</div>
+
+                            <!-- Subcardinal Labels -->
+                            <div class="compass-sublabel tl">TL</div>
+                            <div class="compass-sublabel tg">TG</div>
+                            <div class="compass-sublabel bd">BD</div>
+                            <div class="compass-sublabel bl">BL</div>
+
+                            <!-- True North Needle -->
+                            <div class="needle-north" title="Arah Utara Sejati"></div>
+
+                            <!-- Qibla Needle -->
+                            <div id="needle-qibla" class="needle-qibla" title="Jarum Vektor Kiblat"></div>
+
+                            <!-- Gambar Kakbah Isometrik 3D Presisi -->
+                            <div id="kaaba-marker" class="kaaba-icon" title="Ka'bah Al-Musyarrafah (Mekkah)">
+                                <svg width="34" height="34" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Bayangan Dasar -->
+                                    <polygon points="18,34 32,26 18,18 4,26" fill="#000000" opacity="0.35"/>
+                                    <!-- Dinding Sisi Kiri -->
+                                    <polygon points="4,13 18,20 18,31 4,24" fill="#141416" stroke="#000000" stroke-width="1.2"/>
+                                    <!-- Dinding Sisi Kanan -->
+                                    <polygon points="18,20 32,13 32,24 18,31" fill="#1f1f22" stroke="#000000" stroke-width="1.2"/>
+                                    <!-- Atap Ka'bah -->
+                                    <polygon points="18,5 32,13 18,20 4,13" fill="#2d2d30" stroke="#000000" stroke-width="1.2"/>
+                                    <polygon points="18,7 30,13 18,18 6,13" fill="#141416"/>
+                                    <!-- Pita Kiswah Emas Sisi Kiri -->
+                                    <polygon points="4,15.5 18,22.5 18,24.5 4,17.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
+                                    <!-- Pita Kiswah Emas Sisi Kanan -->
+                                    <polygon points="18,22.5 32,15.5 32,17.5 18,24.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
+                                    <!-- Pintu Ka'bah (Bab al-Kaaba) -->
+                                    <polygon points="22,19.5 27,17 27,24 22,26.5" fill="#ffde59" stroke="#000000" stroke-width="1"/>
+                                    <line x1="24.5" y1="18.2" x2="24.5" y2="25.2" stroke="#000000" stroke-width="0.7"/>
+                                    <!-- Pondasi Marmer (Syadzarwan) -->
+                                    <polygon points="4,24 18,31 18,32 4,25" fill="#e5e5ea" stroke="#000000" stroke-width="0.8"/>
+                                    <polygon points="18,31 32,24 32,25 18,32" fill="#d1d1d6" stroke="#000000" stroke-width="0.8"/>
+                                </svg>
+                            </div>
+
+                            <!-- Central Hub -->
+                            <div class="compass-center-hub"></div>
                         </div>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; text-align: center;"
-                        id="compass-caption">VEKTOR KIBLAT: MENUNJUK KE KA'BAH</p>
+
+                    <!-- Live Compass HUD & Directional Guide -->
+                    <div class="compass-hud-box">
+                        <div class="compass-status-bar-pill">
+                            <div>
+                                <span id="status-sensor-dot" class="status-dot-indicator inactive"></span>
+                                <span id="status-sensor-text">SENSOR LIVE: NONAKTIF</span>
+                            </div>
+                            <div id="sensor-type-badge" style="font-size: 0.68rem; background: #000000; color: #ffffff; padding: 2px 6px;">MODE STATIS</div>
+                        </div>
+
+                        <!-- Real-time Guidance Banner -->
+                        <div id="compass-guide-banner" class="compass-guide-banner static">
+                            KLIK "DETEKSI LOKASI (GPS)" UNTUK AKTIFKAN SENSOR REAL-TIME
+                        </div>
+
+                        <!-- Live Metrics -->
+                        <div class="compass-metrics-grid">
+                            <div class="compass-metric-pill">
+                                <small>ARAH ANDA (HEADING)</small>
+                                <span id="hud-device-heading">0° (U)</span>
+                            </div>
+                            <div class="compass-metric-pill">
+                                <small>SELISIH SUDUT</small>
+                                <span id="hud-angle-diff">--°</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Controls Row -->
+                        <div class="compass-actions-row">
+                            <button id="btn-toggle-sensor" class="secondary-btn" style="flex: 1; padding: 0.45rem 0.5rem; font-size: 0.72rem;" onclick="toggleLiveCompass()">
+                                🟢 AKTIFKAN LIVE KOMPAS
+                            </button>
+                            <button id="btn-recalibrate" class="secondary-btn" style="padding: 0.45rem 0.6rem; font-size: 0.72rem;" onclick="requestCompassSensorPermission()" title="Minta izin sensor / kalibrasi">
+                                🔄 KALIBRASI
+                            </button>
+                        </div>
+
+                        <!-- Desktop / Manual Simulation Controls -->
+                        <div class="compass-sim-box" id="compass-sim-container">
+                            <div class="compass-sim-header" onclick="toggleSimVisibility()">
+                                <span>📱 UJI SIMULASI PUTAR DEVICE</span>
+                                <span id="sim-heading-val" style="font-family: monospace; font-size: 0.85rem; background: #000; color: #fff; padding: 1px 5px;">0°</span>
+                            </div>
+                            <div class="compass-sim-slider-row">
+                                <span style="font-size: 0.7rem; font-weight: 800;">0°</span>
+                                <input type="range" id="sim-heading-slider" min="0" max="359" value="0" step="1" oninput="simulateHeading(this.value)">
+                                <span style="font-size: 0.7rem; font-weight: 800;">360°</span>
+                            </div>
+                            <div style="display: flex; gap: 0.35rem; margin-top: 0.4rem;">
+                                <button class="secondary-btn" style="flex: 1; padding: 0.25rem; font-size: 0.68rem;" onclick="adjustSimHeading(-15)">⟲ -15°</button>
+                                <button class="secondary-btn" style="flex: 1.2; padding: 0.25rem; font-size: 0.68rem; background: var(--accent-yellow);" onclick="alignSimToQibla()">🎯 KE KIBLAT</button>
+                                <button class="secondary-btn" style="flex: 1; padding: 0.25rem; font-size: 0.68rem;" onclick="adjustSimHeading(15)">+15° ⟳</button>
+                            </div>
+                        </div>
+
+                        <p style="margin-top: 0.35rem; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; text-align: center;"
+                            id="compass-caption">VEKTOR KIBLAT: MENUNJUK KE KA'BAH</p>
+                    </div>
                 </div>
             </div>
 
@@ -2140,6 +2517,339 @@
             };
         }
 
+        // --- REAL-TIME QIBLA COMPASS & SENSOR ENGINE ---
+        let liveCompassActive = false;
+        let currentQiblaBearing = 295.14; // Default Jakarta
+        let currentDeviceHeading = 0;
+        let continuousDialRotation = 0;
+        let hasSensorSupport = false;
+        let lastHapticTime = 0;
+        let sensorWatchTimeout = null;
+
+        function updateLiveCompassUIState(active, modeLabel = "GPS REALTIME") {
+            const dot = document.getElementById('status-sensor-dot');
+            const statusText = document.getElementById('status-sensor-text');
+            const badge = document.getElementById('sensor-type-badge');
+            const btnToggle = document.getElementById('btn-toggle-sensor');
+
+            if (active) {
+                if (dot) {
+                    dot.className = 'status-dot-indicator active';
+                }
+                if (statusText) statusText.innerText = "SENSOR LIVE: AKTIF";
+                if (badge) {
+                    badge.innerText = modeLabel;
+                    badge.style.background = "#10b981";
+                    badge.style.color = "#ffffff";
+                }
+                if (btnToggle) {
+                    btnToggle.innerHTML = "⏸ JEDA / MODE STATIS";
+                    btnToggle.style.background = "#fff";
+                }
+            } else {
+                if (dot) {
+                    dot.className = 'status-dot-indicator inactive';
+                }
+                if (statusText) statusText.innerText = "SENSOR LIVE: NONAKTIF";
+                if (badge) {
+                    badge.innerText = "MODE STATIS";
+                    badge.style.background = "#000000";
+                    badge.style.color = "#ffffff";
+                }
+                if (btnToggle) {
+                    btnToggle.innerHTML = "🟢 AKTIFKAN LIVE KOMPAS";
+                    btnToggle.style.background = "var(--accent-yellow)";
+                }
+            }
+        }
+
+        function requestCompassSensorPermission() {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            startLiveCompassTracking();
+                        } else {
+                            const banner = document.getElementById('compass-guide-banner');
+                            if (banner) {
+                                banner.className = 'compass-guide-banner static';
+                                banner.innerText = "IZIN SENSOR DITOLAK PADA PERANGKAT.";
+                            }
+                            updateLiveCompassUIState(false);
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("Sensor permission error:", err);
+                        startLiveCompassTracking();
+                    });
+            } else {
+                startLiveCompassTracking();
+            }
+        }
+
+        function startLiveCompassTracking() {
+            liveCompassActive = true;
+            updateLiveCompassUIState(true, hasSensorSupport ? "SENSOR DEVICE" : "GPS REALTIME");
+
+            window.removeEventListener('deviceorientationabsolute', onDeviceOrientation, true);
+            window.removeEventListener('deviceorientation', onDeviceOrientation, true);
+
+            if ('ondeviceorientationabsolute' in window) {
+                window.addEventListener('deviceorientationabsolute', onDeviceOrientation, true);
+            }
+            window.addEventListener('deviceorientation', onDeviceOrientation, true);
+
+            // Timeout to notify if running on PC/Laptop without magnetometer
+            clearTimeout(sensorWatchTimeout);
+            sensorWatchTimeout = setTimeout(() => {
+                if (!hasSensorSupport && liveCompassActive) {
+                    const badge = document.getElementById('sensor-type-badge');
+                    if (badge) badge.innerText = "SIMULASI / PC";
+                    const banner = document.getElementById('compass-guide-banner');
+                    if (banner && banner.classList.contains('static')) {
+                        banner.innerText = "SENSOR TIDAK TERDETEKSI (PC/LAPTOP). GUNAKAN SLIDER SIMULASI DI BAWAH.";
+                    }
+                }
+            }, 1800);
+        }
+
+        function stopLiveCompassTracking() {
+            liveCompassActive = false;
+            updateLiveCompassUIState(false);
+
+            window.removeEventListener('deviceorientationabsolute', onDeviceOrientation, true);
+            window.removeEventListener('deviceorientation', onDeviceOrientation, true);
+
+            // Smoothly reset rose to 0deg (North-up)
+            continuousDialRotation = 0;
+            currentDeviceHeading = 0;
+
+            const rose = document.getElementById('compass-rose');
+            if (rose) {
+                rose.classList.add('anim-smooth');
+                rose.style.transform = `rotate(0deg)`;
+                setTimeout(() => rose.classList.remove('anim-smooth'), 650);
+            }
+
+            const kaaba = document.getElementById('kaaba-marker');
+            if (kaaba) {
+                kaaba.style.transform = `translate(-50%, -50%) rotate(0deg)`;
+            }
+
+            const dial = document.getElementById('compass-dial-box');
+            if (dial) dial.classList.remove('aligned');
+
+            const reticle = document.getElementById('compass-reticle');
+            if (reticle) reticle.classList.remove('aligned');
+
+            const banner = document.getElementById('compass-guide-banner');
+            if (banner) {
+                banner.className = 'compass-guide-banner static';
+                banner.innerText = "MODE STATIS: REFERENSI UTARA SEJATI DI ATAS";
+            }
+
+            const hudHeading = document.getElementById('hud-device-heading');
+            if (hudHeading) hudHeading.innerText = `0° (U)`;
+
+            const hudDiff = document.getElementById('hud-angle-diff');
+            if (hudDiff) {
+                hudDiff.innerText = `--°`;
+                hudDiff.style.color = '#000000';
+            }
+
+            const slider = document.getElementById('sim-heading-slider');
+            if (slider) slider.value = 0;
+
+            const simVal = document.getElementById('sim-heading-val');
+            if (simVal) simVal.innerText = `0°`;
+        }
+
+        function toggleLiveCompass() {
+            if (liveCompassActive) {
+                stopLiveCompassTracking();
+            } else {
+                requestCompassSensorPermission();
+            }
+        }
+
+        function onDeviceOrientation(e) {
+            if (!liveCompassActive) return;
+
+            let heading = null;
+
+            // 1. iOS Safari webkitCompassHeading
+            if (typeof e.webkitCompassHeading !== 'undefined' && e.webkitCompassHeading !== null) {
+                heading = e.webkitCompassHeading;
+                hasSensorSupport = true;
+            }
+            // 2. Android deviceorientationabsolute or alpha
+            else if (e.alpha !== null && !isNaN(e.alpha)) {
+                hasSensorSupport = true;
+                if (e.beta !== null && e.gamma !== null && Math.abs(e.beta) > 15 && Math.abs(e.gamma) > 15) {
+                    let comp = -(e.alpha + (e.beta * e.gamma) / 90);
+                    heading = ((comp % 360) + 360) % 360;
+                } else {
+                    heading = ((360 - e.alpha) % 360 + 360) % 360;
+                }
+            }
+
+            if (heading !== null && !isNaN(heading)) {
+                // Screen orientation adjustment
+                let screenAngle = 0;
+                if (window.screen && window.screen.orientation && window.screen.orientation.angle !== undefined) {
+                    screenAngle = window.screen.orientation.angle;
+                } else if (typeof window.orientation === 'number') {
+                    screenAngle = window.orientation;
+                }
+                heading = (heading + screenAngle + 360) % 360;
+
+                applyCompassHeading(heading, true);
+            }
+        }
+
+        function applyCompassHeading(heading, fromSensor = true) {
+            currentDeviceHeading = heading;
+            if (fromSensor) {
+                hasSensorSupport = true;
+                const badge = document.getElementById('sensor-type-badge');
+                if (badge && badge.innerText !== "SENSOR DEVICE") {
+                    badge.innerText = "SENSOR DEVICE";
+                    badge.style.background = "#10b981";
+                }
+            }
+
+            // Continuous rotation to avoid 360° backspin glitches
+            const targetAngle = -heading;
+            let diff = targetAngle - continuousDialRotation;
+            diff = ((diff + 180) % 360 + 360) % 360 - 180;
+            continuousDialRotation += diff;
+
+            // Rotate compass rose
+            const rose = document.getElementById('compass-rose');
+            if (rose) {
+                rose.style.transform = `rotate(${continuousDialRotation}deg)`;
+            }
+
+            // Keep Ka'bah icon upright isometrically
+            const kaaba = document.getElementById('kaaba-marker');
+            if (kaaba) {
+                kaaba.style.transform = `translate(-50%, -50%) rotate(${heading}deg)`;
+            }
+
+            // Calculate angular difference towards Qibla
+            let qiblaDiff = (currentQiblaBearing - heading + 360) % 360;
+            if (qiblaDiff > 180) qiblaDiff -= 360;
+
+            const absDiff = Math.abs(qiblaDiff);
+            const isAligned = absDiff <= 3.0; // Within 3° precision
+
+            const directions = ["U", "UTL", "TL", "TTL", "T", "TGr", "TG", "STG", "S", "SBD", "BD", "BBD", "B", "BBL", "BL", "UBL"];
+            const headingDirIdx = Math.floor(((heading % 360 + 360) % 360 + 11.25) / 22.5) % 16;
+            const qiblaDirIdx = Math.floor(((currentQiblaBearing % 360 + 360) % 360 + 11.25) / 22.5) % 16;
+
+            // Update Live HUD elements
+            const hudHeading = document.getElementById('hud-device-heading');
+            if (hudHeading) {
+                hudHeading.innerText = `${Math.round(heading)}° (${directions[headingDirIdx]})`;
+            }
+
+            const hudDiff = document.getElementById('hud-angle-diff');
+            if (hudDiff) {
+                if (isAligned) {
+                    hudDiff.innerText = `0° (LURUS)`;
+                    hudDiff.style.color = '#059669';
+                } else if (qiblaDiff > 0) {
+                    hudDiff.innerText = `${Math.round(absDiff)}° KE KANAN`;
+                    hudDiff.style.color = '#000000';
+                } else {
+                    hudDiff.innerText = `${Math.round(absDiff)}° KE KIRI`;
+                    hudDiff.style.color = '#000000';
+                }
+            }
+
+            // Update Directional Guidance Banner
+            const banner = document.getElementById('compass-guide-banner');
+            const dial = document.getElementById('compass-dial-box');
+            const reticle = document.getElementById('compass-reticle');
+
+            if (banner) {
+                if (isAligned) {
+                    banner.className = 'compass-guide-banner aligned';
+                    banner.innerHTML = `✓ ANDA TEPAT MENGHADAP KIBLAT! (${currentQiblaBearing.toFixed(1)}°)`;
+                    if (dial) dial.classList.add('aligned');
+                    if (reticle) reticle.classList.add('aligned');
+
+                    // Subtle haptic feedback when entering alignment
+                    const now = Date.now();
+                    if (navigator.vibrate && (now - lastHapticTime > 1200)) {
+                        lastHapticTime = now;
+                        try { navigator.vibrate([60, 40, 60]); } catch (e) {}
+                    }
+                } else {
+                    if (dial) dial.classList.remove('aligned');
+                    if (reticle) reticle.classList.remove('aligned');
+
+                    if (qiblaDiff > 0) {
+                        banner.className = 'compass-guide-banner turn-right';
+                        banner.innerHTML = `⟳ PUTAR KE KANAN <b>${Math.round(absDiff)}°</b> MENUJU KIBLAT`;
+                    } else {
+                        banner.className = 'compass-guide-banner turn-left';
+                        banner.innerHTML = `⟲ PUTAR KE KIRI <b>${Math.round(absDiff)}°</b> MENUJU KIBLAT`;
+                    }
+                }
+            }
+
+            // Update caption
+            const caption = document.getElementById('compass-caption');
+            if (caption) {
+                if (isAligned) {
+                    caption.innerText = `✓ ARAH TEPAT MENUJU KA'BAH (${currentQiblaBearing.toFixed(1)}°)`;
+                } else {
+                    caption.innerText = `VEKTOR KIBLAT: ${currentQiblaBearing.toFixed(1)}° (${directions[qiblaDirIdx]}) | ARAH ANDA: ${Math.round(heading)}°`;
+                }
+            }
+
+            // Sync simulation slider if not currently dragging
+            const slider = document.getElementById('sim-heading-slider');
+            const simVal = document.getElementById('sim-heading-val');
+            if (slider && !slider.matches(':active')) {
+                slider.value = Math.round(heading);
+            }
+            if (simVal) {
+                simVal.innerText = `${Math.round(heading)}°`;
+            }
+        }
+
+        // --- SIMULATION FUNCTIONS FOR TESTING & DESKTOP ---
+        function simulateHeading(val) {
+            const h = parseFloat(val);
+            if (!liveCompassActive) {
+                liveCompassActive = true;
+                updateLiveCompassUIState(true, "SIMULASI MANUAL");
+            }
+            applyCompassHeading(h, false);
+        }
+
+        function adjustSimHeading(delta) {
+            let newH = ((currentDeviceHeading + delta) % 360 + 360) % 360;
+            simulateHeading(newH);
+        }
+
+        function alignSimToQibla() {
+            simulateHeading(currentQiblaBearing);
+        }
+
+        function toggleSimVisibility() {
+            const container = document.getElementById('compass-sim-container');
+            if (container) {
+                const row = container.querySelector('.compass-sim-slider-row');
+                const btns = container.querySelector('div:last-child');
+                const isHidden = row.style.display === 'none';
+                row.style.display = isHidden ? 'flex' : 'none';
+                btns.style.display = isHidden ? 'flex' : 'none';
+            }
+        }
+
         // --- QIBLA FINDER & PRAYER UI ---
         let latestPrayerSchedule = null;
         let countdownTimerInterval = null;
@@ -2166,7 +2876,11 @@
                 alert("Geolocation tidak didukung oleh browser Anda.");
                 return;
             }
-            if (btn) btn.innerText = "MENCARI LOKASI...";
+            if (btn) btn.innerText = "MENCARI LOKASI & KALIBRASI...";
+
+            // Request orientation permission in user-initiated gesture (required for iOS Safari)
+            requestCompassSensorPermission();
+
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
                     const lat = parseFloat(pos.coords.latitude.toFixed(6));
@@ -2180,6 +2894,9 @@
                     if (btn) btn.innerText = "DETEKSI LOKASI (GPS)";
 
                     computeQiblaAndPrayer();
+
+                    // Immediately activate live compass orientation tracking
+                    startLiveCompassTracking();
                 },
                 (err) => {
                     if (btn) btn.innerText = "DETEKSI LOKASI (GPS)";
@@ -2207,24 +2924,27 @@
             const x = Math.cos(phiU) * Math.tan(phiM) - Math.sin(phiU) * Math.cos(deltaLambda);
 
             let bearingDeg = (toDeg(Math.atan2(y, x)) + 360) % 360;
+            currentQiblaBearing = bearingDeg;
 
             const dphi = phiM - phiU;
             const haversineA = Math.sin(dphi / 2) ** 2 + Math.cos(phiU) * Math.cos(phiM) * Math.sin(deltaLambda / 2) ** 2;
             const distKm = 6371 * 2 * Math.atan2(Math.sqrt(haversineA), Math.sqrt(1 - haversineA));
 
             const directions = ["U", "UTL", "TL", "TTL", "T", "TGr", "TG", "STG", "S", "SBD", "BD", "BBD", "B", "BBL", "BL", "UBL"];
-            const dirIdx = Math.round((bearingDeg + 11.25) / 22.5) % 16;
+            const dirIdx = Math.floor(((bearingDeg % 360 + 360) % 360 + 11.25) / 22.5) % 16;
 
             document.getElementById('qibla-bearing').innerText = `BEARING: ${bearingDeg.toFixed(2)}°`;
             document.getElementById('qibla-dir').innerText = `ARAH: ${directions[dirIdx]} (${bearingDeg.toFixed(1)}° DARI UTARA SEJATI)`;
             document.getElementById('qibla-dist').innerText = `JARAK KE KA'BAH: ${distKm.toLocaleString(undefined, { maximumFractionDigits: 2 })} KM`;
 
+            // Needle points towards Qibla inside the compass rose
             const needle = document.getElementById('needle-qibla');
             if (needle) needle.style.transform = `rotate(${bearingDeg}deg)`;
 
-            const dial = document.querySelector('.compass-dial');
-            const center = dial ? (dial.clientWidth / 2) : 125;
-            const radius = center - 25;
+            // Position Ka'bah marker along the dial circle
+            const dial = document.getElementById('compass-dial-box');
+            const center = dial ? (dial.clientWidth / 2) : 130;
+            const radius = center - 32;
             const rad = toRad(bearingDeg - 90);
             const kx = center + radius * Math.cos(rad);
             const ky = center + radius * Math.sin(rad);
@@ -2233,9 +2953,11 @@
             if (kaaba) {
                 kaaba.style.left = `${kx}px`;
                 kaaba.style.top = `${ky}px`;
+                kaaba.style.transform = `translate(-50%, -50%) rotate(${currentDeviceHeading}deg)`;
             }
 
-            document.getElementById('compass-caption').innerText = `VEKTOR KIBLAT: ${bearingDeg.toFixed(1)}° (${directions[dirIdx]}) MENUJU KA'BAH`;
+            // Refresh live compass heading calculation with updated Qibla bearing
+            applyCompassHeading(currentDeviceHeading, false);
 
             // 2. Prayer Times for Today
             const now = new Date();
