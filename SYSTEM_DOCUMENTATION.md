@@ -155,25 +155,26 @@ Digunakan oleh praktisi astronomi, hisab falak, dan sains untuk menentukan posis
 
 ---
 
-### Alur 3: Menentukan Arah Kiblat Real-Time & Jadwal Shalat (`QIBLA & SHALAT`)
-Panduan ibadah harian berbasis hisab resmi Kementerian Agama RI dilengkapi **Kompas Dinamis Real-Time (Live Device Orientation)**.
+### Alur 3: Menentukan Arah Kiblat (Template Statis vs Deteksi GPS Dinamis) & Jadwal Shalat (`QIBLA & SHALAT`)
+Pengguna memiliki kebebasan penuh memilih antara **Mode Template (Kompas Statis)** atau **Mode Deteksi GPS (Kompas Dinamis Real-Time)**:
 
 1. **Langkah 1**: Klik tab **"QIBLA & SHALAT"**.
-2. **Langkah 2 (Menentukan Lokasi)**:
-   - **Opsi A (Otomatis GPS & Sensor Gerak)**: Klik tombol **"DETEKSI LOKASI (GPS)"**. Peramban akan meminta izin lokasi dan orientasi sensor, langsung mengisi lintang/bujur pengguna secara akurat, dan **langsung mengaktifkan kompas real-time**.
-   - **Opsi B (Daftar Kota)**: Pilih nama kota pada menu dropdown (contoh: Jakarta, Surabaya, Bandung, Medan, Makassar, Banda Aceh, Jayapura, dll).
-   - **Opsi C (Koordinat Manual)**: Ketik koordinat lintang (*Latitude*) dan bujur (*Longitude*) yang Anda miliki.
-3. **Langkah 3**: Klik tombol **"HITUNG QIBLA & SHALAT"**.
-4. **Langkah 4 (Kompas Real-Time Bergerak Mengikuti Perangkat)**:
-   - **Pelacakan Arah Perangkat Nyata**: Saat menggunakan fitur GPS atau mengaktifkan mode live, piringan kompas (*compass rose*) berputar secara dinamis dan mulus (*continuous unwrapped rotation*) mengikuti perputaran fisik ponsel / perangkat pengguna (*DeviceOrientation API / Magnetometer & Gyroscope*).
-   - **Retikel Bidik Depan (Sighting Arrow)**: Menunjukkan arah hadap perangkat saat ini (12 o'clock).
-   - **Jarum & Ikon Ka'bah 3D**: Terus menunjuk ke arah fisik Ka'bah di Mekkah di dunia nyata.
-   - **Umpan Balik Presisi (Alignment Feedback)**:
-     - Jika perangkat berjarak $\le 3^\circ$ dari arah Ka'bah, kompas otomatis memancarkan kilau hijau zamrud (*Emerald Glow*), menampilkan banner *"✓ ANDA TEPAT MENGHADAP KIBLAT!"*, dan memicu getaran haptik ponsel (*Haptic Vibration*).
-     - Jika belum tepat, HUD dinamis menampilkan panduan belok seketika: *"⟳ PUTAR KE KANAN X°"* atau *"⟲ PUTAR KE KIRI X°"*.
-   - **Simulator Interaktif (Desktop / PC Fallback)**: Untuk pengujian di laptop/PC tanpa sensor kompas, tersedia slider simulasi derajat ($0^\circ - 360^\circ$) dan tombol *"🎯 KE KIBLAT"* untuk menguji rotasi kompas dan deteksi arah secara instan.
-   - Menampilkan jarak garis lurus dari lokasi Anda ke Ka'bah di Mekkah (dalam kilometer) serta sudut bearing presisi.
-5. **Langkah 5 (Melihat Jadwal Shalat)**:
+2. **Langkah 2 (Memilih Mode Perhitungan)**:
+   - **Mode 1: 📍 LOKASI TEMPLATE (STATIS)**:
+     - Pilih nama kota pada menu dropdown (contoh: Jakarta, Surabaya, Bandung, Medan, Makkah, dll) atau masukkan koordinat manual.
+     - Klik **"HITUNG QIBLA & SHALAT (STATIS)"**.
+     - **Perilaku Kompas**: Kompas berada dalam mode referensi **Utara Sejati statis** (Utara di posisi jam 12, rotasi $0^\circ$). Jarum emas dan ikon Ka'bah menunjukkan sudut arah kiblat statis dari Utara sejati (contoh: `295.14°`). Sensor orientasi tidak aktif sehingga tampilan stabil tanpa terpengaruh pergerakan ponsel.
+   - **Mode 2: 🛰️ DETEKSI GPS & SENSOR (LIVE DINAMIS)**:
+     - Klik opsi **"2. DETEKSI GPS & SENSOR (LIVE)"** atau tekan tombol **"🛰️ DETEKSI LOKASI SAYA SEKARANG"**.
+     - Peramban secara otomatis meminta izin GPS & kalibrasi sensor gerak (*DeviceOrientation API*).
+     - **Perilaku Kompas**: Piringan kompas (*compass rose*) **berputar secara dinamis dan real-time mengikuti putaran fisik ponsel pengguna**.
+     - **Retikel Bidik Depan**: Menunjukkan arah hadap perangkat saat ini.
+     - **Jarum & Ka'bah 3D**: Terus menunjuk ke arah Ka'bah di dunia nyata secara presisi.
+     - **Umpan Balik Presisi (Alignment Feedback)**:
+       - Ketika perangkat berjarak $\le 3^\circ$ dari arah Ka'bah, kompas berpendar hijau zamrud (*Emerald Glow*), menampilkan banner *"✓ ANDA TEPAT MENGHADAP KIBLAT!"*, dan memicu getaran haptik (*Haptic Vibration*).
+       - Jika belum tepat, HUD memandu belokan: *"⟳ PUTAR KE KANAN X°"* atau *"⟲ PUTAR KE KIRI X°"*.
+       - Pada pengujian di PC/laptop tanpa sensor magnetik, tersedia slider simulasi untuk menguji pergerakan kompas secara instan.
+3. **Langkah 3 (Melihat Jadwal Shalat)**:
    - 7 kartu waktu shalat ditampilkan lengkap: **Imsak, Subuh, Terbit, Dzuhur, Ashar, Maghrib, dan Isya**.
    - Shalat yang sedang berlangsung otomatis disorot dengan warna kuning terang (*Active Prayer Card*).
    - Jam hitung mundur (*Live Countdown*) menampilkan sisa waktu detik-demi-detik menuju shalat berikutnya.

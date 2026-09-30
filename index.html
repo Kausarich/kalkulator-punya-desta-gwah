@@ -378,6 +378,93 @@
             word-break: break-word;
         }
 
+        /* Qibla Mode Switcher (Template Statis vs GPS Dinamis) */
+        .qibla-mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .qibla-mode-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            background: #ffffff;
+            border: 3px solid #000000;
+            padding: 0.85rem 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: inherit;
+            position: relative;
+        }
+
+        .qibla-mode-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .qibla-mode-btn.active {
+            background: var(--accent-yellow);
+            border: 3px solid #000000;
+            transform: translate(-3px, -3px);
+            box-shadow: 4px 4px 0px #000000;
+        }
+
+        .qibla-mode-btn .mode-icon {
+            font-size: 1.75rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .qibla-mode-btn .mode-title {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #000000;
+        }
+
+        .qibla-mode-btn .mode-desc {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #4b5563;
+            margin-top: 3px;
+            line-height: 1.3;
+        }
+
+        .qibla-mode-btn.active .mode-desc {
+            color: #000000;
+        }
+
+        .qibla-gps-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 1.1rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
+        }
+
+        .qibla-gps-status-box {
+            background: #fafaf7;
+            border: 2px dashed #000000;
+            padding: 0.8rem;
+            margin-bottom: 0.85rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 640px) {
+            .qibla-mode-selector {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+        }
+
         /* Qibla Layout */
         .qibla-layout {
             display: grid;
@@ -1652,58 +1739,101 @@
                 <span style="font-size: 0.8rem; font-weight: 700; background: #000000; color: #ffffff; padding: 3px 8px;">BERDASARKAN LOKASI</span>
             </h2>
 
+            <!-- PILIHAN METODE PENENTUAN ARAH KIBLAT (TEMPLATE vs GPS) -->
+            <div class="qibla-mode-selector">
+                <button type="button" class="qibla-mode-btn active" id="btn-mode-template" onclick="setQiblaMode('template')">
+                    <span class="mode-icon">📍</span>
+                    <div class="mode-info">
+                        <span class="mode-title">1. LOKASI TEMPLATE (STATIS)</span>
+                        <span class="mode-desc">Pilih kota preset / koordinat manual. Kompas statis berpatokan Utara Sejati.</span>
+                    </div>
+                </button>
+                <button type="button" class="qibla-mode-btn" id="btn-mode-gps" onclick="setQiblaMode('gps')">
+                    <span class="mode-icon">🛰️</span>
+                    <div class="mode-info">
+                        <span class="mode-title">2. DETEKSI GPS & SENSOR (LIVE)</span>
+                        <span class="mode-desc">Kalibrasi GPS & sensor. Penunjuk kiblat bergerak dinamis mengikuti arah perangkat.</span>
+                    </div>
+                </button>
+            </div>
+
             <div class="qibla-layout">
                 <div>
-                    <div class="input-group" style="margin-bottom: 1rem;">
-                        <label>PILIH KOTA PRESET</label>
-                        <select id="city-preset" class="input-control" onchange="onCitySelected()">
-                            <option value="-6.2088,106.8456,7,Jakarta (WIB)">Jakarta, Indonesia (WIB)</option>
-                            <option value="-7.2575,112.7521,7,Surabaya (WIB)">Surabaya, Indonesia (WIB)</option>
-                            <option value="-6.9175,107.6191,7,Bandung (WIB)">Bandung, Indonesia (WIB)</option>
-                            <option value="3.5952,98.6722,7,Medan (WIB)">Medan, Indonesia (WIB)</option>
-                            <option value="-7.7956,110.3695,7,Yogyakarta (WIB)">Yogyakarta, Indonesia (WIB)</option>
-                            <option value="-6.9667,110.4167,7,Semarang (WIB)">Semarang, Indonesia (WIB)</option>
-                            <option value="5.5483,95.3238,7,Banda Aceh (WIB)">Banda Aceh, Indonesia (WIB)</option>
-                            <option value="-0.0263,109.3425,7,Pontianak (WIB)">Pontianak, Indonesia (WIB)</option>
-                            <option value="-5.1477,119.4327,8,Makassar (WITA)">Makassar, Indonesia (WITA)</option>
-                            <option value="-8.6705,115.2126,8,Denpasar (WITA)">Denpasar, Indonesia (WITA)</option>
-                            <option value="-3.3194,114.5908,8,Banjarmasin (WITA)">Banjarmasin, Indonesia (WITA)</option>
-                            <option value="-2.5489,140.7181,9,Jayapura (WIT)">Jayapura, Indonesia (WIT)</option>
-                            <option value="3.1390,101.6869,8,Kuala Lumpur (MYT)">Kuala Lumpur, Malaysia</option>
-                            <option value="21.4225,39.8262,3,Makkah (AST)">Makkah Al-Mukarramah, Saudi Arabia</option>
-                            <option value="24.4672,39.6111,3,Madinah (AST)">Madinah Al-Munawwarah, Saudi Arabia</option>
-                            <option value="24.7136,46.6753,3,Riyadh (AST)">Riyadh, Saudi Arabia</option>
-                            <option value="51.5074,-0.1278,0,London (GMT)">London, United Kingdom</option>
-                            <option value="40.7128,-74.0060,-5,New York (EST)">New York, USA</option>
-                            <option value="35.6762,139.6503,9,Tokyo (JST)">Tokyo, Japan</option>
-                            <option value="-33.8688,151.2093,10,Sydney (AEST)">Sydney, Australia</option>
-                        </select>
+                    <!-- PANEL 1: LOKASI TEMPLATE (STATIS) -->
+                    <div id="panel-mode-template">
+                        <div class="input-group" style="margin-bottom: 1rem;">
+                            <label>PILIH KOTA PRESET (TEMPLATE)</label>
+                            <select id="city-preset" class="input-control" onchange="onCitySelected()">
+                                <option value="-6.2088,106.8456,7,Jakarta (WIB)">Jakarta, Indonesia (WIB)</option>
+                                <option value="-7.2575,112.7521,7,Surabaya (WIB)">Surabaya, Indonesia (WIB)</option>
+                                <option value="-6.9175,107.6191,7,Bandung (WIB)">Bandung, Indonesia (WIB)</option>
+                                <option value="3.5952,98.6722,7,Medan (WIB)">Medan, Indonesia (WIB)</option>
+                                <option value="-7.7956,110.3695,7,Yogyakarta (WIB)">Yogyakarta, Indonesia (WIB)</option>
+                                <option value="-6.9667,110.4167,7,Semarang (WIB)">Semarang, Indonesia (WIB)</option>
+                                <option value="5.5483,95.3238,7,Banda Aceh (WIB)">Banda Aceh, Indonesia (WIB)</option>
+                                <option value="-0.0263,109.3425,7,Pontianak (WIB)">Pontianak, Indonesia (WIB)</option>
+                                <option value="-5.1477,119.4327,8,Makassar (WITA)">Makassar, Indonesia (WITA)</option>
+                                <option value="-8.6705,115.2126,8,Denpasar (WITA)">Denpasar, Indonesia (WITA)</option>
+                                <option value="-3.3194,114.5908,8,Banjarmasin (WITA)">Banjarmasin, Indonesia (WITA)</option>
+                                <option value="-2.5489,140.7181,9,Jayapura (WIT)">Jayapura, Indonesia (WIT)</option>
+                                <option value="3.1390,101.6869,8,Kuala Lumpur (MYT)">Kuala Lumpur, Malaysia</option>
+                                <option value="21.4225,39.8262,3,Makkah (AST)">Makkah Al-Mukarramah, Saudi Arabia</option>
+                                <option value="24.4672,39.6111,3,Madinah (AST)">Madinah Al-Munawwarah, Saudi Arabia</option>
+                                <option value="24.7136,46.6753,3,Riyadh (AST)">Riyadh, Saudi Arabia</option>
+                                <option value="51.5074,-0.1278,0,London (GMT)">London, United Kingdom</option>
+                                <option value="40.7128,-74.0060,-5,New York (EST)">New York, USA</option>
+                                <option value="35.6762,139.6503,9,Tokyo (JST)">Tokyo, Japan</option>
+                                <option value="-33.8688,151.2093,10,Sydney (AEST)">Sydney, Australia</option>
+                            </select>
+                        </div>
+
+                        <div class="qibla-coords-grid">
+                            <div class="input-group">
+                                <label>LATITUDE (°N/S)</label>
+                                <input type="number" step="any" id="qibla-lat" class="input-control" placeholder="-6.2088">
+                            </div>
+                            <div class="input-group">
+                                <label>LONGITUDE (°E/W)</label>
+                                <input type="number" step="any" id="qibla-lon" class="input-control" placeholder="106.8456">
+                            </div>
+                            <div class="input-group utc-col">
+                                <label>UTC (JAM)</label>
+                                <input type="number" step="0.5" id="qibla-tz" class="input-control" placeholder="7" value="7">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <button class="primary-btn" style="width: 100%;" onclick="computeQiblaAndPrayer()">
+                                HITUNG QIBLA & SHALAT (STATIS)
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="qibla-coords-grid">
-                        <div class="input-group">
-                            <label>LATITUDE (°N/S)</label>
-                            <input type="number" step="any" id="qibla-lat" class="input-control" placeholder="-6.2088">
-                        </div>
-                        <div class="input-group">
-                            <label>LONGITUDE (°E/W)</label>
-                            <input type="number" step="any" id="qibla-lon" class="input-control" placeholder="106.8456">
-                        </div>
-                        <div class="input-group utc-col">
-                            <label>UTC (JAM)</label>
-                            <input type="number" step="0.5" id="qibla-tz" class="input-control" placeholder="7" value="7">
+                    <!-- PANEL 2: DETEKSI GPS & SENSOR (LIVE) -->
+                    <div id="panel-mode-gps" style="display: none;">
+                        <div class="qibla-gps-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem; flex-wrap: wrap; gap: 0.4rem;">
+                                <span style="font-weight: 900; font-size: 0.85rem; text-transform: uppercase;">🛰️ KALIBRASI GPS PERANGKAT</span>
+                                <span id="gps-accuracy-badge" style="font-size: 0.68rem; font-weight: 800; background: #000000; color: #ffffff; padding: 2px 7px;">STATUS: SIAP</span>
+                            </div>
+
+                            <div class="qibla-gps-status-box">
+                                <div id="gps-live-coords-text">KOORDINAT: MENUNGGU DETEKSI GPS</div>
+                                <div id="gps-sensor-state-text" style="color: #555555; font-size: 0.72rem; margin-top: 3px;">Sensor kompas & gyroscope akan aktif otomatis mengikuti hadap perangkat Anda.</div>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.35rem;">
+                                <button class="primary-btn" id="btn-gps" style="width: 100%; padding: 0.9rem;" onclick="detectMyLocation()" title="Deteksi koordinat GPS dan kalibrasi sensor">
+                                    🛰️ DETEKSI LOKASI SAYA SEKARANG
+                                </button>
+                                <button class="secondary-btn" style="width: 100%; font-size: 0.78rem; padding: 0.55rem;" onclick="requestCompassSensorPermission()">
+                                    🔄 KALIBRASI / MINTA ULANG IZIN SENSOR
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                        <button class="primary-btn" style="flex: 1;" onclick="computeQiblaAndPrayer()">
-                            HITUNG QIBLA & SHALAT
-                        </button>
-                        <button class="secondary-btn" id="btn-gps" style="padding: 0.85rem 1rem;" onclick="detectMyLocation()" title="Gunakan GPS Browser">
-                            DETEKSI LOKASI (GPS)
-                        </button>
-                    </div>
-
+                    <!-- Result Card (Shared across both modes) -->
                     <div class="res-card">
                         <div id="qibla-bearing" class="res-title">BEARING: --°</div>
                         <div id="qibla-dir" style="font-weight: 800; margin-top: 0.35rem;">ARAH: --</div>
@@ -2518,6 +2648,7 @@
         }
 
         // --- REAL-TIME QIBLA COMPASS & SENSOR ENGINE ---
+        let currentQiblaMode = 'template'; // 'template' (statis) | 'gps' (dinamis)
         let liveCompassActive = false;
         let currentQiblaBearing = 295.14; // Default Jakarta
         let currentDeviceHeading = 0;
@@ -2525,6 +2656,71 @@
         let hasSensorSupport = false;
         let lastHapticTime = 0;
         let sensorWatchTimeout = null;
+
+        function setQiblaMode(mode) {
+            currentQiblaMode = mode;
+            const btnTemplate = document.getElementById('btn-mode-template');
+            const btnGps = document.getElementById('btn-mode-gps');
+            const panelTemplate = document.getElementById('panel-mode-template');
+            const panelGps = document.getElementById('panel-mode-gps');
+            const reticleText = document.getElementById('reticle-label');
+            const simBox = document.getElementById('compass-sim-container');
+            const actionsRow = document.querySelector('.compass-actions-row');
+
+            if (mode === 'template') {
+                if (btnTemplate) btnTemplate.classList.add('active');
+                if (btnGps) btnGps.classList.remove('active');
+                if (panelTemplate) panelTemplate.style.display = 'block';
+                if (panelGps) panelGps.style.display = 'none';
+
+                // Stop live orientation in template mode
+                stopLiveCompassTracking();
+
+                if (reticleText) {
+                    reticleText.innerText = "UTARA SEJATI (0°)";
+                    reticleText.style.background = "#000000";
+                }
+
+                const badge = document.getElementById('sensor-type-badge');
+                if (badge) {
+                    badge.innerText = "LOKASI TEMPLATE (STATIS)";
+                    badge.style.background = "#000000";
+                    badge.style.color = "#ffffff";
+                }
+
+                const dot = document.getElementById('status-sensor-dot');
+                if (dot) dot.className = 'status-dot-indicator inactive';
+
+                const statusText = document.getElementById('status-sensor-text');
+                if (statusText) statusText.innerText = "MODE: TEMPLATE (STATIS)";
+
+                const banner = document.getElementById('compass-guide-banner');
+                if (banner) {
+                    banner.className = 'compass-guide-banner static';
+                    banner.innerHTML = `📍 MODE TEMPLATE: ARAH KIBLAT <b>${currentQiblaBearing.toFixed(1)}°</b> DARI UTARA SEJATI`;
+                }
+
+                if (simBox) simBox.style.display = 'none';
+                if (actionsRow) actionsRow.style.display = 'none';
+
+                computeQiblaAndPrayer();
+            } else {
+                if (btnGps) btnGps.classList.add('active');
+                if (btnTemplate) btnTemplate.classList.remove('active');
+                if (panelTemplate) panelTemplate.style.display = 'none';
+                if (panelGps) panelGps.style.display = 'block';
+
+                if (reticleText) {
+                    reticleText.innerText = "DEPAN (ARAH DEVICE)";
+                }
+
+                if (simBox) simBox.style.display = 'block';
+                if (actionsRow) actionsRow.style.display = 'flex';
+
+                // Trigger GPS detection and sensor tracking
+                detectMyLocation();
+            }
+        }
 
         function updateLiveCompassUIState(active, modeLabel = "GPS REALTIME") {
             const dot = document.getElementById('status-sensor-dot');
@@ -2552,7 +2748,7 @@
                 }
                 if (statusText) statusText.innerText = "SENSOR LIVE: NONAKTIF";
                 if (badge) {
-                    badge.innerText = "MODE STATIS";
+                    badge.innerText = (currentQiblaMode === 'template') ? "LOKASI TEMPLATE (STATIS)" : "MODE STATIS";
                     badge.style.background = "#000000";
                     badge.style.color = "#ffffff";
                 }
@@ -2645,7 +2841,9 @@
             const banner = document.getElementById('compass-guide-banner');
             if (banner) {
                 banner.className = 'compass-guide-banner static';
-                banner.innerText = "MODE STATIS: REFERENSI UTARA SEJATI DI ATAS";
+                banner.innerHTML = (currentQiblaMode === 'template') 
+                    ? `📍 MODE TEMPLATE: ARAH KIBLAT <b>${currentQiblaBearing.toFixed(1)}°</b> DARI UTARA SEJATI`
+                    : `MODE STATIS: REFERENSI UTARA SEJATI DI ATAS`;
             }
 
             const hudHeading = document.getElementById('hud-device-heading');
@@ -2872,11 +3070,21 @@
 
         function detectMyLocation() {
             const btn = document.getElementById('btn-gps');
+            const accuracyBadge = document.getElementById('gps-accuracy-badge');
+            const coordsText = document.getElementById('gps-live-coords-text');
+            const sensorStateText = document.getElementById('gps-sensor-state-text');
+
             if (!navigator.geolocation) {
                 alert("Geolocation tidak didukung oleh browser Anda.");
+                if (accuracyBadge) accuracyBadge.innerText = "GPS TIDAK DIDUKUNG";
                 return;
             }
-            if (btn) btn.innerText = "MENCARI LOKASI & KALIBRASI...";
+            if (btn) btn.innerText = "🛰️ MENCARI LOKASI & KALIBRASI...";
+            if (accuracyBadge) {
+                accuracyBadge.innerText = "STATUS: MENCARI GPS...";
+                accuracyBadge.style.background = "#eab308";
+                accuracyBadge.style.color = "#000000";
+            }
 
             // Request orientation permission in user-initiated gesture (required for iOS Safari)
             requestCompassSensorPermission();
@@ -2891,7 +3099,20 @@
                     document.getElementById('qibla-lon').value = lon;
                     document.getElementById('qibla-tz').value = tz;
                     document.getElementById('prayer-loc-tag').innerText = `LOKASI: GPS (${lat}, ${lon})`;
-                    if (btn) btn.innerText = "DETEKSI LOKASI (GPS)";
+
+                    if (coordsText) {
+                        coordsText.innerHTML = `LOKASI GPS: <b>${lat.toFixed(5)}, ${lon.toFixed(5)}</b> (UTC${tz >= 0 ? '+' : ''}${tz})`;
+                    }
+                    if (accuracyBadge) {
+                        const acc = pos.coords.accuracy ? ` (±${Math.round(pos.coords.accuracy)}m)` : '';
+                        accuracyBadge.innerText = `GPS AKTIF${acc}`;
+                        accuracyBadge.style.background = "#10b981";
+                        accuracyBadge.style.color = "#ffffff";
+                    }
+                    if (sensorStateText) {
+                        sensorStateText.innerText = "Sensor gerak aktif: putar ponsel Anda hingga jarum dan Ka'bah lurus ke depan.";
+                    }
+                    if (btn) btn.innerText = "🛰️ DETEKSI ULANG LOKASI (GPS)";
 
                     computeQiblaAndPrayer();
 
@@ -2899,7 +3120,12 @@
                     startLiveCompassTracking();
                 },
                 (err) => {
-                    if (btn) btn.innerText = "DETEKSI LOKASI (GPS)";
+                    if (btn) btn.innerText = "🛰️ DETEKSI LOKASI SAYA SEKARANG";
+                    if (accuracyBadge) {
+                        accuracyBadge.innerText = "GAGAL DETEKSI";
+                        accuracyBadge.style.background = "#dc2626";
+                        accuracyBadge.style.color = "#ffffff";
+                    }
                     alert(`Gagal mengambil lokasi GPS (${err.message}). Anda dapat memasukkan koordinat manual atau memilih kota preset.`);
                 },
                 { enableHighAccuracy: true, timeout: 10000 }
@@ -2953,11 +3179,46 @@
             if (kaaba) {
                 kaaba.style.left = `${kx}px`;
                 kaaba.style.top = `${ky}px`;
-                kaaba.style.transform = `translate(-50%, -50%) rotate(${currentDeviceHeading}deg)`;
             }
 
-            // Refresh live compass heading calculation with updated Qibla bearing
-            applyCompassHeading(currentDeviceHeading, false);
+            // Mode handling: Template (Statis) vs GPS (Dinamis)
+            if (currentQiblaMode === 'template') {
+                const rose = document.getElementById('compass-rose');
+                if (rose) rose.style.transform = `rotate(0deg)`;
+
+                if (kaaba) {
+                    kaaba.style.transform = `translate(-50%, -50%) rotate(0deg)`;
+                }
+
+                const banner = document.getElementById('compass-guide-banner');
+                if (banner) {
+                    banner.className = 'compass-guide-banner static';
+                    banner.innerHTML = `📍 MODE TEMPLATE: ARAH KIBLAT <b>${bearingDeg.toFixed(1)}°</b> (${directions[dirIdx]}) DARI UTARA SEJATI`;
+                }
+
+                const caption = document.getElementById('compass-caption');
+                if (caption) {
+                    caption.innerText = `VEKTOR KIBLAT: ${bearingDeg.toFixed(1)}° (${directions[dirIdx]}) MENUJU KA'BAH`;
+                }
+
+                const hudHeading = document.getElementById('hud-device-heading');
+                if (hudHeading) hudHeading.innerText = `0° (U)`;
+
+                const hudDiff = document.getElementById('hud-angle-diff');
+                if (hudDiff) {
+                    hudDiff.innerText = `${bearingDeg.toFixed(1)}°`;
+                    hudDiff.style.color = '#000000';
+                }
+
+                const dialEl = document.getElementById('compass-dial-box');
+                if (dialEl) dialEl.classList.remove('aligned');
+            } else {
+                if (kaaba) {
+                    kaaba.style.transform = `translate(-50%, -50%) rotate(${currentDeviceHeading}deg)`;
+                }
+                // Refresh live compass heading calculation with updated Qibla bearing
+                applyCompassHeading(currentDeviceHeading, false);
+            }
 
             // 2. Prayer Times for Today
             const now = new Date();
@@ -3338,6 +3599,7 @@
             setCurrentDateTime();
             computeJulianDay();
             onCitySelected();
+            setQiblaMode('template');
 
             const today = new Date();
             calState.year = today.getFullYear();
