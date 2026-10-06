@@ -2,7 +2,7 @@
 
 > **Versi:** 2.0.0  
 > **Lisensi:** MIT  
-> **Gaya Desain:** Neo-Brutalism (High Contrast, Bold Borders, Electric Yellow Accent, Zero Emojis)  
+> **Gaya Desain:** Neo-Brutalism (Paper Beige, Teal, Magenta & Yellow, Bold Borders, Zero Emojis)
 > **Platform:** Web Modern (HTML5/CSS3/ES6+) & Desktop GUI (Python 3 / Tkinter)  
 > **Sasaran Pembaca:** Klien, Stakeholder Proyek, Pengembang (Developer) & Pengguna Akhir (End User)
 
@@ -64,7 +64,7 @@ graph TD
 ### 2.2 Komponen Arsitektur Utama
 
 1. **Presentation Layer (UI/UX Neo-Brutalism)**:
-   - Menggunakan pendekatan desain modern berkarakter kuat: batas garis hitam tebal (*bold black borders* `2px`/`3px`), bayangan kontras tanpa blur (*solid offset shadows*), warna aksen *Electric Yellow* (`#ffde59`), dan tipografi monospaced teknis.
+   - Menggunakan pendekatan desain Neo-Brutalism: garis hitam tebal (`2px`/`3px`), bayangan hitam tegas tanpa blur, latar *paper beige* (`#F5F5DC`), aksen teal (`#00C2C8`), magenta (`#F000FF`), dan kuning (`#FFD700`). Versi web memakai judul padat dan tegas, sementara display kalkulator memakai tipografi monospaced.
    - Bersifat **Zero-Emoji** — mengutamakan simbol teknis Unicode universal (`◀`, `▶`, `▲`, `▼`, `×`, `÷`, `°`) agar tampilan terlihat profesional, berwibawa, dan tidak kekanak-kanakan.
 
 2. **Autonomous Local Engine (Mesin Hisab Tanpa Server)**:
@@ -124,23 +124,17 @@ flowchart TD
 
 ---
 
-### Alur 1: Menggunakan Kalkulator Saintifik (`CALCULATOR`)
-Cocok untuk perhitungan cepat sehari-hari maupun perhitungan teknis ilmiah.
+### Alur 1: Menggunakan Kalkulator Saintifik (`SCIENTIFIC CALC`)
+Kalkulator Web dan Desktop menyediakan operasi aritmatika, fungsi ilmiah, konstanta, dan mode sudut.
 
-1. **Langkah 1**: Klik tab **"CALCULATOR"**.
-2. **Langkah 2**: Klik tombol angka (`0`–`9`) dan tombol operasi (`+`, `-`, `×`, `÷`, `%`, `^`).
-3. **Langkah 3 (Fungsi Khusus)**:
-   - Gunakan `√` untuk akar kuadrat.
-   - Gunakan `sin`, `cos`, `tan` untuk sudut trigonometri.
-   - Gunakan `log` (logaritma basis 10) atau `ln` (logaritma natural).
-   - Gunakan konstanta `π` ($3.14159...$) atau `e` ($2.71828...$).
-4. **Langkah 4**: Tekan tombol `=` (*Electric Yellow*).
-   - Hasil kalkulasi langsung ditampilkan dalam angka besar tebal di layar.
-   - Layar atas menampilkan riwayat rumus yang baru dihitung.
-5. **Langkah 5**: Tekan `C` untuk membersihkan layar, atau `DEL` untuk menghapus satu digit terakhir.
+1. Masukkan angka dan operasi melalui tombol kalkulator. Kolom **Input Expression** menampilkan rumus yang sedang dihitung, sedangkan **Result** menampilkan hasil setelah tombol `=` ditekan.
+2. Gunakan tombol mode sudut untuk berganti antara `DEG`, `RAD`, dan `GRAD`. Mode awal adalah derajat; fungsi trigonometri dan inversnya mengikuti mode yang dipilih.
+3. Angka hasil yang sangat besar atau sangat kecil ditampilkan dalam notasi pangkat sepuluh, seperti `1.23 × 10^12`. Tombol `10^x` menghitung 10 pangkat nilai yang dimasukkan.
+4. Fungsi yang tersedia meliputi `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `sqrt`, `log` (basis 10), `ln`, `x^2`, `x^y`, `10^x`, `exp`, `1/x`, `n!`, dan `abs`.
+5. Gunakan konstanta `pi` dan `e`, operasi sisa bagi `%`, serta `Ans` untuk memakai kembali hasil terakhir. Digit yang ditekan berurutan tetap membentuk satu angka; perkalian implisit hanya digunakan pada konstanta atau tanda kurung.
+6. Tombol `C` menghapus karakter atau token terakhir, sedangkan `AC` menghapus seluruh ekspresi.
 
 ---
-
 ### Alur 2: Menghitung Julian Day Astronomis (`JULIAN DAY`)
 Digunakan oleh praktisi astronomi, hisab falak, dan sains untuk menentukan posisi benda langit.
 
@@ -276,9 +270,9 @@ classDiagram
 Aplikasi mengimplementasikan panduan visual Neo-Brutalism berstandar industri dengan proteksi tata letak:
 
 1. **Sistem Warna & Border**:
-   - Border Solid Black `2px` s/d `3px` (`#000000`) pada seluruh elemen input dan tombol.
-   - Aksen utama warna kuning elektrik (*Electric Yellow* `#ffde59`).
-   - Warna latar bertekstur dot matrix modern (`radial-gradient(#000 1px, transparent 1px)`).
+   - Border hitam solid `2px` s/d `3px` (`#000000`) pada elemen input, tombol, kartu, dan panel.
+   - Latar utama *paper beige* (`#F5F5DC`) dengan permukaan putih (`#FFFFFF`); warna aksen teal (`#00C2C8`), magenta (`#F000FF`), dan kuning (`#FFD700`).
+   - Sudut hampir persegi dan bayangan hitam offset tanpa blur menjaga kontras dan bentuk komponen tetap jelas.
 2. **Pencegahan CSS Offside (Solusi Bug Layout)**:
    - **Strict Grid Containment**: Menggunakan `grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)` dan batasan `min-width: 0` pada kartu agar tabel tidak pernah meluber melebihi lebar layar.
    - **Flush Shadows**: Menghilangkan shadow eksternal berlebih pada kartu yang berada di dalam kontainer bergaris agar tepi kartu sejajar presisi (*pixel-perfect alignment*).

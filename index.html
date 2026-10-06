@@ -4,34 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Desta Calculator - Kalkulator, Qibla & Kalender Hijriah</title>
-    <!-- Google Fonts: Space Mono & JetBrains Mono -->
+    <title>Desta Scientific Calculator - Qibla & Kalender Hijriah</title>
+    <!-- Display and interface fonts for the Neo-Brutalist theme -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg: #ffffff;
+            --bg: #F5F5DC;
             --text: #000000;
             --card-bg: #ffffff;
             --border: #000000;
             --border-width: 3px;
             --shadow: 4px 4px 0px #000000;
-            --shadow-sm: 2px 2px 0px #000000;
-            --shadow-lg: 6px 6px 0px #000000;
-            --accent-yellow: #ffde59;
-            --accent-yellow-light: #fff9d6;
-            --accent-red: #e63946;
-            --accent-teal: #2a9d8f;
+            --shadow-sm: 4px 4px 0px #000000;
+            --shadow-lg: 8px 8px 0px #000000;
+            --accent-yellow: #FFD700;
+            --accent-yellow-light: #FFF1A8;
+            --accent-magenta: #F000FF;
+            --accent-teal: #00C2C8;
+            --accent-teal-dark: #00787C;
+            --accent-magenta-dark: #800080;
+            --surface-muted: #F0EEDC;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Space Mono', 'JetBrains Mono', monospace;
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -42,8 +45,7 @@
 
         body {
             background-color: var(--bg);
-            background-image: radial-gradient(#000000 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-image: none;
             color: var(--text);
             min-height: 100vh;
             display: flex;
@@ -162,6 +164,13 @@
             box-shadow: var(--shadow);
         }
 
+        .calc-angle-note {
+            margin: -0.75rem 0 1rem;
+            color: #555555;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
         .calc-expr {
             font-size: 1.1rem;
             color: #555555;
@@ -181,7 +190,7 @@
 
         .calc-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, minmax(0, 1fr));
             gap: 0.65rem;
         }
 
@@ -209,7 +218,7 @@
         }
 
         .calc-btn.op {
-            background: #f4f4ee;
+            background: #F0EEDC;
         }
 
         .calc-btn.action {
@@ -450,7 +459,7 @@
         }
 
         .qibla-gps-status-box {
-            background: #fafaf7;
+            background: #F5F5DC;
             border: 2px dashed #000000;
             padding: 0.8rem;
             margin-bottom: 0.85rem;
@@ -540,19 +549,19 @@
 
         /* Aligned state when device faces Ka'bah directly */
         .compass-dial.aligned {
-            border-color: #059669;
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.55), var(--shadow-lg);
-            background-color: #f0fdf4;
+            border-color: #00787C;
+            box-shadow: 0 0 25px rgba(0, 194, 200, 0.55), var(--shadow-lg);
+            background-color: #E8FCF9;
         }
 
         .compass-reticle-top.aligned .reticle-arrow {
-            color: #059669;
+            color: #00787C;
             transform: scale(1.25);
             animation: pulse-reticle 0.8s infinite alternate ease-in-out;
         }
 
         .compass-reticle-top.aligned .reticle-text {
-            background: #059669;
+            background: #00787C;
             color: #ffffff;
         }
 
@@ -610,7 +619,7 @@
 
         .compass-label.n {
             top: 10px;
-            color: #dc2626; /* Bright Red for True North */
+            color: #F000FF; /* Bright Red for True North */
             font-size: 1.25rem;
         }
 
@@ -647,7 +656,7 @@
             position: absolute;
             width: 4px;
             height: 85px;
-            background: #dc2626;
+            background: #F000FF;
             transform-origin: center center;
             top: 45px;
             pointer-events: none;
@@ -661,7 +670,7 @@
             left: -5px;
             border-left: 7px solid transparent;
             border-right: 7px solid transparent;
-            border-bottom: 11px solid #dc2626;
+            border-bottom: 11px solid #F000FF;
         }
 
         /* Qibla Direction Needle */
@@ -752,8 +761,8 @@
         }
 
         .status-dot-indicator.active {
-            background: #10b981;
-            box-shadow: 0 0 8px #10b981;
+            background: #00C2C8;
+            box-shadow: 0 0 8px #00C2C8;
             animation: pulse-dot 1.2s infinite ease-in-out;
         }
 
@@ -778,15 +787,15 @@
         }
 
         .compass-guide-banner.aligned {
-            background: #10b981;
+            background: #00C2C8;
             color: #ffffff;
-            border-color: #047857;
+            border-color: #00696C;
             animation: pulse-guide-box 1.2s infinite alternate ease-in-out;
         }
 
         @keyframes pulse-guide-box {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
-            100% { transform: scale(1.02); box-shadow: 0 0 20px rgba(16, 185, 129, 0.7); }
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 194, 200, 0.4); }
+            100% { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 194, 200, 0.7); }
         }
 
         .compass-guide-banner.turn-right {
@@ -795,12 +804,12 @@
         }
 
         .compass-guide-banner.turn-left {
-            background: #e0f2fe;
-            color: #0369a1;
+            background: #E4FBFA;
+            color: #005B5E;
         }
 
         .compass-guide-banner.static {
-            background: #f4f4f5;
+            background: #F0EEDC;
             color: #3f3f46;
         }
 
@@ -853,9 +862,9 @@
         }
 
         .compass-calib-banner.calibrated {
-            background: #d1fae5;
-            border-color: #059669;
-            color: #065f46;
+            background: #D9F7F4;
+            border-color: #00787C;
+            color: #004F52;
             animation: none;
         }
 
@@ -903,7 +912,7 @@
 
         .prayer-card.next {
             border: 2px dashed #000000;
-            background: #fbfbf7;
+            background: #F5F5DC;
         }
 
         .prayer-name {
@@ -956,7 +965,7 @@
 
         .cal-title-card {
             text-align: center;
-            background: #fafaf7;
+            background: #F5F5DC;
             border: 2px solid #000000;
             padding: 0.65rem 1rem;
             box-shadow: none;
@@ -1076,7 +1085,7 @@
         }
 
         .cal-weekday.sun {
-            background: var(--accent-red);
+            background: var(--accent-magenta);
             color: #ffffff;
         }
 
@@ -1119,7 +1128,7 @@
         }
 
         .cal-cell.other-month {
-            background: #fafaf7;
+            background: #F5F5DC;
             opacity: 0.4;
             border-color: #cccccc;
             cursor: default;
@@ -1189,7 +1198,7 @@
         /* Selected Info Card */
         .cal-selected-info-card {
             margin-top: 1rem;
-            background: #fafaf7;
+            background: #F5F5DC;
             border: 2px solid #000000;
             box-shadow: none;
             padding: 0.85rem 1rem;
@@ -1249,7 +1258,7 @@
         .conv-card .res-card {
             box-shadow: none;
             border: 2px solid #000000;
-            background: #fafaf7;
+            background: #F5F5DC;
         }
 
         .conv-header {
@@ -1382,12 +1391,12 @@
             font-weight: 700;
             padding: 0.4rem 0.35rem;
             border-bottom: 1px solid #000000;
-            border-right: 1px solid #eeeeee;
+            border-right: 1px solid #D9D5C4;
             white-space: nowrap;
         }
 
         .month-start-table tr:nth-child(even) {
-            background: #fbfbf8;
+            background: #F5F5DC;
         }
 
         .month-start-table tr:hover {
@@ -1501,12 +1510,13 @@
             }
 
             .calc-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
                 gap: 0.4rem;
             }
 
             .calc-btn {
-                padding: 0.85rem 0;
-                font-size: 1.05rem;
+                padding: 0.75rem 0;
+                font-size: 0.95rem;
             }
 
             .compass-dial {
@@ -1627,19 +1637,266 @@
                 font-size: 0.8rem;
             }
         }
-    </style>
+
+        /* Reference theme: paper, ink, teal primary actions, magenta alerts. */
+        * {
+            border-radius: 0 !important;
+        }
+
+        .compass-dial,
+        .compass-rose,
+        .compass-center-hub,
+        .status-dot-indicator {
+            border-radius: 50% !important;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
+        }
+
+        h1, h2, h3, .section-title, .tab-btn, button, .input-group label {
+            font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            font-weight: 800;
+        }
+
+        .header {
+            background: var(--card-bg);
+            border: 3px solid var(--border);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header h1 {
+            display: inline-block;
+            padding: 0.08em 0.3em;
+            border: 3px solid var(--border);
+            background: var(--accent-teal);
+            box-shadow: var(--shadow-sm);
+            font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 4rem);
+            line-height: 0.95;
+            letter-spacing: -0.035em;
+        }
+
+        .header p {
+            color: #222222;
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .tab-btn {
+            border: 3px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+        }
+
+        .tab-btn.active,
+        .qibla-mode-btn.active,
+        .month-toggle-btn.active {
+            background: var(--accent-teal);
+            color: var(--text);
+        }
+
+        .app-container {
+            border: 3px solid var(--border);
+            background: var(--card-bg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-title {
+            font-size: 1.45rem;
+            letter-spacing: -0.015em;
+            border-bottom-width: 3px;
+        }
+
+        .calc-display,
+        .res-card,
+        .cal-wrapper,
+        .qibla-gps-card,
+        .prayer-status-bar,
+        .cal-title-card {
+            border-width: 3px;
+            box-shadow: var(--shadow);
+        }
+
+        .calc-expr,
+        .calc-result {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .calc-btn,
+        .input-control,
+        .primary-btn,
+        .secondary-btn,
+        .sec-mini-btn,
+        .cal-nav-btn,
+        .cal-select-m,
+        .cal-input-y {
+            border-width: 3px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .calc-btn.op {
+            background: var(--surface-muted);
+        }
+
+        .calc-btn.equals,
+        .primary-btn {
+            background: var(--accent-teal);
+            color: var(--text);
+        }
+
+        .qibla-mode-btn.active,
+        .prayer-card.active {
+            border-color: var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .cal-weekday.sun,
+        .cal-event-tag,
+        .cal-sel-event-badge {
+            background: var(--accent-magenta);
+            color: var(--text);
+        }
+
+        .cal-weekday.fri {
+            background: var(--accent-teal);
+            color: var(--text);
+        }
+
+        .cal-cell.today,
+        .cal-nav-btn.today-btn,
+        .res-title {
+            background: var(--accent-yellow);
+            color: var(--text);
+        }
+
+        .compass-dial.aligned {
+            border-color: var(--accent-teal-dark);
+            background-color: #E8FCF9;
+            box-shadow: 0 0 0 4px var(--accent-teal), var(--shadow-lg);
+        }
+
+        .compass-reticle-top.aligned .reticle-arrow {
+            color: var(--accent-teal-dark);
+        }
+
+        .compass-reticle-top.aligned .reticle-text,
+        .compass-guide-banner.aligned {
+            background: var(--accent-teal);
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .compass-guide-banner.turn-left {
+            background: #E4FBFA;
+            color: #005B5E;
+        }
+
+        .compass-calib-banner.calibrated {
+            background: #D9F7F4;
+            border-color: var(--accent-teal-dark);
+            color: #004F52;
+        }
+
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible,
+        button:focus-visible,
+        .cal-cell:focus-visible {
+            outline: 4px solid var(--accent-yellow);
+            outline-offset: 2px;
+        }
+
+        .input-control:focus {
+            background: var(--accent-yellow-light);
+            box-shadow: 0 0 0 3px var(--accent-teal), var(--shadow-sm);
+        }
+
+        .calc-input {
+            border: 3px solid var(--border);
+            background: var(--surface-muted);
+            box-shadow: var(--shadow-sm);
+            padding: 0.65rem;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .calc-input-label,
+        .calc-result-label {
+            color: var(--text);
+            font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .calc-expr {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            min-height: 3.2rem;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 0.55rem 0.7rem;
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            line-height: 1.25;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        #calc-expr:empty::before {
+            content: attr(data-placeholder);
+            color: #666666;
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .calc-result-label {
+            margin: 0.25rem 0 0;
+            color: var(--accent-teal-dark);
+        }
+
+        #calc-angle-mode {
+            background: var(--accent-teal);
+            color: var(--text);
+        }
+
+        .calc-result {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            line-height: 1.2;
+            overflow-wrap: anywhere;
+        }
+
+        .calc-angle-note {
+            margin: 0 0 1rem;
+            border-left: 4px solid var(--accent-teal-dark);
+            background: #E8FCF9;
+            color: #004F52;
+            padding: 0.55rem 0.7rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        </style>
 </head>
 
 <body>
 
     <div class="header">
         <h1>DESTA CALCULATOR</h1>
-        <p>ARITHMETIC • JULIAN DAY • QIBLA & SHALAT • KALENDER HIJRIAH</p>
+        <p>SCIENTIFIC CALCULATOR • JULIAN DAY • QIBLA & SHALAT • KALENDER HIJRIAH</p>
     </div>
 
     <!-- Navigation Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" id="btn-tab-calc" onclick="switchTab(event, 'calc')">CALCULATOR</button>
+        <button class="tab-btn active" id="btn-tab-calc" onclick="switchTab(event, 'calc')">SCIENTIFIC CALC</button>
         <button class="tab-btn" id="btn-tab-julian" onclick="switchTab(event, 'julian')">JULIAN DAY</button>
         <button class="tab-btn" id="btn-tab-qibla" onclick="switchTab(event, 'qibla')">QIBLA & SHALAT</button>
         <button class="tab-btn" id="btn-tab-calendar" onclick="switchTab(event, 'calendar')">KALENDER & HIJRIAH</button>
@@ -1648,46 +1905,69 @@
     <!-- Main Container -->
     <div class="app-container">
 
-        <!-- TAB 1: CALCULATOR -->
+        <!-- TAB 1: SCIENTIFIC CALCULATOR -->
         <div id="tab-calc" class="tab-content active">
             <div class="calc-display">
-                <div id="calc-expr" class="calc-expr"></div>
-                <div id="calc-result" class="calc-result">0</div>
+                <div class="calc-input">
+                    <div class="calc-input-label">Input expression</div>
+                    <div id="calc-expr" class="calc-expr" data-placeholder="Enter an expression" aria-label="Current calculator input" aria-live="polite"></div>
+                </div>
+                <div class="calc-result-label">Result</div>
+                <div id="calc-result" class="calc-result" aria-live="polite">0</div>
             </div>
+            <p id="calc-angle-note" class="calc-angle-note" aria-live="polite">Angle mode DEG: trig inputs and inverse trig outputs use degrees.</p>
 
             <div class="calc-grid">
-                <button class="calc-btn action" onclick="clearEntry()">C</button>
+                <button class="calc-btn op" id="calc-angle-mode" onclick="toggleAngleMode()" aria-label="Angle mode: degrees. Activate to cycle units.">DEG</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('sin', 'sin')">sin</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('cos', 'cos')">cos</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('tan', 'tan')">tan</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('log', 'log')">log</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('ln', 'ln')">ln</button>
+
+                <button class="calc-btn op" onclick="applyCalcFunction('asin', 'asin')">asin</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('acos', 'acos')">acos</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('atan', 'atan')">atan</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('sqrt', 'sqrt')">sqrt</button>
+                <button class="calc-btn op" onclick="calcSquare()">x^2</button>
+                <button class="calc-btn op" onclick="appendChar('**', '^')">x^y</button>
+
                 <button class="calc-btn action" onclick="clearAll()">AC</button>
+                <button class="calc-btn action" onclick="clearEntry()">C</button>
                 <button class="calc-btn op" onclick="appendChar('(', '(')">(</button>
                 <button class="calc-btn op" onclick="appendChar(')', ')')">)</button>
-                <button class="calc-btn op" onclick="appendChar('/', '÷')">÷</button>
+                <button class="calc-btn op" onclick="appendChar('pi', 'pi')">pi</button>
+                <button class="calc-btn op" onclick="appendChar('e', 'e')">e</button>
 
                 <button class="calc-btn" onclick="appendChar('7')">7</button>
                 <button class="calc-btn" onclick="appendChar('8')">8</button>
                 <button class="calc-btn" onclick="appendChar('9')">9</button>
-                <button class="calc-btn op" onclick="appendChar('**', '^')">x^y</button>
-                <button class="calc-btn op" onclick="appendChar('*', '×')">×</button>
+                <button class="calc-btn op" onclick="appendChar('/', '/')">/</button>
+                <button class="calc-btn op" onclick="appendChar('*', '*')">*</button>
+                <button class="calc-btn op" onclick="appendChar('%', '%')">%</button>
 
                 <button class="calc-btn" onclick="appendChar('4')">4</button>
                 <button class="calc-btn" onclick="appendChar('5')">5</button>
                 <button class="calc-btn" onclick="appendChar('6')">6</button>
-                <button class="calc-btn op" onclick="calcSqrt()">√</button>
                 <button class="calc-btn op" onclick="appendChar('-', '-')">-</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('inv', 'inv')">1/x</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('factorial', 'factorial')">n!</button>
 
                 <button class="calc-btn" onclick="appendChar('1')">1</button>
                 <button class="calc-btn" onclick="appendChar('2')">2</button>
                 <button class="calc-btn" onclick="appendChar('3')">3</button>
-                <button class="calc-btn op" onclick="appendChar('Math.PI', 'π')">π</button>
                 <button class="calc-btn op" onclick="appendChar('+', '+')">+</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('pow10', '10^x')">10^x</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('exp', 'exp')">exp</button>
 
                 <button class="calc-btn" onclick="appendChar('0')">0</button>
                 <button class="calc-btn" onclick="appendChar('.')">.</button>
-                <button class="calc-btn" onclick="negate()">±</button>
-                <button class="calc-btn op" onclick="appendChar('Math.E', 'e')">e</button>
+                <button class="calc-btn" onclick="negate()">+/-</button>
+                <button class="calc-btn op" onclick="applyCalcFunction('abs', 'abs')">abs</button>
+                <button class="calc-btn op" onclick="appendChar('Ans', 'Ans')">Ans</button>
                 <button class="calc-btn equals" onclick="evaluateCalc()">=</button>
             </div>
         </div>
-
         <!-- TAB 2: JULIAN DAY -->
         <div id="tab-julian" class="tab-content">
             <h2 class="section-title">CALENDAR TO JULIAN DAY (JD)</h2>
@@ -1849,22 +2129,22 @@
                         <div id="compass-rose" class="compass-rose">
                             <!-- Compass Bezel Ticks SVG -->
                             <svg class="compass-ticks-ring" viewBox="0 0 260 260" width="260" height="260">
-                                <circle cx="130" cy="130" r="122" fill="none" stroke="#e4e4e7" stroke-width="1.5" stroke-dasharray="2 6"/>
-                                <circle cx="130" cy="130" r="102" fill="none" stroke="#f4f4f5" stroke-width="1"/>
+                                <circle cx="130" cy="130" r="122" fill="none" stroke="#D9D5C4" stroke-width="1.5" stroke-dasharray="2 6"/>
+                                <circle cx="130" cy="130" r="102" fill="none" stroke="#F0EEDC" stroke-width="1"/>
                                 <!-- 30-degree tick marks -->
-                                <line x1="130" y1="8" x2="130" y2="18" stroke="#dc2626" stroke-width="3"/>
+                                <line x1="130" y1="8" x2="130" y2="18" stroke="#F000FF" stroke-width="3"/>
                                 <line x1="130" y1="242" x2="130" y2="252" stroke="#000000" stroke-width="2.5"/>
                                 <line x1="8" y1="130" x2="18" y2="130" stroke="#000000" stroke-width="2.5"/>
                                 <line x1="242" y1="130" x2="252" y2="130" stroke="#000000" stroke-width="2.5"/>
                                 
-                                <line x1="191" y1="24" x2="186" y2="33" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="236" y1="69" x2="227" y2="74" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="236" y1="191" x2="227" y2="186" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="191" y1="236" x2="186" y2="227" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="69" y1="236" x2="74" y2="227" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="24" y1="191" x2="33" y2="186" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="24" y1="69" x2="33" y2="74" stroke="#a1a1aa" stroke-width="1.5"/>
-                                <line x1="69" y1="24" x2="74" y2="33" stroke="#a1a1aa" stroke-width="1.5"/>
+                                <line x1="191" y1="24" x2="186" y2="33" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="236" y1="69" x2="227" y2="74" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="236" y1="191" x2="227" y2="186" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="191" y1="236" x2="186" y2="227" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="69" y1="236" x2="74" y2="227" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="24" y1="191" x2="33" y2="186" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="24" y1="69" x2="33" y2="74" stroke="#8C8978" stroke-width="1.5"/>
+                                <line x1="69" y1="24" x2="74" y2="33" stroke="#8C8978" stroke-width="1.5"/>
                             </svg>
 
                             <div class="compass-crosshair-v"></div>
@@ -1901,11 +2181,11 @@
                                     <polygon points="18,5 32,13 18,20 4,13" fill="#2d2d30" stroke="#000000" stroke-width="1.2"/>
                                     <polygon points="18,7 30,13 18,18 6,13" fill="#141416"/>
                                     <!-- Pita Kiswah Emas Sisi Kiri -->
-                                    <polygon points="4,15.5 18,22.5 18,24.5 4,17.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
+                                    <polygon points="4,15.5 18,22.5 18,24.5 4,17.5" fill="#FFD700" stroke="#000000" stroke-width="0.8"/>
                                     <!-- Pita Kiswah Emas Sisi Kanan -->
-                                    <polygon points="18,22.5 32,15.5 32,17.5 18,24.5" fill="#ffde59" stroke="#000000" stroke-width="0.8"/>
+                                    <polygon points="18,22.5 32,15.5 32,17.5 18,24.5" fill="#FFD700" stroke="#000000" stroke-width="0.8"/>
                                     <!-- Pintu Ka'bah (Bab al-Kaaba) -->
-                                    <polygon points="22,19.5 27,17 27,24 22,26.5" fill="#ffde59" stroke="#000000" stroke-width="1"/>
+                                    <polygon points="22,19.5 27,17 27,24 22,26.5" fill="#FFD700" stroke="#000000" stroke-width="1"/>
                                     <line x1="24.5" y1="18.2" x2="24.5" y2="25.2" stroke="#000000" stroke-width="0.7"/>
                                     <!-- Pondasi Marmer (Syadzarwan) -->
                                     <polygon points="4,24 18,31 18,32 4,25" fill="#e5e5ea" stroke="#000000" stroke-width="0.8"/>
@@ -2307,96 +2587,194 @@
             }
         }
 
-        // --- CALCULATOR ---
+        // --- SCIENTIFIC CALCULATOR ---
         let calcEvalExpr = "";
         let calcDispExpr = "";
+        let calcAngleMode = "DEG";
+        let calcAnswer = 0;
+        let calcJustEvaluated = false;
+
+        function formatCalcResult(value) {
+            if (value === 0) return "0";
+            const magnitude = Math.abs(value);
+            if (magnitude >= 1e10 || magnitude < 1e-7) {
+                const [mantissa, exponent] = value.toExponential(7).split("e");
+                return `${String(Number(mantissa))} × 10^${Number(exponent)}`;
+            }
+            const [whole, fraction = ""] = value.toFixed(8).split(".");
+            const trimmedFraction = fraction.replace(/0+$/, "");
+            return trimmedFraction ? `${whole}.${trimmedFraction}` : whole;
+        }
 
         function appendChar(char, displayChar) {
-            if (!displayChar) displayChar = char;
+            if (displayChar === undefined) displayChar = char;
+            if (calcJustEvaluated) {
+                if (["+", "-", "*", "/", "**", "**2", "%"].includes(char)) {
+                    calcEvalExpr = String(calcAnswer);
+                    calcDispExpr = String(calcAnswer);
+                } else {
+                    calcEvalExpr = "";
+                    calcDispExpr = "";
+                }
+                calcJustEvaluated = false;
+            }
+            const previousIsValue = /[0-9)]$/.test(calcEvalExpr) || ["pi", "e", "Ans"].some(token => calcEvalExpr.endsWith(token));
+            const nextStartsValue = char === "(" || ["pi", "e", "Ans"].includes(char) || (/^\d/.test(char) && (calcEvalExpr.endsWith(")") || ["pi", "e", "Ans"].some(token => calcEvalExpr.endsWith(token))));
+            if (!calcJustEvaluated && calcEvalExpr && previousIsValue && nextStartsValue) {
+                calcEvalExpr += "*";
+                calcDispExpr += "*";
+            }
             calcEvalExpr += char;
             calcDispExpr += displayChar;
             document.getElementById('calc-expr').innerText = calcDispExpr;
         }
 
+        function applyCalcFunction(name, displayName) {
+            if (calcJustEvaluated) {
+                calcEvalExpr = String(calcAnswer);
+                calcDispExpr = String(calcAnswer);
+                calcJustEvaluated = false;
+            }
+            if (!calcEvalExpr || ["**", "+", "-", "*", "/", "%", "("].some(token => calcEvalExpr.endsWith(token))) {
+                appendChar(name + "(", displayName + "(");
+                return;
+            }
+            calcEvalExpr = name + "(" + calcEvalExpr + ")";
+            calcDispExpr = displayName + "(" + calcDispExpr + ")";
+            document.getElementById('calc-expr').innerText = calcDispExpr;
+            calcJustEvaluated = false;
+        }
+
+        function calcSquare() {
+            if (!calcEvalExpr) {
+                appendChar("Ans**2", "Ans^2");
+            } else {
+                appendChar("**2", "^2");
+            }
+        }
+
+        function toggleAngleMode() {
+            const modes = ["DEG", "RAD", "GRAD"];
+            calcAngleMode = modes[(modes.indexOf(calcAngleMode) + 1) % modes.length];
+            const modeNames = { DEG: "degrees", RAD: "radians", GRAD: "gradians" };
+            const modeName = modeNames[calcAngleMode];
+            const angleButton = document.getElementById('calc-angle-mode');
+            angleButton.innerText = calcAngleMode;
+            angleButton.setAttribute("aria-label", `Angle mode: ${modeName}. Activate to cycle units.`);
+            document.getElementById('calc-angle-note').innerText = `Angle mode ${calcAngleMode}: trig inputs and inverse trig outputs use ${modeName}.`;
+        }
+
         function clearAll() {
             calcEvalExpr = "";
             calcDispExpr = "";
+            calcJustEvaluated = false;
             document.getElementById('calc-expr').innerText = "";
             document.getElementById('calc-result').innerText = "0";
         }
 
         function clearEntry() {
-            if (calcEvalExpr.endsWith("Math.PI")) {
-                calcEvalExpr = calcEvalExpr.slice(0, -"Math.PI".length);
-                calcDispExpr = calcDispExpr.slice(0, -1);
-            } else if (calcEvalExpr.endsWith("Math.E")) {
-                calcEvalExpr = calcEvalExpr.slice(0, -"Math.E".length);
-                calcDispExpr = calcDispExpr.slice(0, -1);
-            } else if (calcEvalExpr.endsWith("**")) {
-                calcEvalExpr = calcEvalExpr.slice(0, -2);
-                calcDispExpr = calcDispExpr.slice(0, -1);
+            if (calcJustEvaluated) {
+                calcEvalExpr = "";
+                calcDispExpr = "";
+                calcJustEvaluated = false;
+                document.getElementById('calc-expr').innerText = "";
+                document.getElementById('calc-result').innerText = "0";
+                return;
+            }
+            const tokens = [
+                ["factorial(", "factorial("], ["pow10(", "10^x("], ["sqrt(", "sqrt("],
+                ["asin(", "asin("], ["acos(", "acos("], ["atan(", "atan("],
+                ["sin(", "sin("], ["cos(", "cos("], ["tan(", "tan("],
+                ["log(", "log("], ["ln(", "ln("], ["exp(", "exp("],
+                ["abs(", "abs("], ["inv(", "inv("], ["Ans", "Ans"], ["pi", "pi"], ["**", "^"]
+            ];
+            const token = tokens.find(([raw]) => calcEvalExpr.endsWith(raw));
+            if (token) {
+                calcEvalExpr = calcEvalExpr.slice(0, -token[0].length);
+                calcDispExpr = calcDispExpr.slice(0, -token[1].length);
             } else {
                 calcEvalExpr = calcEvalExpr.slice(0, -1);
                 calcDispExpr = calcDispExpr.slice(0, -1);
             }
+            calcJustEvaluated = false;
             document.getElementById('calc-expr').innerText = calcDispExpr;
         }
 
         function negate() {
-            if (!calcEvalExpr) {
-                let curr = document.getElementById('calc-result').innerText;
-                if (curr !== "0" && curr !== "ERROR") {
-                    if (curr.startsWith("-")) curr = curr.substring(1);
-                    else curr = "-" + curr;
-                    document.getElementById('calc-result').innerText = curr;
-                    calcEvalExpr = curr;
-                    calcDispExpr = curr;
-                    document.getElementById('calc-expr').innerText = calcDispExpr;
-                }
-                return;
+            if (calcJustEvaluated) {
+                calcEvalExpr = String(calcAnswer);
+                calcDispExpr = String(calcAnswer);
+                calcJustEvaluated = false;
             }
-            if (calcEvalExpr.startsWith("-(") && calcEvalExpr.endsWith(")")) {
-                calcEvalExpr = calcEvalExpr.slice(2, -1);
+            const current = calcEvalExpr || document.getElementById('calc-result').innerText;
+            if (current === "ERROR") return;
+            if (current.startsWith("-(") && current.endsWith(")")) {
+                calcEvalExpr = current.slice(2, -1);
                 calcDispExpr = calcDispExpr.slice(2, -1);
             } else {
-                calcEvalExpr = `-(${calcEvalExpr})`;
-                calcDispExpr = `-(${calcDispExpr})`;
+                calcEvalExpr = "-(" + current + ")";
+                calcDispExpr = "-(" + (calcDispExpr || current) + ")";
             }
+            calcJustEvaluated = false;
             document.getElementById('calc-expr').innerText = calcDispExpr;
         }
 
-        function calcSqrt() {
-            try {
-                let valToSqrt = calcEvalExpr || document.getElementById('calc-result').innerText;
-                let num = eval(valToSqrt);
-                if (num < 0) throw new Error("Invalid domain");
-                let res = Math.sqrt(num);
-                let resFormatted = Number.isInteger(res) ? res : parseFloat(res.toFixed(8));
-                document.getElementById('calc-result').innerText = resFormatted;
-                calcDispExpr = `√(${calcDispExpr || num})`;
-                calcEvalExpr = String(resFormatted);
-                document.getElementById('calc-expr').innerText = calcDispExpr;
-            } catch (e) {
-                document.getElementById('calc-result').innerText = "ERROR";
-            }
+        function calculatorScope() {
+            const angleIn = value => {
+                if (calcAngleMode === "DEG") return value * Math.PI / 180;
+                if (calcAngleMode === "GRAD") return value * Math.PI / 200;
+                return value;
+            };
+            const angleOut = value => {
+                if (calcAngleMode === "DEG") return value * 180 / Math.PI;
+                if (calcAngleMode === "GRAD") return value * 200 / Math.PI;
+                return value;
+            };
+            return {
+                pi: Math.PI,
+                e: Math.E,
+                Ans: calcAnswer,
+                sin: value => Math.sin(angleIn(value)),
+                cos: value => Math.cos(angleIn(value)),
+                tan: value => Math.tan(angleIn(value)),
+                asin: value => angleOut(Math.asin(value)),
+                acos: value => angleOut(Math.acos(value)),
+                atan: value => angleOut(Math.atan(value)),
+                sqrt: value => Math.sqrt(value),
+                log: value => Math.log10(value),
+                ln: value => Math.log(value),
+                exp: value => Math.exp(value),
+                pow10: value => Math.pow(10, value),
+                abs: value => Math.abs(value),
+                inv: value => {
+                    if (value === 0) throw new Error("Cannot divide by zero");
+                    return 1 / value;
+                },
+                factorial: value => {
+                    if (!Number.isInteger(value) || value < 0 || value > 170) throw new Error("Factorial requires a whole number from 0 to 170");
+                    let result = 1;
+                    for (let factor = 2; factor <= value; factor += 1) result *= factor;
+                    return result;
+                }
+            };
         }
 
         function evaluateCalc() {
             try {
                 if (!calcEvalExpr) return;
-                let res = eval(calcEvalExpr);
-                if (typeof res === 'number') {
-                    if (!isFinite(res)) throw new Error("Division by zero");
-                    res = Number.isInteger(res) ? res : parseFloat(res.toFixed(8));
-                }
-                document.getElementById('calc-result').innerText = res;
-                calcDispExpr = String(res);
-                calcEvalExpr = String(res);
-            } catch (e) {
+                const scope = calculatorScope();
+                const names = Object.keys(scope);
+                const evaluate = new Function(...names, '"use strict"; return (' + calcEvalExpr + ');');
+                const result = evaluate(...names.map(name => scope[name]));
+                if (typeof result !== "number" || !Number.isFinite(result)) throw new Error("Result is outside the calculator range");
+                calcAnswer = result;
+                document.getElementById('calc-result').innerText = formatCalcResult(result);
+                calcJustEvaluated = true;
+            } catch (error) {
                 document.getElementById('calc-result').innerText = "ERROR";
+                calcJustEvaluated = false;
             }
         }
-
         // --- JULIAN DAY ---
         function setCurrentDateTime() {
             const now = new Date();
@@ -2756,8 +3134,8 @@
                 if (statusText) statusText.innerText = "SENSOR LIVE: AKTIF (OTOMATIS)";
                 if (badge) {
                     badge.innerText = modeLabel;
-                    badge.style.background = "#10b981";
-                    badge.style.color = "#ffffff";
+                    badge.style.background = "#00C2C8";
+                    badge.style.color = "#000000";
                 }
                 if (btnToggle) {
                     btnToggle.innerHTML = "⏸ JEDA SENSOR LIVE";
@@ -2775,7 +3153,7 @@
                 }
                 if (btnToggle) {
                     btnToggle.innerHTML = "🟢 AKTIFKAN LIVE KOMPAS";
-                    btnToggle.style.background = "var(--accent-yellow)";
+                    btnToggle.style.background = "var(--accent-teal)";
                 }
             }
         }
@@ -2829,8 +3207,8 @@
                     const badge = document.getElementById('sensor-type-badge');
                     if (badge) {
                         badge.innerText = "MODE DESKTOP / PC";
-                        badge.style.background = "#3b82f6";
-                        badge.style.color = "#ffffff";
+                        badge.style.background = "#00C2C8";
+                        badge.style.color = "#000000";
                     }
                     const banner = document.getElementById('compass-guide-banner');
                     if (banner && currentQiblaMode === 'gps') {
@@ -2988,8 +3366,8 @@
                 const badge = document.getElementById('sensor-type-badge');
                 if (badge && badge.innerText !== "SENSOR LIVE: OTOMATIS") {
                     badge.innerText = "SENSOR LIVE: OTOMATIS";
-                    badge.style.background = "#10b981";
-                    badge.style.color = "#ffffff";
+                    badge.style.background = "#00C2C8";
+                    badge.style.color = "#000000";
                 }
             }
         }
@@ -3046,7 +3424,7 @@
             if (hudDiff) {
                 if (isAligned) {
                     hudDiff.innerText = `0° (LURUS)`;
-                    hudDiff.style.color = '#059669';
+                    hudDiff.style.color = '#00787C';
                 } else if (qiblaDiff > 0) {
                     hudDiff.innerText = `${Math.round(absDiff)}° KE KANAN`;
                     hudDiff.style.color = '#000000';
@@ -3135,7 +3513,7 @@
             if (btn) btn.innerText = "🛰️ MENCARI LOKASI & KALIBRASI...";
             if (accuracyBadge) {
                 accuracyBadge.innerText = "STATUS: MENCARI GPS...";
-                accuracyBadge.style.background = "#eab308";
+                accuracyBadge.style.background = "#FFD700";
                 accuracyBadge.style.color = "#000000";
             }
 
@@ -3159,8 +3537,8 @@
                     if (accuracyBadge) {
                         const acc = pos.coords.accuracy ? ` (±${Math.round(pos.coords.accuracy)}m)` : '';
                         accuracyBadge.innerText = `GPS AKTIF${acc}`;
-                        accuracyBadge.style.background = "#10b981";
-                        accuracyBadge.style.color = "#ffffff";
+                        accuracyBadge.style.background = "#00C2C8";
+                        accuracyBadge.style.color = "#000000";
                     }
                     if (sensorStateText) {
                         sensorStateText.innerText = "Sensor gerak aktif: putar ponsel Anda hingga jarum dan Ka'bah lurus ke depan.";
@@ -3176,8 +3554,8 @@
                     if (btn) btn.innerText = "🛰️ DETEKSI LOKASI SAYA SEKARANG";
                     if (accuracyBadge) {
                         accuracyBadge.innerText = "GAGAL DETEKSI";
-                        accuracyBadge.style.background = "#dc2626";
-                        accuracyBadge.style.color = "#ffffff";
+                        accuracyBadge.style.background = "#F000FF";
+                        accuracyBadge.style.color = "#000000";
                     }
                     alert(`Gagal mengambil lokasi GPS (${err.message}). Anda dapat memasukkan koordinat manual atau memilih kota preset.`);
                 },
