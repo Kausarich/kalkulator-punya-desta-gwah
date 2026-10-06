@@ -13,7 +13,7 @@ Features:
 import ast
 import math
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, font as tkfont
 from datetime import datetime
 
 
@@ -463,10 +463,11 @@ class AdvancedCalculatorApp(tk.Tk):
         header_frame.pack(fill="x", padx=15, pady=(15, 10))
 
         title_lbl = tk.Label(header_frame, text=" DESTA CALCULATOR ", bg=accent_teal, fg=THEME_BLACK, font=("Arial", 18, "bold"), bd=3, relief="solid")
-        title_lbl.pack(side="left")
+        title_lbl.pack(anchor="center")
 
         subtitle_lbl = tk.Label(header_frame, text="SCIENTIFIC CALCULATOR • JULIAN DAY • QIBLA & SHALAT • KALENDER HIJRIAH", bg=THEME_WHITE, fg=THEME_BLACK, font=("Arial", 9, "bold"))
-        subtitle_lbl.pack(side="right")
+        subtitle_lbl.pack(fill="x", pady=(6, 0))
+        header_frame.bind("<Configure>", lambda event: subtitle_lbl.configure(wraplength=max(1, event.width - 40)))
 
         # Notebook (Tabs)
         self.notebook = ttk.Notebook(self)
@@ -490,78 +491,153 @@ class AdvancedCalculatorApp(tk.Tk):
 
     # --- TAB 1: Scientific Calculator ---
     def _init_calculator_tab(self):
-        container = ttk.Frame(self.tab_calc, padding=15)
+        container = ttk.Frame(self.tab_calc, padding=12)
         container.pack(fill="both", expand=True)
+        container.columnconfigure(0, weight=1)
+        container.rowconfigure(0, weight=1)
+        self.calc_canvas = tk.Canvas(container, bg=THEME_PAPER, highlightthickness=0)
+        self.calc_canvas.grid(row=0, column=0, sticky="nsew")
+        scroll = ttk.Scrollbar(container, orient="vertical", command=self.calc_canvas.yview)
+        scroll.grid(row=0, column=1, sticky="ns")
+        self.calc_canvas.configure(yscrollcommand=scroll.set)
+        content = tk.Frame(self.calc_canvas, bg=THEME_PAPER)
+        content_window = self.calc_canvas.create_window((0, 0), window=content, anchor="nw")
+        content.bind("<Configure>", lambda _: self.calc_canvas.configure(scrollregion=self.calc_canvas.bbox("all")))
 
-        card = tk.Frame(container, bg=THEME_WHITE, bd=2, relief="solid", padx=15, pady=15)
-        card.pack(fill="both", expand=True)
-
+        card = tk.Frame(content, bg=THEME_WHITE, bd=3, relief="solid", padx=12, pady=12)
+        card.pack(fill="x")
         self.calc_expr_var = tk.StringVar(value="")
+        self.calc_display_var = tk.StringVar(value="")
         self.calc_result_var = tk.StringVar(value="0")
         self.calc_angle_mode = "DEG"
         self.calc_answer = 0
         self.calc_just_evaluated = False
 
-        input_frame = tk.Frame(card, bg=THEME_PAPER_SHADE, bd=3, relief="solid", padx=8, pady=8)
+        input_frame = tk.Frame(card, bg=THEME_PAPER_SHADE, bd=2, relief="solid", padx=8, pady=8)
         input_frame.pack(fill="x", pady=(0, 8))
-        tk.Label(input_frame, text="INPUT EXPRESSION", bg=THEME_TEAL, fg=THEME_BLACK, font=("Arial", 9, "bold"), bd=2, relief="solid", padx=6, pady=2).pack(anchor="w", pady=(0, 5))
-        input_field = tk.Frame(input_frame, bg=THEME_WHITE, bd=2, relief="solid", padx=8, pady=7)
+        tk.Label(input_frame, text="MASUKAN", bg=THEME_PAPER_SHADE, fg=THEME_BLACK, font=("Arial", 10, "bold"), anchor="w").pack(fill="x", pady=(0, 4))
+        input_field = tk.Frame(input_frame, bg=THEME_WHITE, bd=2, relief="solid", padx=6, pady=6)
         input_field.pack(fill="x")
-        expr_lbl = tk.Label(input_field, textvariable=self.calc_expr_var, bg=THEME_WHITE, fg=THEME_BLACK, font=("Courier New", 14, "bold"), anchor="e", justify="right", wraplength=680)
-        input_hint = tk.Label(input_field, text="Use the buttons below to enter an expression", bg=THEME_WHITE, fg="#666666", font=("Arial", 10, "bold"), anchor="e")
+        expression = tk.Entry(input_field, textvariable=self.calc_display_var, width=1, state="readonly", readonlybackground=THEME_WHITE, fg=THEME_BLACK, font=("Courier New", 14, "bold"), justify="right", relief="flat", bd=0, highlightthickness=2, highlightbackground=THEME_WHITE, highlightcolor=THEME_YELLOW)
+        expression.pack(fill="x")
+        input_scroll = ttk.Scrollbar(input_field, orient="horizontal", command=expression.xview)
+        input_scroll.pack(fill="x", pady=(3, 0))
 
-        def sync_expression_hint(*_):
-            if self.calc_expr_var.get():
-                input_hint.pack_forget()
-                if not expr_lbl.winfo_manager():
-                    expr_lbl.pack(fill="x")
-            else:
-                expr_lbl.pack_forget()
-                if not input_hint.winfo_manager():
-                    input_hint.pack(fill="x")
+        def sync_input_scroll(first, last):
+            input_scroll.set(first, last)
 
-        self.calc_expr_var.trace_add("write", sync_expression_hint)
-        sync_expression_hint()
+        expression.configure(xscrollcommand=sync_input_scroll)
 
-        tk.Label(card, text="RESULT", bg=THEME_WHITE, fg=THEME_TEAL_DARK, font=("Arial", 9, "bold"), anchor="w").pack(fill="x", pady=(0, 3))
-        display_frame = tk.Frame(card, bg=THEME_WHITE, bd=3, relief="solid")
-        display_frame.pack(fill="x", pady=(0, 8))
+        def sync_expression(*_):
+            raw = self.calc_expr_var.get()
+            display = raw.replace("pow10(", "10^x(").replace("**", "^").replace("pi", "π").replace("*", "×").replace("/", "÷")
+            self.calc_display_var.set(display or "Masukkan angka atau fungsi")
+            expression.configure(fg=THEME_BLACK if raw else "#555555")
+            expression.xview_moveto(1)
 
-        display_lbl = tk.Label(display_frame, textvariable=self.calc_result_var, bg=THEME_WHITE, fg=THEME_BLACK, font=("Courier New", 26, "bold"), anchor="e", padx=10, pady=8)
-        display_lbl.pack(fill="x")
-        self.calc_angle_note = tk.Label(card, text="Angle mode DEG: trig inputs and inverse trig outputs use degrees.", bg=THEME_WHITE, fg=THEME_TEAL_DARK, font=("Arial", 9, "bold"), anchor="w")
-        self.calc_angle_note.pack(fill="x", pady=(0, 8))
+        self.calc_expr_var.trace_add("write", sync_expression)
+        sync_expression()
+        tk.Label(card, text="HASIL", bg=THEME_WHITE, fg=THEME_TEAL_DARK, font=("Arial", 10, "bold"), anchor="e").pack(fill="x")
+        result_font = tkfont.Font(family="Courier New", size=26, weight="bold")
+        result_label = tk.Label(card, textvariable=self.calc_result_var, width=1, bg=THEME_WHITE, fg=THEME_BLACK, font=result_font, anchor="e", padx=5, pady=4)
+        result_label.pack(fill="x", pady=(0, 8))
 
-        btn_frame = tk.Frame(card, bg=THEME_WHITE)
-        btn_frame.pack(fill="both", expand=True)
+        def fit_result(*_):
+            available = max(1, result_label.winfo_width() - 12)
+            result_font.configure(size=26)
+            text = self.calc_result_var.get()
+            for size in range(26, 11, -1):
+                result_font.configure(size=size)
+                if result_font.measure(text) <= available:
+                    break
+            result_label.configure(fg=THEME_MAGENTA_DARK if text == "ERROR" else THEME_BLACK)
 
-        buttons = [
-            [("DEG", self._calc_toggle_angle), ("sin", lambda: self._calc_function("sin")), ("cos", lambda: self._calc_function("cos")), ("tan", lambda: self._calc_function("tan")), ("log", lambda: self._calc_function("log")), ("ln", lambda: self._calc_function("ln"))],
-            [("asin", lambda: self._calc_function("asin")), ("acos", lambda: self._calc_function("acos")), ("atan", lambda: self._calc_function("atan")), ("sqrt", self._calc_sqrt), ("x^2", lambda: self._calc_append("**2")), ("x^y", lambda: self._calc_append("**"))],
-            [("AC", self._calc_clear_all), ("C", self._calc_clear_entry), ("(", lambda: self._calc_append("(")), (")", lambda: self._calc_append(")")), ("pi", lambda: self._calc_append("pi")), ("e", lambda: self._calc_append("e"))],
-            [("7", lambda: self._calc_append("7")), ("8", lambda: self._calc_append("8")), ("9", lambda: self._calc_append("9")), ("/", lambda: self._calc_append("/")), ("*", lambda: self._calc_append("*")), ("%", lambda: self._calc_append("%"))],
-            [("4", lambda: self._calc_append("4")), ("5", lambda: self._calc_append("5")), ("6", lambda: self._calc_append("6")), ("-", lambda: self._calc_append("-")), ("1/x", lambda: self._calc_function("inv")), ("n!", lambda: self._calc_function("factorial"))],
-            [("1", lambda: self._calc_append("1")), ("2", lambda: self._calc_append("2")), ("3", lambda: self._calc_append("3")), ("+", lambda: self._calc_append("+")), ("10^x", lambda: self._calc_function("pow10")), ("exp", lambda: self._calc_function("exp"))],
-            [("0", lambda: self._calc_append("0")), (".", lambda: self._calc_append(".")), ("+/-", self._calc_negate), ("abs", lambda: self._calc_function("abs")), ("Ans", lambda: self._calc_append("Ans")), ("=", self._calc_evaluate)],
+        result_label.bind("<Configure>", fit_result)
+        self.calc_result_var.trace_add("write", fit_result)
+
+        toolbar = tk.Frame(card, bg=THEME_PAPER, bd=2, relief="solid", padx=8, pady=6)
+        toolbar.pack(fill="x", pady=(0, 12))
+        toolbar.columnconfigure(2, weight=1)
+        tk.Label(toolbar, text="MODE SUDUT", bg=THEME_PAPER, fg=THEME_BLACK, font=("Arial", 10, "bold")).grid(row=0, column=0, padx=(0, 8))
+        self.calc_angle_button = tk.Button(toolbar, text="DEG", command=self._calc_toggle_angle, bg=THEME_TEAL, fg=THEME_BLACK, activebackground=THEME_BLACK, activeforeground=THEME_WHITE, font=("Arial", 11, "bold"), width=6, bd=3, relief="solid", pady=5, highlightcolor=THEME_YELLOW)
+        self.calc_angle_button.grid(row=0, column=1, padx=(0, 10))
+        self.calc_angle_note = tk.Label(toolbar, text="Derajat: 360° = 1 putaran.", bg=THEME_PAPER, fg=THEME_TEAL_DARK, font=("Arial", 9, "bold"), anchor="w", justify="left")
+        self.calc_angle_note.grid(row=0, column=2, sticky="ew")
+        toolbar.bind("<Configure>", lambda event: self.calc_angle_note.configure(wraplength=max(100, event.width - 210)))
+
+        self.calc_panels = tk.Frame(card, bg=THEME_WHITE)
+        self.calc_panels.pack(fill="both", expand=True)
+        self.calc_numbers = tk.Frame(self.calc_panels, bg=THEME_WHITE, bd=2, relief="solid", padx=8, pady=8)
+        self.calc_science = tk.Frame(self.calc_panels, bg=THEME_PAPER_SHADE, bd=2, relief="solid", padx=8, pady=8)
+        self.calc_panel_layout = None
+
+        numeric_keys = [
+            [("AC", self._calc_clear_all), ("C", self._calc_clear_entry), ("Ans", lambda: self._calc_append("Ans")), ("÷", lambda: self._calc_append("/"))],
+            [("7", lambda: self._calc_append("7")), ("8", lambda: self._calc_append("8")), ("9", lambda: self._calc_append("9")), ("×", lambda: self._calc_append("*"))],
+            [("4", lambda: self._calc_append("4")), ("5", lambda: self._calc_append("5")), ("6", lambda: self._calc_append("6")), ("−", lambda: self._calc_append("-"))],
+            [("1", lambda: self._calc_append("1")), ("2", lambda: self._calc_append("2")), ("3", lambda: self._calc_append("3")), ("+", lambda: self._calc_append("+"))],
+            [("±", self._calc_negate), ("0", lambda: self._calc_append("0")), (".", lambda: self._calc_append(".")), ("=", self._calc_evaluate)],
+        ]
+        scientific_keys = [
+            [("sin", lambda: self._calc_function("sin")), ("cos", lambda: self._calc_function("cos")), ("tan", lambda: self._calc_function("tan"))],
+            [("asin", lambda: self._calc_function("asin")), ("acos", lambda: self._calc_function("acos")), ("atan", lambda: self._calc_function("atan"))],
+            [("log", lambda: self._calc_function("log")), ("ln", lambda: self._calc_function("ln")), ("√x", self._calc_sqrt)],
+            [("x²", lambda: self._calc_append("**2")), ("xʸ", lambda: self._calc_append("**")), ("10ˣ", lambda: self._calc_function("pow10"))],
+            [("exp", lambda: self._calc_function("exp")), ("1/x", lambda: self._calc_function("inv")), ("n!", lambda: self._calc_function("factorial"))],
+            [("abs", lambda: self._calc_function("abs")), ("%", lambda: self._calc_append("%")), ("π", lambda: self._calc_append("pi"))],
+            [("e", lambda: self._calc_append("e")), ("(", lambda: self._calc_append("(")), (")", lambda: self._calc_append(")"))],
         ]
 
-        for row_index, row in enumerate(buttons):
-            btn_frame.rowconfigure(row_index, weight=1)
-            for column_index, (label, command) in enumerate(row):
-                btn_frame.columnconfigure(column_index, weight=1)
-                bg_color = THEME_WHITE
-                fg_color = THEME_BLACK
-                if label in ("=", "DEG"):
-                    bg_color = THEME_TEAL
-                elif label in ("C", "AC"):
-                    bg_color = THEME_BLACK
-                    fg_color = THEME_WHITE
-                elif label != "0" and not label.isdigit() and label != ".":
-                    bg_color = THEME_PAPER_SHADE
-                button = tk.Button(btn_frame, text=label, command=command, bg=bg_color, fg=fg_color, activebackground=THEME_BLACK, activeforeground=THEME_WHITE, font=("Arial", 10, "bold"), bd=2, relief="solid")
-                button.grid(row=row_index, column=column_index, sticky="nsew", padx=3, pady=3)
-                if label == "DEG":
-                    self.calc_angle_button = button
+        for panel, title, rows, numeric in [(self.calc_numbers, "ANGKA & OPERASI", numeric_keys, True), (self.calc_science, "FUNGSI ILMIAH", scientific_keys, False)]:
+            panel_bg = THEME_WHITE if numeric else THEME_PAPER_SHADE
+            tk.Label(panel, text=title, bg=panel_bg, fg=THEME_BLACK, font=("Arial", 10, "bold"), anchor="w", pady=7).pack(fill="x")
+            tk.Frame(panel, height=2, bg=THEME_BLACK).pack(fill="x", pady=(0, 6))
+            grid = tk.Frame(panel, bg=panel_bg)
+            grid.pack(fill="both", expand=True)
+            for row_index, row in enumerate(rows):
+                grid.rowconfigure(row_index, weight=1, minsize=44, uniform="keys")
+                for column_index, (label, command) in enumerate(row):
+                    grid.columnconfigure(column_index, weight=1, uniform="keys")
+                    bg = THEME_WHITE
+                    fg = THEME_BLACK
+                    if label in ("C", "AC"):
+                        bg, fg = THEME_BLACK, THEME_WHITE
+                    elif label == "=":
+                        bg = THEME_TEAL
+                    elif numeric and not label.isdigit() and label != ".":
+                        bg = THEME_PAPER_SHADE
+                    button = tk.Button(grid, text=label, command=command, width=1, bg=bg, fg=fg, activebackground=THEME_BLACK, activeforeground=THEME_WHITE, font=("Arial", 12 if numeric else 10, "bold"), bd=3, relief="solid", padx=3, pady=5, highlightcolor=THEME_YELLOW)
+                    button.grid(row=row_index, column=column_index, sticky="nsew", padx=3, pady=3)
+
+        def resize_calculator(event):
+            self.calc_canvas.itemconfigure(content_window, width=event.width)
+            self._calc_reflow_controls(event.width)
+
+        self.calc_canvas.bind("<Configure>", resize_calculator)
+        self._calc_reflow_controls(900)
+
+        def bind_wheel(widget):
+            widget.bind("<MouseWheel>", lambda event: self.calc_canvas.yview_scroll(-int(event.delta / 120), "units"))
+            for child in widget.winfo_children():
+                bind_wheel(child)
+
+        bind_wheel(content)
+
+    def _calc_reflow_controls(self, width):
+        layout = "wide" if width >= 680 else "stacked"
+        if layout == self.calc_panel_layout:
+            return
+        self.calc_panel_layout = layout
+        self.calc_numbers.grid_forget()
+        self.calc_science.grid_forget()
+        self.calc_panels.columnconfigure(0, weight=3 if layout == "wide" else 1)
+        self.calc_panels.columnconfigure(1, weight=4 if layout == "wide" else 0)
+        if layout == "wide":
+            self.calc_science.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
+            self.calc_numbers.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.calc_numbers.grid(row=0, column=0, sticky="nsew", pady=(0, 8))
+            self.calc_science.grid(row=1, column=0, sticky="nsew")
 
     def _calc_append(self, char):
         current = self.calc_expr_var.get()
@@ -628,9 +704,8 @@ class AdvancedCalculatorApp(tk.Tk):
         modes = ("DEG", "RAD", "GRAD")
         self.calc_angle_mode = modes[(modes.index(self.calc_angle_mode) + 1) % len(modes)]
         self.calc_angle_button.configure(text=self.calc_angle_mode)
-        mode_names = {"DEG": "degrees", "RAD": "radians", "GRAD": "gradians"}
-        unit_name = mode_names[self.calc_angle_mode]
-        self.calc_angle_note.configure(text=f"Angle mode {self.calc_angle_mode}: trig inputs and inverse trig outputs use {unit_name}.")
+        mode_notes = {"DEG": "Derajat: 360° = 1 putaran.", "RAD": "Radian: 2π rad = 1 putaran.", "GRAD": "Gradian: 400 grad = 1 putaran."}
+        self.calc_angle_note.configure(text=mode_notes[self.calc_angle_mode])
 
     def _calc_evaluate(self):
         expression = self.calc_expr_var.get()

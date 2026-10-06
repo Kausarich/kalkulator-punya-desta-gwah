@@ -127,10 +127,10 @@ flowchart TD
 ### Alur 1: Menggunakan Kalkulator Saintifik (`SCIENTIFIC CALC`)
 Kalkulator Web dan Desktop menyediakan operasi aritmatika, fungsi ilmiah, konstanta, dan mode sudut.
 
-1. Masukkan angka dan operasi melalui tombol kalkulator. Kolom **Input Expression** menampilkan rumus yang sedang dihitung, sedangkan **Result** menampilkan hasil setelah tombol `=` ditekan.
+1. Masukkan angka dan operasi melalui keypad **Angka & Operasi**. Kolom **Masukan** menampilkan rumus yang sedang dihitung, sedangkan **Hasil** menampilkan hasil setelah tombol `=` ditekan. Masukan panjang dapat digeser secara horizontal.
 2. Gunakan tombol mode sudut untuk berganti antara `DEG`, `RAD`, dan `GRAD`. Mode awal adalah derajat; fungsi trigonometri dan inversnya mengikuti mode yang dipilih.
 3. Angka hasil yang sangat besar atau sangat kecil ditampilkan dalam notasi pangkat sepuluh, seperti `1.23 × 10^12`. Tombol `10^x` menghitung 10 pangkat nilai yang dimasukkan.
-4. Fungsi yang tersedia meliputi `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `sqrt`, `log` (basis 10), `ln`, `x^2`, `x^y`, `10^x`, `exp`, `1/x`, `n!`, dan `abs`.
+4. Panel **Fungsi ilmiah** menyediakan `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `sqrt`, `log` (basis 10), `ln`, `x^2`, `x^y`, `10^x`, `exp`, `1/x`, `n!`, dan `abs`. Pada web dengan lebar kurang dari 680px, panel ini dilipat saat awal dibuka; klik judul panel untuk menampilkan tombolnya.
 5. Gunakan konstanta `pi` dan `e`, operasi sisa bagi `%`, serta `Ans` untuk memakai kembali hasil terakhir. Digit yang ditekan berurutan tetap membentuk satu angka; perkalian implisit hanya digunakan pada konstanta atau tanda kurung.
 6. Tombol `C` menghapus karakter atau token terakhir, sedangkan `AC` menghapus seluruh ekspresi.
 
@@ -279,6 +279,11 @@ Aplikasi mengimplementasikan panduan visual Neo-Brutalism berstandar industri de
    - **Mobile-Adaptive Calendar Cells**: Pada layar ponsel ($\le 540\text{px}$), angka tanggal Masehi dan lencana Hijriah otomatis ditata vertikal bertumpuk di tengah sel, menjamin keterbacaan tinggi tanpa terpotong.
 3. **Penghematan Ruang Vertikal**:
    - Penggabungan tabel awal bulan menjadi satu kartu bersistem pengalih (*toggle switcher*) memotong tinggi halaman hingga 50%, membuat navigasi jauh lebih ringkas dan nyaman bagi klien.
+4. **Responsivitas Kalkulator Saintifik**:
+   - Keypad angka selalu memakai empat kolom dengan urutan `7 8 9`, `4 5 6`, dan `1 2 3`; ukuran layar tidak mengubah posisi relatif angka dan operator.
+   - Pada web, keypad angka dan fungsi ilmiah berdampingan mulai dari 680px. Di layar lebih kecil, keypad angka berada di atas panel ilmiah yang dapat dilipat. Tombol angka minimal 48px tinggi pada ponsel; tombol ilmiah dan mode sudut minimal 44px.
+   - Kolom masukan memiliki tinggi tetap dan dapat digeser saat rumus panjang. Hasil notasi ilmiah memakai ukuran teks yang lebih kecil agar tetap terbaca pada ponsel. Zoom peramban tetap tersedia.
+   - Versi desktop memakai pengelompokan dan simbol tombol yang sama, kolom masukan horizontal, ukuran teks hasil yang menyesuaikan lebar, serta scroll vertikal untuk jendela pendek.
 
 ---
 
