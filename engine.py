@@ -264,16 +264,6 @@ def prayer_hours(lat, lon, tz, year, month, day):
     return dict(imsak=noon-dawn-1/6, fajr=noon-dawn, sunrise=noon-sun, dhuhr=noon+1/30, asr=noon+asr, maghrib=noon+sun+1/30, isha=noon+night)
 
 
-def format_prayer_hour(hour):
-    if not math.isfinite(hour): return "Tidak tersedia"
-    minutes = math.floor((hour % 24) * 60 + .5) % 1440
-    return f"{minutes // 60:02d}:{minutes % 60:02d}"
-
-
-def calculate_prayer_times(lat, lon, tz, year, month, day):
-    return {key: format_prayer_hour(value) for key, value in prayer_hours(lat, lon, tz, year, month, day).items()}
-
-
 def location_timezone(zone=None, offset=0):
     if zone:
         try: return ZoneInfo(zone)

@@ -1,44 +1,434 @@
 <!doctype html>
 <html lang="id">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Desta — Kalkulator & Kalender</title><link rel="stylesheet" href="assets/styles.css"></head>
-<body>
-<header class="header"><h1>DESTA CALCULATOR</h1><p>Hitung angka. Jelajahi tanggal.</p></header>
-<nav class="tabs" role="tablist" aria-label="Modul aplikasi">
-<button id="tab-button-calc" role="tab" aria-controls="tab-calc" aria-selected="true">Kalkulator</button>
-<button id="tab-button-julian" role="tab" aria-controls="tab-julian" aria-selected="false" tabindex="-1">Hari Julian</button>
-<button id="tab-button-qibla" role="tab" aria-controls="tab-qibla" aria-selected="false" tabindex="-1">Kiblat & Shalat</button>
-<button id="tab-button-calendar" role="tab" aria-controls="tab-calendar" aria-selected="false" tabindex="-1">Kalender</button>
-</nav>
-<main class="app-container">
-<section id="tab-calc" role="tabpanel" aria-labelledby="tab-button-calc">
-<div class="calc-display"><span class="eyebrow">Masukan</span><div id="calc-input" class="expression" role="textbox" aria-readonly="true" aria-label="Masukan kalkulator" tabindex="0"><span id="calc-expression">0</span></div><span class="eyebrow result-label">Hasil</span><output id="calc-result" aria-live="polite">0</output></div>
-<p id="calc-error" class="error" role="alert" hidden></p>
-<div class="toolbar"><span>Mode sudut</span><button id="calc-mode" class="primary" aria-label="Mode sudut: DEG. Klik untuk mengganti.">DEG</button><span id="calc-mode-note" class="muted">360° = 1 putaran</span></div>
-<div class="calc-panels"><section class="number-panel panel"><h2>Angka & operasi</h2><div id="number-keys" class="number-grid"></div></section><details id="science-panel" class="science-panel panel" open><summary>Fungsi ilmiah</summary><div id="science-keys" class="science-grid"></div></details></div>
-<details class="help"><summary>Cara menggunakan</summary><p>Gunakan tombol atau keyboard. Enter menghitung, Backspace menghapus, Esc mengosongkan. Fungsi ilmiah bekerja pada operand terakhir; gunakan kurung untuk satu kelompok. % berarti sisa bagi. Angka memakai presisi sekitar 15 digit; hasil besar atau kecil ditulis × 10^n.</p></details>
-</section>
-<section id="tab-julian" role="tabpanel" aria-labelledby="tab-button-julian" hidden>
-<h2>Hari Julian</h2><form id="jd-form"><div class="form-grid">
-<label>Tahun<input id="jd-year" type="number" min="1" max="9999" required></label><label>Bulan<input id="jd-month" type="number" min="1" max="12" required></label><label>Tanggal<input id="jd-day" type="number" min="1" max="31" required></label><label>Waktu lokal<input id="jd-time" type="time" step="1" required></label><label>UTC (jam)<input id="jd-utc" type="number" min="-12" max="14" step="any" required></label></div><div class="actions"><button type="submit" class="primary">Hitung JD</button><button id="jd-now" type="button">Waktu sekarang</button></div></form>
-<p id="jd-error" class="error" role="alert" hidden></p><output id="jd-result" class="result-card" aria-live="polite"></output><p class="muted">Tanggal memakai kalender Gregorian proleptik, termasuk sebelum 1582.</p>
-</section>
-<section id="tab-qibla" role="tabpanel" aria-labelledby="tab-button-qibla" hidden>
-<h2>Kiblat & jadwal shalat</h2><div class="segmented" role="group" aria-label="Sumber lokasi"><button id="q-mode-manual" aria-pressed="true">Pilih lokasi</button><button id="q-mode-gps" aria-pressed="false">Lokasi perangkat</button></div>
-<div class="qibla-layout"><div><form id="qibla-form"><label>Kota<select id="q-city"></select></label><div class="coords-grid"><label>Lintang (°)<input id="q-lat" type="number" min="-90" max="90" step="any" required></label><label>Bujur (°)<input id="q-lon" type="number" min="-180" max="180" step="any" required></label><label>UTC (jam)<input id="q-tz" type="number" min="-12" max="14" step="any" required></label></div><p id="q-zone" class="muted"></p><button type="submit" class="primary">Hitung kiblat & shalat</button></form>
-<div id="gps-panel" hidden><p>Ambil koordinat perangkat, lalu aktifkan kompas jika tersedia.</p><p id="gps-status" role="status"></p></div>
-<p id="q-error" class="error" role="alert" hidden></p><output id="q-result" class="result-card" aria-live="polite"></output></div>
-<div class="compass-wrapper"><div class="compass" role="img" aria-label="Kompas kiblat statis; atas adalah utara sejati"><div id="compass-rose" class="compass-rose"><svg class="compass-ring" viewBox="0 0 260 260" aria-hidden="true"><circle cx="130" cy="130" r="119" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="2 10"/></svg><span class="north">U</span><span class="east">T</span><span class="south">S</span><span class="west">B</span><div id="q-needle" class="needle"></div><span id="q-marker" class="kaaba-marker" aria-hidden="true">◆</span><span class="hub"></span></div></div><p id="compass-status" role="status">Referensi utara sejati di atas.</p><div id="sensor-controls" class="actions" hidden><button id="sensor-toggle">Aktifkan kompas</button><button id="sensor-calibrate">Panduan kalibrasi</button></div></div></div>
-<details class="help"><summary>Metode & akurasi</summary><p>Arah statis dihitung dari utara sejati. Sensor perangkat menggunakan referensi magnetik/absolut yang tersedia, tanpa koreksi deklinasi; panduan live adalah perkiraan. Jauhkan perangkat dari logam, gerakkan membentuk angka 8 jika bacaan tidak stabil, lalu cocokkan dengan arah statis.</p><p>Jadwal merupakan estimasi posisi Matahari: Subuh −20°, Isya −18°, tambahan 2 menit hanya pada Dzuhur dan Maghrib. Bukan jadwal resmi. Waktu yang tidak dapat dihitung pada lintang tinggi ditandai tidak tersedia. GPS mengambil lokasi sekali; tekan kembali jika berpindah tempat. Periksa UTC untuk koordinat manual/GPS.</p></details>
-<section class="prayer-section"><div class="section-heading"><h3>Jadwal lokasi terpilih</h3><span id="prayer-date"></span></div><p id="prayer-countdown" class="status-card" role="timer" aria-live="off"></p><div id="prayer-grid" class="prayer-grid"></div></section>
-</section>
-<section id="tab-calendar" role="tabpanel" aria-labelledby="tab-button-calendar" hidden>
-<h2>Kalender Masehi & Hijriah</h2><p class="muted">Hijriah tabular (hisab aritmetika); tanggal resmi dapat berbeda.</p>
-<div class="calendar panel"><div class="calendar-title"><h3 id="calendar-title"></h3><p id="calendar-hijri"></p></div><div class="calendar-controls"><div class="actions"><button id="cal-prev" aria-label="Bulan sebelumnya">◀</button><button id="cal-today" class="accent">Hari ini</button><button id="cal-next" aria-label="Bulan berikutnya">▶</button></div><form id="cal-jump"><label class="sr-only" for="cal-month">Bulan kalender</label><select id="cal-month"></select><label class="sr-only" for="cal-year">Tahun kalender</label><input id="cal-year" type="number" min="623" max="9998" required><button type="submit">Buka</button></form></div>
-<div id="calendar-weekdays" class="calendar-weekdays" aria-hidden="true"></div><div id="calendar-days" class="calendar-days" role="group" aria-label="Tanggal kalender"></div><output id="calendar-selected" class="result-card" aria-live="polite"></output></div>
-<p id="calendar-error" class="error" role="alert" hidden></p>
-<div class="two-columns"><form id="greg-convert" class="panel"><h3>Masehi → Hijriah</h3><label>Tanggal Masehi<input id="greg-date" type="date" min="0623-01-01" max="9998-12-31" required></label><button type="submit" class="primary">Konversi</button><output id="greg-result" class="result-card" aria-live="polite"></output></form><form id="hijri-convert" class="panel"><h3>Hijriah → Masehi</h3><div class="form-grid"><label>Tanggal<input id="hijri-day" type="number" min="1" max="30" required></label><label>Bulan<select id="hijri-month"></select></label><label>Tahun H<input id="hijri-year" type="number" min="1" max="9665" required></label></div><button type="submit" class="primary">Konversi</button><output id="hijri-result" class="result-card" aria-live="polite"></output></form></div>
-<section class="panel month-section"><h3>Awal bulan</h3><div class="segmented" role="group" aria-label="Jenis tahun"><button id="month-hijri" aria-pressed="true">Tahun Hijriah</button><button id="month-greg" aria-pressed="false">Tahun Masehi</button></div><form id="month-form" class="actions"><button id="month-prev" type="button" aria-label="Tahun sebelumnya">◀</button><label>Tahun<input id="month-year" type="number" required></label><button id="month-next" type="button" aria-label="Tahun berikutnya">▶</button><button type="submit">Tampilkan</button></form><p class="scroll-hint">Geser tabel untuk melihat seluruh kolom.</p><div class="table-scroll" tabindex="0" role="region" aria-label="Tabel awal bulan"><table><caption id="month-caption"></caption><thead><tr><th scope="col">Bulan</th><th scope="col">Hari</th><th scope="col">Tanggal padanan</th><th scope="col">Durasi</th></tr></thead><tbody id="month-body"></tbody></table></div></section>
-</section>
-</main>
-<script src="assets/data.js"></script><script src="assets/engine.js"></script><script src="assets/calculator.js"></script><script src="assets/calendar.js"></script><script src="assets/compass.js"></script><script src="assets/qibla.js"></script><script src="assets/app.js"></script>
-</body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Desta — Kalkulator & Kalender</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>DESTA CALCULATOR</h1>
+      <p>Hitung angka. Jelajahi tanggal.</p>
+    </header>
+    <nav class="tabs" role="tablist" aria-label="Modul aplikasi">
+      <button
+        id="tab-button-calc"
+        role="tab"
+        aria-controls="tab-calc"
+        aria-selected="true"
+      >
+        Kalkulator
+      </button>
+      <button
+        id="tab-button-julian"
+        role="tab"
+        aria-controls="tab-julian"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Hari Julian
+      </button>
+      <button
+        id="tab-button-qibla"
+        role="tab"
+        aria-controls="tab-qibla"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Kiblat & Shalat
+      </button>
+      <button
+        id="tab-button-calendar"
+        role="tab"
+        aria-controls="tab-calendar"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Kalender
+      </button>
+    </nav>
+    <main class="app-container">
+      <section id="tab-calc" role="tabpanel" aria-labelledby="tab-button-calc">
+        <div class="calc-display">
+          <span class="eyebrow">Masukan</span>
+          <div
+            id="calc-input"
+            class="expression"
+            role="textbox"
+            aria-readonly="true"
+            aria-label="Masukan kalkulator"
+            tabindex="0"
+          >
+            <span id="calc-expression">0</span>
+          </div>
+          <span class="eyebrow result-label">Hasil</span
+          ><output id="calc-result" aria-live="polite">0</output>
+        </div>
+        <p id="calc-error" class="error" role="alert" hidden></p>
+        <div class="toolbar">
+          <span>Mode sudut</span
+          ><button
+            id="calc-mode"
+            class="primary"
+            aria-label="Mode sudut: DEG. Klik untuk mengganti."
+          >
+            DEG</button
+          ><span id="calc-mode-note" class="muted">360° = 1 putaran</span>
+        </div>
+        <div class="calc-panels">
+          <section class="number-panel panel">
+            <h2>Angka & operasi</h2>
+            <div id="number-keys" class="number-grid"></div>
+          </section>
+          <details id="science-panel" class="science-panel panel" open>
+            <summary>Fungsi ilmiah</summary>
+            <div id="science-keys" class="science-grid"></div>
+          </details>
+        </div>
+        <details class="help">
+          <summary>Cara menggunakan</summary>
+          <p>
+            Gunakan tombol atau keyboard. Enter menghitung, Backspace menghapus,
+            Esc mengosongkan. Fungsi ilmiah bekerja pada operand terakhir;
+            gunakan kurung untuk satu kelompok. % berarti sisa bagi. Angka
+            memakai presisi sekitar 15 digit; hasil besar atau kecil ditulis ×
+            10^n.
+          </p>
+        </details>
+      </section>
+      <section
+        id="tab-julian"
+        role="tabpanel"
+        aria-labelledby="tab-button-julian"
+        hidden
+      >
+        <h2>Hari Julian</h2>
+        <form id="jd-form">
+          <div class="form-grid">
+            <label
+              >Tahun<input
+                id="jd-year"
+                type="number"
+                min="1"
+                max="9999"
+                required /></label
+            ><label
+              >Bulan<input
+                id="jd-month"
+                type="number"
+                min="1"
+                max="12"
+                required /></label
+            ><label
+              >Tanggal<input
+                id="jd-day"
+                type="number"
+                min="1"
+                max="31"
+                required /></label
+            ><label
+              >Waktu lokal<input
+                id="jd-time"
+                type="time"
+                step="1"
+                required /></label
+            ><label
+              >UTC (jam)<input
+                id="jd-utc"
+                type="number"
+                min="-12"
+                max="14"
+                step="any"
+                required
+            /></label>
+          </div>
+          <div class="actions">
+            <button type="submit" class="primary">Hitung JD</button
+            ><button id="jd-now" type="button">Waktu sekarang</button>
+          </div>
+        </form>
+        <p id="jd-error" class="error" role="alert" hidden></p>
+        <output id="jd-result" class="result-card" aria-live="polite"></output>
+        <p class="muted">
+          Tanggal memakai kalender Gregorian proleptik, termasuk sebelum 1582.
+        </p>
+      </section>
+      <section
+        id="tab-qibla"
+        role="tabpanel"
+        aria-labelledby="tab-button-qibla"
+        hidden
+      >
+        <h2>Kiblat & jadwal shalat</h2>
+        <div class="segmented" role="group" aria-label="Sumber lokasi">
+          <button id="q-mode-manual" aria-pressed="true">Pilih lokasi</button
+          ><button id="q-mode-gps" aria-pressed="false">
+            Lokasi perangkat
+          </button>
+        </div>
+        <div class="qibla-layout">
+          <div>
+            <form id="qibla-form">
+              <label>Kota<select id="q-city"></select></label>
+              <div class="coords-grid">
+                <label
+                  >Lintang (°)<input
+                    id="q-lat"
+                    type="number"
+                    min="-90"
+                    max="90"
+                    step="any"
+                    required /></label
+                ><label
+                  >Bujur (°)<input
+                    id="q-lon"
+                    type="number"
+                    min="-180"
+                    max="180"
+                    step="any"
+                    required /></label
+                ><label
+                  >UTC (jam)<input
+                    id="q-tz"
+                    type="number"
+                    min="-12"
+                    max="14"
+                    step="any"
+                    required
+                /></label>
+              </div>
+              <p id="q-zone" class="muted"></p>
+              <button type="submit" class="primary">
+                Hitung kiblat & shalat
+              </button>
+            </form>
+            <div id="gps-panel" hidden>
+              <p>
+                Ambil koordinat perangkat, lalu aktifkan kompas jika tersedia.
+              </p>
+              <p id="gps-status" role="status"></p>
+            </div>
+            <p id="q-error" class="error" role="alert" hidden></p>
+            <output
+              id="q-result"
+              class="result-card"
+              aria-live="polite"
+            ></output>
+          </div>
+          <div class="compass-wrapper">
+            <div
+              class="compass"
+              role="img"
+              aria-label="Kompas kiblat statis; atas adalah utara sejati"
+            >
+              <div id="compass-rose" class="compass-rose">
+                <svg
+                  class="compass-ring"
+                  viewBox="0 0 260 260"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="130"
+                    cy="130"
+                    r="119"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    stroke-dasharray="2 10"
+                  /></svg
+                ><span class="north">U</span><span class="east">T</span
+                ><span class="south">S</span><span class="west">B</span>
+                <div id="q-needle" class="needle"></div>
+                <span id="q-marker" class="kaaba-marker" aria-hidden="true"
+                  >◆</span
+                ><span class="hub"></span>
+              </div>
+            </div>
+            <p id="compass-status" role="status">
+              Referensi utara sejati di atas.
+            </p>
+            <div id="sensor-controls" class="actions" hidden>
+              <button id="sensor-toggle">Aktifkan kompas</button
+              ><button id="sensor-calibrate">Panduan kalibrasi</button>
+            </div>
+          </div>
+        </div>
+        <details class="help">
+          <summary>Metode & akurasi</summary>
+          <p>
+            Arah statis dihitung dari utara sejati. Sensor perangkat menggunakan
+            referensi magnetik/absolut yang tersedia, tanpa koreksi deklinasi;
+            panduan live adalah perkiraan. Jauhkan perangkat dari logam,
+            gerakkan membentuk angka 8 jika bacaan tidak stabil, lalu cocokkan
+            dengan arah statis.
+          </p>
+          <p>
+            Jadwal merupakan estimasi posisi Matahari: Subuh −20°, Isya −18°,
+            tambahan 2 menit hanya pada Dzuhur dan Maghrib. Bukan jadwal resmi.
+            Waktu yang tidak dapat dihitung pada lintang tinggi ditandai tidak
+            tersedia. GPS mengambil lokasi sekali; tekan kembali jika berpindah
+            tempat. Periksa UTC untuk koordinat manual/GPS.
+          </p>
+        </details>
+        <section class="prayer-section">
+          <div class="section-heading">
+            <h3>Jadwal lokasi terpilih</h3>
+            <span id="prayer-date"></span>
+          </div>
+          <p
+            id="prayer-countdown"
+            class="status-card"
+            role="timer"
+            aria-live="off"
+          ></p>
+          <div id="prayer-grid" class="prayer-grid"></div>
+        </section>
+      </section>
+      <section
+        id="tab-calendar"
+        role="tabpanel"
+        aria-labelledby="tab-button-calendar"
+        hidden
+      >
+        <h2>Kalender Masehi & Hijriah</h2>
+        <p class="muted">
+          Hijriah tabular (hisab aritmetika); tanggal resmi dapat berbeda.
+        </p>
+        <div class="calendar panel">
+          <div class="calendar-title">
+            <h3 id="calendar-title"></h3>
+            <p id="calendar-hijri"></p>
+          </div>
+          <div class="calendar-controls">
+            <div class="actions">
+              <button id="cal-prev" aria-label="Bulan sebelumnya">◀</button
+              ><button id="cal-today" class="accent">Hari ini</button
+              ><button id="cal-next" aria-label="Bulan berikutnya">▶</button>
+            </div>
+            <form id="cal-jump">
+              <label class="sr-only" for="cal-month">Bulan kalender</label
+              ><select id="cal-month"></select
+              ><label class="sr-only" for="cal-year">Tahun kalender</label
+              ><input
+                id="cal-year"
+                type="number"
+                min="623"
+                max="9998"
+                required
+              /><button type="submit">Buka</button>
+            </form>
+          </div>
+          <div
+            id="calendar-weekdays"
+            class="calendar-weekdays"
+            aria-hidden="true"
+          ></div>
+          <div
+            id="calendar-days"
+            class="calendar-days"
+            role="group"
+            aria-label="Tanggal kalender"
+          ></div>
+          <output
+            id="calendar-selected"
+            class="result-card"
+            aria-live="polite"
+          ></output>
+        </div>
+        <p id="calendar-error" class="error" role="alert" hidden></p>
+        <div class="two-columns">
+          <form id="greg-convert" class="panel">
+            <h3>Masehi → Hijriah</h3>
+            <label
+              >Tanggal Masehi<input
+                id="greg-date"
+                type="date"
+                min="0623-01-01"
+                max="9998-12-31"
+                required /></label
+            ><button type="submit" class="primary">Konversi</button
+            ><output
+              id="greg-result"
+              class="result-card"
+              aria-live="polite"
+            ></output>
+          </form>
+          <form id="hijri-convert" class="panel">
+            <h3>Hijriah → Masehi</h3>
+            <div class="form-grid">
+              <label
+                >Tanggal<input
+                  id="hijri-day"
+                  type="number"
+                  min="1"
+                  max="30"
+                  required /></label
+              ><label>Bulan<select id="hijri-month"></select></label
+              ><label
+                >Tahun H<input
+                  id="hijri-year"
+                  type="number"
+                  min="1"
+                  max="9665"
+                  required
+              /></label>
+            </div>
+            <button type="submit" class="primary">Konversi</button
+            ><output
+              id="hijri-result"
+              class="result-card"
+              aria-live="polite"
+            ></output>
+          </form>
+        </div>
+        <section class="panel month-section">
+          <h3>Awal bulan</h3>
+          <div class="segmented" role="group" aria-label="Jenis tahun">
+            <button id="month-hijri" aria-pressed="true">Tahun Hijriah</button
+            ><button id="month-greg" aria-pressed="false">Tahun Masehi</button>
+          </div>
+          <form id="month-form" class="actions">
+            <button id="month-prev" type="button" aria-label="Tahun sebelumnya">
+              ◀</button
+            ><label>Tahun<input id="month-year" type="number" required /></label
+            ><button
+              id="month-next"
+              type="button"
+              aria-label="Tahun berikutnya"
+            >
+              ▶</button
+            ><button type="submit">Tampilkan</button>
+          </form>
+          <p class="scroll-hint">Geser tabel untuk melihat seluruh kolom.</p>
+          <div
+            class="table-scroll"
+            tabindex="0"
+            role="region"
+            aria-label="Tabel awal bulan"
+          >
+            <table>
+              <caption id="month-caption"></caption>
+              <thead>
+                <tr>
+                  <th scope="col">Bulan</th>
+                  <th scope="col">Hari</th>
+                  <th scope="col">Tanggal padanan</th>
+                  <th scope="col">Durasi</th>
+                </tr>
+              </thead>
+              <tbody id="month-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="assets/data.js"></script>
+    <script src="assets/engine.js"></script>
+    <script src="assets/calculator.js"></script>
+    <script src="assets/calendar.js"></script>
+    <script src="assets/compass.js"></script>
+    <script src="assets/qibla.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
